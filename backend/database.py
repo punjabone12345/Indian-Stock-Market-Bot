@@ -2,14 +2,19 @@ import os
 import sqlite3
 import json
 from datetime import datetime
-import psycopg2
-from psycopg2.extras import RealDictCursor
+try:
+    import psycopg2
+    from psycopg2.extras import RealDictCursor
+    HAS_PSYCOPG2 = True
+except ImportError:
+    HAS_PSYCOPG2 = False
+    RealDictCursor = None
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
 
 class Database:
     def __init__(self):
-        self.is_postgres = bool(DATABASE_URL and ("postgres" in DATABASE_URL or "neon" in DATABASE_URL))
+        self.is_postgres = bool(HAS_PSYCOPG2 and DATABASE_URL and ("postgres" in DATABASE_URL or "neon" in DATABASE_URL))
         self.init_db()
 
     def get_connection(self):
