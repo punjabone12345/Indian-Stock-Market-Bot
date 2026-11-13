@@ -11,11 +11,18 @@ import urllib.request
 import ssl
 import json
 
-from database import db
-from market_data import market_service, CROWN_6_INSTRUMENTS
-from portfolio import portfolio
-from trade_engine import trade_engine
-from telegram_alerts import telegram_service
+try:
+    from database import db
+    from market_data import market_service, CROWN_6_INSTRUMENTS
+    from portfolio import portfolio
+    from trade_engine import trade_engine
+    from telegram_alerts import telegram_service
+except ImportError:
+    from backend.database import db
+    from backend.market_data import market_service, CROWN_6_INSTRUMENTS
+    from backend.portfolio import portfolio
+    from backend.trade_engine import trade_engine
+    from backend.telegram_alerts import telegram_service
 
 # Background scanning loop
 async def background_market_scanner():
@@ -57,6 +64,11 @@ def get_portfolio_status():
 @app.get("/api/dashboard")
 def get_dashboard_data():
     quotes = market_service.fetch_live_quotes()
+    if not trade_engine.market_scores:
+        try:
+            trade_engine.run_market_scan()
+        except Exception as e:
+            print(f"[Dashboard] Initial scan exception: {e}")
     scores = trade_engine.market_scores
 
     instruments_data = []

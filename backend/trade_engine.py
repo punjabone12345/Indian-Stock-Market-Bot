@@ -1,8 +1,12 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from market_data import market_service, CROWN_6_INSTRUMENTS
-from portfolio import portfolio
+try:
+    from market_data import market_service, CROWN_6_INSTRUMENTS
+    from portfolio import portfolio
+except ImportError:
+    from backend.market_data import market_service, CROWN_6_INSTRUMENTS
+    from backend.portfolio import portfolio
 
 class TradeEngine:
     def __init__(self):

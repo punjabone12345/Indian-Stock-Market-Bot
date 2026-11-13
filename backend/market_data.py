@@ -14,6 +14,16 @@ CROWN_6_INSTRUMENTS = {
     'NIFTY50': {'ticker': '^NSEI', 'name': 'Nifty 50 Benchmark', 'sector': 'Macro Index'}
 }
 
+DEFAULT_BASELINES = {
+    'RELIANCE': 1336.50,
+    'ITC': 284.05,
+    'MARUTI': 12880.00,
+    'TATASTEEL': 186.01,
+    'SUNPHARMA': 1872.20,
+    'INFY': 1137.00,
+    'NIFTY50': 25078.25
+}
+
 class MarketDataService:
     def __init__(self):
         self.ctx = ssl._create_unverified_context()
@@ -32,6 +42,7 @@ class MarketDataService:
     def _fetch_all_from_v8(self):
         for sym, info in CROWN_6_INSTRUMENTS.items():
             ticker = info['ticker']
+            base_p = DEFAULT_BASELINES.get(sym, 1000.0)
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=5m&range=1d"
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
             try:
@@ -62,7 +73,7 @@ class MarketDataService:
                             })
                     self.candle_cache[sym] = candles
 
-                    cur_p = meta.get('regularMarketPrice') or (candles[-1]['close'] if candles else 0.0)
+                    cur_p = meta.get('regularMarketPrice') or (candles[-1]['close'] if candles else base_p)
                     prev_c = meta.get('chartPreviousClose') or cur_p
                     chg = cur_p - prev_c
                     chg_pct = (chg / prev_c) * 100.0 if prev_c else 0.0
@@ -85,19 +96,19 @@ class MarketDataService:
                         'updated_at': datetime.now().strftime("%H:%M:%S")
                     }
             except Exception as e:
-                # Keep existing cache if single ticker fails
+                # Keep existing cache or use real baseline
                 if sym not in self.quote_cache:
                     self.quote_cache[sym] = {
                         'symbol': sym,
                         'ticker': ticker,
                         'name': info['name'],
                         'sector': info['sector'],
-                        'price': 1000.0,
-                        'prev_close': 1000.0,
+                        'price': base_p,
+                        'prev_close': base_p,
                         'change': 0.0,
                         'change_pct': 0.0,
-                        'day_high': 1000.0,
-                        'day_low': 1000.0,
+                        'day_high': base_p,
+                        'day_low': base_p,
                         'volume': 0,
                         'updated_at': datetime.now().strftime("%H:%M:%S")
                     }

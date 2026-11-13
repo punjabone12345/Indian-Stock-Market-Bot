@@ -1,8 +1,12 @@
 import uuid
 import time
 from datetime import datetime
-from database import db
-from telegram_alerts import telegram_service
+try:
+    from database import db
+    from telegram_alerts import telegram_service
+except ImportError:
+    from backend.database import db
+    from backend.telegram_alerts import telegram_service
 
 class PortfolioManager:
     def __init__(self):
