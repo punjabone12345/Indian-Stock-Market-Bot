@@ -218,11 +218,19 @@ class PortfolioManager:
             pos['unrealized_pnl'] = round(gross_pnl, 2)
             pos['unrealized_r'] = round(gross_pnl / self.risk_per_trade, 2)
 
-            # Check Stop Loss / Target Triggers
+            # Check Stop Loss / Target Triggers or 3:00 PM IST EOD Square-off
             exit_reason = None
             exit_price = None
 
-            if direction == 'BUY':
+            now_utc = datetime.now(timezone.utc)
+            now_ist = now_utc + timedelta(hours=5, minutes=30)
+            time_mins = now_ist.hour * 60 + now_ist.minute
+            is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST
+
+            if is_eod_cutoff:
+                exit_reason = 'EOD_AUTO_SQUAREOFF_3PM'
+                exit_price = ltp
+            elif direction == 'BUY':
                 if ltp <= sl:
                     exit_reason = 'STOP_LOSS_HIT'
                     exit_price = sl

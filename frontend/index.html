@@ -1004,8 +1004,8 @@ Trigger Condition:
               charges: 31.65,
               netPnl: 1593.35,
               rMultiple: "+7.97R",
-              exitReason: "EOD Auto-Squareoff",
-              time: "03:15 PM",
+              exitReason: "3:00 PM EOD Auto-Squareoff",
+              time: "03:00 PM",
               marginUsed: 24300.00,
               turnover: 121500.00
             },
@@ -1052,9 +1052,11 @@ Trigger Condition:
 
       const isWeekday = day >= 1 && day <= 5;
       const isMarketHours = timeInMinutes >= (9 * 60 + 15) && timeInMinutes <= (15 * 60 + 30);
+      const isPast3PM = isWeekday && (timeInMinutes >= (15 * 60)); // Strict 3:00 PM IST EOD Square-off
 
       return {
-        isOpen: isWeekday && isMarketHours,
+        isOpen: isWeekday && isMarketHours && !isPast3PM,
+        isPast3PM: isPast3PM,
         timeStr: ist.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
       };
     }
@@ -1290,6 +1292,47 @@ Trigger Condition:
             time: p.entry_time || p.time || "10:00 AM"
           }));
           renderPositions();
+        }
+
+        // 4. Auto Square-off any open intraday positions before 3:00 PM IST
+        const marketStatus = getMarketStatus();
+        if (marketStatus.isPast3PM && userState.positions && userState.positions.length > 0) {
+          userState.positions.forEach(pos => {
+            const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty);
+            const grossPnl = pos.currentPnl;
+            const charges = chg.totalCharges;
+            const netPnl = parseFloat((grossPnl - charges).toFixed(2));
+            const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
+
+            if (!userState.ledger[0]) {
+              userState.ledger.unshift({ date: "TODAY", dayPnl: "+₹0.00", trades: [] });
+            }
+
+            userState.ledger[0].trades.unshift({
+              id: "tr_eod_" + Date.now(),
+              symbol: pos.symbol,
+              side: pos.side,
+              qty: pos.qty,
+              entry: pos.entry,
+              exit: pos.currentLtp,
+              sl: pos.sl,
+              tp: pos.tp,
+              pnl: `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`,
+              grossPnl: grossPnl,
+              charges: charges,
+              netPnl: netPnl,
+              rMultiple: `${netPnl >= 0 ? '+' : ''}${rMultiple}R`,
+              exitReason: "3:00 PM EOD Auto-Squareoff",
+              time: "03:00 PM",
+              marginUsed: pos.marginLocked,
+              turnover: pos.entry * pos.qty
+            });
+          });
+          userState.positions = [];
+          renderPositions();
+          renderLedger();
+          recalculateMarginsAndPnl();
+          showToast("⏰ 03:00 PM IST Reached: All intraday positions auto-squared off.");
         }
 
         recalculateMarginsAndPnl();

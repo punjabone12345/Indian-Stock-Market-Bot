@@ -148,6 +148,8 @@ class TradeEngine:
         is_weekday = (0 <= now_ist.weekday() <= 4)
         time_mins = now_ist.hour * 60 + now_ist.minute
         is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
+        is_entry_window = is_weekday and (9 * 60 + 30 <= time_mins <= 14 * 60 + 15)  # No new entries after 2:15 PM IST
+        is_past_3pm = is_weekday and (time_mins >= 15 * 60)  # All open positions squared off by 3:00 PM IST
 
         # Evaluate each of the Crown 6 stocks
         scores = {}
@@ -158,10 +160,16 @@ class TradeEngine:
             if not is_market_open:
                 sc['signal_ready'] = False
                 sc['next_step'] = f"NSE Closed (Recorded LTP: ₹{q['price']:,.2f}). Session starts 09:15 AM."
+            elif is_past_3pm:
+                sc['signal_ready'] = False
+                sc['next_step'] = "Past 03:00 PM IST: All intraday positions squared off. Session closing."
+            elif not is_entry_window:
+                sc['signal_ready'] = False
+                sc['next_step'] = "Outside Entry Window (09:30 AM - 02:15 PM IST): Active position tracking only."
             scores[sym] = sc
 
-            # Auto Entry if signal confirms and market is open
-            if is_market_open and sc['signal_ready'] and portfolio.bot_active and len(portfolio.positions) < portfolio.max_open_positions:
+            # Auto Entry if signal confirms, within entry window, and not past 3:00 PM cutoff
+            if is_entry_window and sc['signal_ready'] and portfolio.bot_active and len(portfolio.positions) < portfolio.max_open_positions:
                 cur_p = q['price']
                 atr = sc['atr']
                 # SL: 0.20% min, 0.70% max
