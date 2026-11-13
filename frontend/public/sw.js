@@ -1,5 +1,5 @@
 // Indian Stock Market Bot - Service Worker for PWA Offline & Installability
-const CACHE_NAME = 'ismb-terminal-v2';
+const CACHE_NAME = 'indian-stock-market-bot-v3';
 const STATIC_RESOURCES = [
   '/',
   '/index.html',

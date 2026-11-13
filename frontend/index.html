@@ -1,14 +1,14 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
-<title>ISMB CROWN 6 • Institutional Trading Terminal</title>
+<title>Indian Stock Market Bot • Institutional Terminal</title>
 <!-- PWA Manifest & Android App Meta Tags -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080B11">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="application-name" content="ISMB Crown 6">
+<meta name="application-name" content="Indian Stock Market Bot">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
 <link rel="apple-touch-icon" href="/icon-192.png">
@@ -192,7 +192,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="crown" aria-hidden="true" class="lucide lucide-crown w-3.5 h-3.5"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>
 </div>
 <div class="flex items-center gap-1 min-w-0">
-<span class="font-extrabold text-[12px] sm:text-[13px] tracking-tight text-white font-sans truncate">ISMB CROWN 6</span>
+<span class="font-black text-[12.5px] sm:text-[13.5px] tracking-tight text-white font-sans truncate">Indian Stock Market Bot</span>
 <span id="marketStatusBadge" class="live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0">
 🌙 NSE CLOSED
 </span>
@@ -268,429 +268,15 @@
 <!-- Watchlist Header -->
 <div class="flex items-center justify-between pt-0.5 px-1">
 <div class="flex items-center gap-1.5">
-<span class="text-xs font-bold text-slate-200 font-mono tracking-wide">CROWN 6 ALPHA</span>
+<span class="text-xs font-black text-slate-200 font-mono tracking-wide">Indian Stock Market Bot</span>
 <span class="text-[8.5px] px-2 py-0.5 rounded-full bg-cyanAccent/10 text-cyanAccent font-mono border border-cyanAccent/20 font-semibold">5m MIS</span>
 </div>
 <span class="text-[9.5px] font-mono text-slate-400">NSE Intraday</span>
 </div>
 <!-- 6 High-Density Instrument Cards Container -->
-<div class="space-y-2.5" id="watchlistContainer"><div id="stock-row-RELIANCE" class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm">
-          <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('RELIANCE')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">RELIANCE</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10.5px] text-slate-400 font-sans ml-1 truncate max-w-[130px]">Energy • Heavyweight</span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div id="ltp-RELIANCE" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300">
-                  ₹1,335.10
-                </div>
-                <div id="pchange-RELIANCE" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md bg-roseBear/15 text-roseBear border border-roseBear/25">
-                  -0.35%
-                </div>
-              </div>
-            </div>
-
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 82%;"></div>
-                </div>
-                <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    82%
-                  </span>
-                </div>
-              </div>
-
-              <div class="shrink-0">
-                <button onclick="event.stopPropagation(); openChartModal('RELIANCE')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
-                  <span>5m Chart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
-            <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-2.5 h-2.5 text-amberTactical"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-amberTactical font-semibold">SIGNAL TRIGGER:</span> Testing EMA9 resistance zone (₹1,336.08). Waiting for 5m bearish confirmation close.
-            </div>
-          </div>
-
-          <!-- Collapsible Quant Strip -->
-          <div id="quant-strip-RELIANCE" class="hidden p-2.5 bg-black/30 border-t border-dashed border-white/10 grid grid-cols-4 gap-1.5 text-[9px] font-mono text-center">
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">EMA 9</span>
-              <span class="text-slate-200 font-bold">1336.08</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">VWAP</span>
-              <span class="text-slate-200 font-bold">1338.4</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">ATR (14)</span>
-              <span class="text-slate-200 font-bold">18.2</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">5x MIS MARGIN</span>
-              <span class="text-cyanAccent font-bold">₹267.02 / sh</span>
-            </div>
-          </div>
-        </div><div id="stock-row-ITC" class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm">
-          <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('ITC')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">ITC</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10.5px] text-slate-400 font-sans ml-1 truncate max-w-[130px]">FMCG • Intraday Lead</span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div id="ltp-ITC" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300">₹492.69</div>
-                <div id="pchange-ITC" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md bg-emeraldBull/25 text-emeraldBull border border-emeraldBull/40">+0.86%</div>
-              </div>
-            </div>
-
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 78%;"></div>
-                </div>
-                <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    78%
-                  </span>
-                </div>
-              </div>
-
-              <div class="shrink-0">
-                <button onclick="event.stopPropagation(); openChartModal('ITC')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
-                  <span>5m Chart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
-            <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-2.5 h-2.5 text-amberTactical"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-amberTactical font-semibold">SIGNAL TRIGGER:</span> Consolidating above 5m VWAP (₹490.50). 1:3 Bullish continuation order ready at ₹493.10.
-            </div>
-          </div>
-
-          <!-- Collapsible Quant Strip -->
-          <div id="quant-strip-ITC" class="hidden p-2.5 bg-black/30 border-t border-dashed border-white/10 grid grid-cols-4 gap-1.5 text-[9px] font-mono text-center">
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">EMA 9</span>
-              <span class="text-slate-200 font-bold">491.2</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">VWAP</span>
-              <span class="text-slate-200 font-bold">490.5</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">ATR (14)</span>
-              <span class="text-slate-200 font-bold">6.4</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">5x MIS MARGIN</span>
-              <span class="text-cyanAccent font-bold">₹98.46 / sh</span>
-            </div>
-          </div>
-        </div><div id="stock-row-MARUTI" class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm">
-          <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('MARUTI')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">MARUTI</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10.5px] text-slate-400 font-sans ml-1 truncate max-w-[130px]">Auto • High ATR Target</span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div id="ltp-MARUTI" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300">₹12,435.59</div>
-                <div id="pchange-MARUTI" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md bg-roseBear/25 text-roseBear border border-roseBear/40">-1.00%</div>
-              </div>
-            </div>
-
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 61%;"></div>
-                </div>
-                <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    61%
-                  </span>
-                </div>
-              </div>
-
-              <div class="shrink-0">
-                <button onclick="event.stopPropagation(); openChartModal('MARUTI')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
-                  <span>5m Chart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
-            <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-2.5 h-2.5 text-amberTactical"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-amberTactical font-semibold">SIGNAL TRIGGER:</span> Oscillating between 12,400 Support and 12,520 EMA20. No institutional edge detected.
-            </div>
-          </div>
-
-          <!-- Collapsible Quant Strip -->
-          <div id="quant-strip-MARUTI" class="hidden p-2.5 bg-black/30 border-t border-dashed border-white/10 grid grid-cols-4 gap-1.5 text-[9px] font-mono text-center">
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">EMA 9</span>
-              <span class="text-slate-200 font-bold">12480</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">VWAP</span>
-              <span class="text-slate-200 font-bold">12490</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">ATR (14)</span>
-              <span class="text-slate-200 font-bold">145</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">5x MIS MARGIN</span>
-              <span class="text-cyanAccent font-bold">₹2,490.00 / sh</span>
-            </div>
-          </div>
-        </div><div id="stock-row-TATASTEEL" class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm">
-          <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('TATASTEEL')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">TATASTEEL</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10.5px] text-slate-400 font-sans ml-1 truncate max-w-[130px]">Metals • High Volume</span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div id="ltp-TATASTEEL" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300">₹154.76</div>
-                <div id="pchange-TATASTEEL" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md bg-emeraldBull/25 text-emeraldBull border border-emeraldBull/40">-0.70%</div>
-              </div>
-            </div>
-
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 89%;"></div>
-                </div>
-                <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    89%
-                  </span>
-                </div>
-              </div>
-
-              <div class="shrink-0">
-                <button onclick="event.stopPropagation(); openChartModal('TATASTEEL')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
-                  <span>5m Chart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
-            <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-2.5 h-2.5 text-amberTactical"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-amberTactical font-semibold">SIGNAL TRIGGER:</span> Breakdown of morning low (₹154.00) confirms institutional liquidity short block.
-            </div>
-          </div>
-
-          <!-- Collapsible Quant Strip -->
-          <div id="quant-strip-TATASTEEL" class="hidden p-2.5 bg-black/30 border-t border-dashed border-white/10 grid grid-cols-4 gap-1.5 text-[9px] font-mono text-center">
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">EMA 9</span>
-              <span class="text-slate-200 font-bold">155.1</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">VWAP</span>
-              <span class="text-slate-200 font-bold">155.8</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">ATR (14)</span>
-              <span class="text-slate-200 font-bold">2.8</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">5x MIS MARGIN</span>
-              <span class="text-cyanAccent font-bold">₹30.84 / sh</span>
-            </div>
-          </div>
-        </div><div id="stock-row-SUNPHARMA" class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm">
-          <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('SUNPHARMA')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">SUNPHARMA</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10.5px] text-slate-400 font-sans ml-1 truncate max-w-[130px]">Pharma • Defensive Flow</span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div id="ltp-SUNPHARMA" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300">
-                  ₹1,720.50
-                </div>
-                <div id="pchange-SUNPHARMA" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/25">
-                  +0.83%
-                </div>
-              </div>
-            </div>
-
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 54%;"></div>
-                </div>
-                <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    54%
-                  </span>
-                </div>
-              </div>
-
-              <div class="shrink-0">
-                <button onclick="event.stopPropagation(); openChartModal('SUNPHARMA')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
-                  <span>5m Chart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
-            <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-2.5 h-2.5 text-amberTactical"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-amberTactical font-semibold">SIGNAL TRIGGER:</span> Respecting daily pivot. Watching 5m pullback to ₹1,715 for institutional re-entry.
-            </div>
-          </div>
-
-          <!-- Collapsible Quant Strip -->
-          <div id="quant-strip-SUNPHARMA" class="hidden p-2.5 bg-black/30 border-t border-dashed border-white/10 grid grid-cols-4 gap-1.5 text-[9px] font-mono text-center">
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">EMA 9</span>
-              <span class="text-slate-200 font-bold">1718</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">VWAP</span>
-              <span class="text-slate-200 font-bold">1716.4</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">ATR (14)</span>
-              <span class="text-slate-200 font-bold">22.5</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">5x MIS MARGIN</span>
-              <span class="text-cyanAccent font-bold">₹344.10 / sh</span>
-            </div>
-          </div>
-        </div><div id="stock-row-INFY" class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm">
-          <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('INFY')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">INFY</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10.5px] text-slate-400 font-sans ml-1 truncate max-w-[130px]">IT Tech • US Q3 Sync</span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div id="ltp-INFY" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300 text-emeraldBull">₹1,915.04</div>
-                <div id="pchange-INFY" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md bg-emeraldBull/25 text-emeraldBull border border-emeraldBull/40">-0.83%</div>
-              </div>
-            </div>
-
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 74%;"></div>
-                </div>
-                <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    74%
-                  </span>
-                </div>
-              </div>
-
-              <div class="shrink-0">
-                <button onclick="event.stopPropagation(); openChartModal('INFY')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
-                  <span>5m Chart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
-            <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-2.5 h-2.5 text-amberTactical"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-amberTactical font-semibold">SIGNAL TRIGGER:</span> 3 consecutive lower highs on 5m. Target ₹1,898 with 1:3 RRR algorithmic setup.
-            </div>
-          </div>
-
-          <!-- Collapsible Quant Strip -->
-          <div id="quant-strip-INFY" class="hidden p-2.5 bg-black/30 border-t border-dashed border-white/10 grid grid-cols-4 gap-1.5 text-[9px] font-mono text-center">
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">EMA 9</span>
-              <span class="text-slate-200 font-bold">1920</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">VWAP</span>
-              <span class="text-slate-200 font-bold">1924.5</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">ATR (14)</span>
-              <span class="text-slate-200 font-bold">26</span>
-            </div>
-            <div class="bg-surfaceLow/90 p-1.5 rounded-xl border border-white/5">
-              <span class="text-slate-400 block text-[8px] uppercase">5x MIS MARGIN</span>
-              <span class="text-cyanAccent font-bold">₹382.48 / sh</span>
-            </div>
-          </div>
-        </div></div>
+<div class="space-y-2.5" id="watchlistContainer">
+  <!-- Dynamic 6 Instrument Cards rendered via renderWatchlist() with TradingView Logos -->
+</div>
 </section>
 <!-- TAB 2: POSITIONS TAB -->
 <section class="p-3.5 space-y-3 hidden" id="tab-positions">
@@ -758,98 +344,9 @@
 <!-- Chronological Master Ledger grouped date-wise -->
 <div class="space-y-2 pt-1">
 <div class="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider px-1">Chronological Trade Ledger</div>
-<div class="space-y-3 font-mono" id="ledgerContainer"><div class="space-y-1.5">
-          <div class="flex items-center justify-between text-[10px] px-1 text-slate-400 font-bold border-b border-white/5 pb-1">
-            <span>TODAY (18 OCT 2024)</span>
-            <span class="text-emeraldBull font-mono">+₹1,440.00 (+7.2R)</span>
-          </div>
-          <div class="space-y-1.5">
-            
-            <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px]">
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-white">RELIANCE</span>
-                  <span class="px-1.5 py-0.2 rounded-full text-[8px] font-extrabold bg-roseBear/15 text-roseBear border border-roseBear/25">SELL</span>
-                  <span class="text-slate-400 font-sans">50 Qty • 10:15 AM</span>
-                </div>
-                <span class="text-[9px] text-slate-400 block mt-0.5">₹1344.00 → ₹1332.00 • Target 1:3 Hit (EMA9 breakdown)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-emeraldBull block text-xs">+₹600.00</span>
-                <span class="text-[9px] text-emeraldBull/80">+3.0R</span>
-              </div>
-            </div>
-          
-            <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px]">
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-white">TATASTEEL</span>
-                  <span class="px-1.5 py-0.2 rounded-full text-[8px] font-extrabold bg-roseBear/15 text-roseBear border border-roseBear/25">SELL</span>
-                  <span class="text-slate-400 font-sans">400 Qty • 11:45 AM</span>
-                </div>
-                <span class="text-[9px] text-slate-400 block mt-0.5">₹156.40 → ₹154.30 • Target 1:3 Hit (PZ breakdown)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-emeraldBull block text-xs">+₹840.00</span>
-                <span class="text-[9px] text-emeraldBull/80">+4.2R</span>
-              </div>
-            </div>
-          
-          </div>
-        </div><div class="space-y-1.5">
-          <div class="flex items-center justify-between text-[10px] px-1 text-slate-400 font-bold border-b border-white/5 pb-1">
-            <span>YESTERDAY (17 OCT 2024)</span>
-            <span class="text-emeraldBull font-mono">+₹2,840.00 (+14.2R)</span>
-          </div>
-          <div class="space-y-1.5">
-            
-            <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px]">
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-white">INFY</span>
-                  <span class="px-1.5 py-0.2 rounded-full text-[8px] font-extrabold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/25">BUY</span>
-                  <span class="text-slate-400 font-sans">35 Qty • 02:10 PM</span>
-                </div>
-                <span class="text-[9px] text-slate-400 block mt-0.5">₹1880.00 → ₹1910.00 • Trailing SL Protected</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-emeraldBull block text-xs">+₹1,050.00</span>
-                <span class="text-[9px] text-emeraldBull/80">+5.2R</span>
-              </div>
-            </div>
-          
-            <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px]">
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-white">ITC</span>
-                  <span class="px-1.5 py-0.2 rounded-full text-[8px] font-extrabold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/25">BUY</span>
-                  <span class="text-slate-400 font-sans">250 Qty • 03:15 PM</span>
-                </div>
-                <span class="text-[9px] text-slate-400 block mt-0.5">₹486.00 → ₹492.50 • EOD Auto-Squareoff</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-emeraldBull block text-xs">+₹1,625.00</span>
-                <span class="text-[9px] text-emeraldBull/80">+8.1R</span>
-              </div>
-            </div>
-          
-            <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px]">
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-white">MARUTI</span>
-                  <span class="px-1.5 py-0.2 rounded-full text-[8px] font-extrabold bg-roseBear/15 text-roseBear border border-roseBear/25">SELL</span>
-                  <span class="text-slate-400 font-sans">5 Qty • 09:40 AM</span>
-                </div>
-                <span class="text-[9px] text-slate-400 block mt-0.5">₹12550.00 → ₹12585.00 • Stop Loss Triggered</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-roseBear block text-xs">-₹175.00</span>
-                <span class="text-[9px] text-roseBear/80">-0.87R</span>
-              </div>
-            </div>
-          
-          </div>
-        </div></div>
+<div class="space-y-3 font-mono" id="ledgerContainer">
+  <!-- Chronological Trade Ledger rendered via renderLedger() with Audit buttons -->
+</div>
 </div>
 </section>
 <!-- TAB 4: SETTINGS & BROKER CONTROL CENTER -->
@@ -1070,106 +567,143 @@ Trigger Condition:
 </div>
 <!-- Position Close/Delete Modal -->
 <div class="absolute inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200" id="positionActionModal">
-<div class="glass-panel p-5 rounded-3xl border border-white/10 max-w-[340px] text-center space-y-3.5 shadow-2xl">
-<div class="w-12 h-12 mx-auto rounded-2xl bg-cyanAccent/15 flex items-center justify-center text-cyanAccent border border-cyanAccent/25" id="actionModalIcon">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check w-6 h-6"><path d="M20 6 9 17l-5-5"></path></svg>
+  <div class="glass-panel p-5 rounded-3xl border border-white/10 max-w-[340px] text-center space-y-3.5 shadow-2xl">
+    <div class="w-12 h-12 mx-auto rounded-2xl bg-cyanAccent/15 flex items-center justify-center text-cyanAccent border border-cyanAccent/25" id="actionModalIcon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check w-6 h-6"><path d="M20 6 9 17l-5-5"></path></svg>
+    </div>
+    <h3 class="text-sm font-black text-white font-mono" id="actionModalTitle">CONFIRM ACTION</h3>
+    <p class="text-xs text-slate-300 font-mono leading-relaxed" id="actionModalDesc">Are you sure you want to proceed?</p>
+    <div class="grid grid-cols-2 gap-2 pt-1 font-mono text-xs">
+      <button class="py-2.5 rounded-xl bg-surfaceHigh text-slate-200 font-bold border border-white/5 active:scale-95 transition-all" onclick="closeActionModal()">CANCEL</button>
+      <button class="py-2.5 rounded-xl bg-cyanAccent text-black font-extrabold active:scale-95 transition-all shadow-md" id="actionModalConfirmBtn" onclick="confirmPositionAction()">CONFIRM</button>
+    </div>
+  </div>
 </div>
-<h3 class="text-sm font-bold text-white font-mono" id="actionModalTitle">CONFIRM ACTION</h3>
-<p class="text-xs text-slate-400 font-mono leading-relaxed" id="actionModalDesc">Are you sure you want to proceed?</p>
-<div class="grid grid-cols-2 gap-2 pt-1 font-mono text-xs">
-<button class="py-2.5 rounded-xl bg-surfaceHigh text-slate-300 font-semibold border border-white/5 active:scale-95 transition-all" onclick="closeActionModal()">CANCEL</button>
-<button class="py-2.5 rounded-xl bg-cyanAccent text-black font-bold active:scale-95 transition-all shadow-md" id="actionModalConfirmBtn" onclick="confirmPositionAction()">CONFIRM</button>
-</div>
-</div>
+
 <!-- ============================================== -->
-<!-- TRADE AUDIT DETAIL MODAL                       -->
+<!-- TRADE AUDIT DETAIL MODAL (STANDALONE Z-[100])  -->
 <!-- ============================================== -->
-<div class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-300" id="tradeDetailModal" onclick="if(event.target===this) closeTradeDetailModal()">
-  <div class="w-full max-w-[420px] bg-surfaceCard rounded-t-[28px] sm:rounded-3xl border border-white/10 p-4 space-y-3 shadow-2xl transform translate-y-8 transition-transform duration-300 max-h-[88vh] overflow-y-auto" id="tradeDetailSheet" onclick="event.stopPropagation()">
-    <!-- Header -->
-    <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
-      <div class="flex items-center gap-2">
-        <span class="font-black text-base text-white font-mono" id="tdModalSymbol">RELIANCE</span>
-        <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold font-mono" id="tdModalSideBadge">SELL • 5x MIS</span>
-        <span class="text-[9.5px] text-slate-400 font-mono ml-1" id="tdModalTime">10:15 AM</span>
+<div class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-250" id="tradeDetailModal" onclick="if(event.target===this) closeTradeDetailModal()">
+  <div class="w-full max-w-[440px] bg-[#0E1424] rounded-t-[28px] sm:rounded-3xl border border-white/15 p-4 space-y-3.5 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] transform translate-y-8 transition-transform duration-250 max-h-[90vh] overflow-y-auto" id="tradeDetailSheet" onclick="event.stopPropagation()">
+    <!-- Header with Stock Logo -->
+    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+      <div class="flex items-center gap-2.5">
+        <div id="tdModalLogo" class="shrink-0"></div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-black text-base text-white font-mono tracking-tight" id="tdModalSymbol">RELIANCE</span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-black font-mono" id="tdModalSideBadge">SELL • 5x MIS</span>
+          </div>
+          <span class="text-[9.5px] text-slate-400 font-mono font-medium block mt-0.5" id="tdModalTime">10:15 AM IST</span>
+        </div>
       </div>
-      <button onclick="closeTradeDetailModal()" class="w-7 h-7 rounded-full bg-surfaceHigh flex items-center justify-center text-slate-400 hover:text-white transition-all active:scale-95">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" class="w-3.5 h-3.5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+      <button onclick="closeTradeDetailModal()" class="w-8 h-8 rounded-full bg-surfaceHigh border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-all active:scale-95">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
       </button>
     </div>
 
     <!-- Strategy Signal -->
-    <div class="px-3 py-2 bg-surfaceLow rounded-xl border border-white/5">
-      <span class="text-[8.5px] font-bold text-amberTactical uppercase font-mono block mb-0.5">STRATEGY TRIGGER</span>
-      <p class="text-[11px] font-mono text-slate-200" id="tdModalReason">Target 1:3 Hit (EMA9 breakdown)</p>
+    <div class="px-3 py-2 bg-black/40 rounded-xl border border-white/10">
+      <span class="text-[8.5px] font-bold text-amberTactical uppercase font-mono block mb-0.5">STRATEGY TRIGGER (1:3 ASYMMETRIC RRR)</span>
+      <p class="text-[11px] font-mono text-slate-200 font-medium" id="tdModalReason">Target 1:3 Hit (EMA9 breakdown pullback)</p>
     </div>
 
     <!-- Execution Prices (4 Grid) -->
     <div class="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">ENTRY</span>
-        <span class="text-white font-bold text-xs" id="tdModalEntry">₹1,344.00</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">ENTRY PRICE</span>
+        <span class="text-white font-black text-xs" id="tdModalEntry">₹1,344.00</span>
       </div>
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">EXIT</span>
-        <span class="text-white font-bold text-xs" id="tdModalExit">₹1,332.00</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">EXIT PRICE</span>
+        <span class="text-white font-black text-xs" id="tdModalExit">₹1,332.00</span>
       </div>
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">STOP LOSS</span>
-        <span class="text-roseBear font-bold text-xs" id="tdModalSL">₹1,348.00</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">STOP LOSS (1R)</span>
+        <span class="text-roseBear font-black text-xs" id="tdModalSL">₹1,348.00</span>
       </div>
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">TARGET (1:3)</span>
-        <span class="text-emeraldBull font-bold text-xs" id="tdModalTP">₹1,332.00</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">TARGET (3R)</span>
+        <span class="text-emeraldBull font-black text-xs" id="tdModalTP">₹1,332.00</span>
       </div>
     </div>
 
     <!-- Position & Margin (3 Grid) -->
     <div class="grid grid-cols-3 gap-1.5 text-[10px] font-mono">
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">QTY</span>
-        <span class="text-white font-bold" id="tdModalQty">50 Qty</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">QTY</span>
+        <span class="text-white font-black text-xs" id="tdModalQty">50</span>
       </div>
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">TURNOVER</span>
-        <span class="text-white font-bold" id="tdModalTurnover">₹67,200.00</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">TURNOVER</span>
+        <span class="text-white font-black text-xs" id="tdModalTurnover">₹1,33,800</span>
       </div>
-      <div class="bg-surfaceLow p-2 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase">5x MARGIN</span>
-        <span class="text-cyanAccent font-bold" id="tdModalMargin">₹13,440.00</span>
-      </div>
-    </div>
-
-    <!-- Statutory Charges -->
-    <div class="bg-black/30 p-2.5 rounded-xl border border-white/5 space-y-1 text-[9px] font-mono text-slate-400">
-      <div class="flex justify-between font-bold text-slate-300">
-        <span>Statutory Charges:</span>
-        <span id="tdModalCharges">₹12.26</span>
-      </div>
-      <div class="flex justify-between text-[8px] text-slate-500">
-        <span>STT: <span id="tdModalSTT">₹8.40</span> • Exch: <span id="tdModalExch">₹1.99</span> • GST: <span id="tdModalGST">₹1.87</span></span>
-        <span class="text-emeraldBull">MARGIN RELEASED</span>
+      <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">5x MARGIN</span>
+        <span class="text-cyanAccent font-black text-xs" id="tdModalMargin">₹13,440</span>
       </div>
     </div>
 
-    <!-- Net Realized P&L Banner -->
-    <div class="p-3 rounded-2xl border flex items-center justify-between font-mono" id="tdModalPnlBanner">
+    <!-- Statutory Trading Charges Breakdown -->
+    <div class="bg-black/50 p-3 rounded-2xl border border-white/10 space-y-2 text-[10px] font-mono">
+      <div class="flex items-center justify-between font-bold text-slate-200 border-b border-white/10 pb-1.5">
+        <span class="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyanAccent"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Statutory Charges (NSE):
+        </span>
+        <span class="text-roseBear font-black text-xs" id="tdModalCharges">₹70.69</span>
+      </div>
+      <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[9px] text-slate-400">
+        <div class="flex justify-between">
+          <span>Brokerage:</span>
+          <span class="text-slate-200 font-bold" id="tdModalBrokerage">₹39.98</span>
+        </div>
+        <div class="flex justify-between">
+          <span>STT (0.025%):</span>
+          <span class="text-slate-200 font-bold" id="tdModalSTT">₹16.65</span>
+        </div>
+        <div class="flex justify-between">
+          <span>NSE Exch:</span>
+          <span class="text-slate-200 font-bold" id="tdModalExch">₹3.97</span>
+        </div>
+        <div class="flex justify-between">
+          <span>GST (18%):</span>
+          <span class="text-slate-200 font-bold" id="tdModalGST">₹7.94</span>
+        </div>
+        <div class="flex justify-between">
+          <span>SEBI + Stamp:</span>
+          <span class="text-slate-200 font-bold" id="tdModalSebiStamp">₹2.15</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Margin Status:</span>
+          <span class="text-emeraldBull font-bold">RELEASED (100%)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gross vs Net Realized P&L Banner -->
+    <div class="p-3.5 rounded-2xl border flex items-center justify-between font-mono" id="tdModalPnlBanner">
       <div>
-        <span class="text-[8.5px] uppercase font-sans text-slate-400 block">NET P&amp;L</span>
-        <span class="text-base font-black" id="tdModalNetPnl">+₹600.00</span>
+        <div class="flex items-center gap-2 mb-0.5">
+          <span class="text-[8.5px] uppercase font-sans text-slate-400 font-bold">GROSS P&amp;L</span>
+          <span class="text-xs font-bold text-slate-300" id="tdModalGrossPnl">+₹600.00</span>
+        </div>
+        <div>
+          <span class="text-[9px] uppercase font-sans text-slate-400 font-bold">NET REALIZED P&amp;L</span>
+          <span class="text-base font-black" id="tdModalNetPnl">+₹529.31</span>
+        </div>
       </div>
       <div class="text-right">
-        <span class="text-[8.5px] uppercase font-sans text-slate-400 block">R-MULTIPLE</span>
-        <span class="text-xs font-bold" id="tdModalRMultiple">+3.00R</span>
+        <span class="text-[9px] uppercase font-sans text-slate-400 font-bold">R-MULTIPLE</span>
+        <span class="text-sm font-black" id="tdModalRMultiple">+2.65R</span>
+        <span class="text-[8px] text-slate-400 block mt-0.5">1R = ₹200</span>
       </div>
     </div>
 
-    <button onclick="closeTradeDetailModal()" class="w-full py-2 rounded-xl bg-surfaceHigh text-slate-200 font-bold font-mono text-xs hover:bg-white/10 active:scale-98 transition-all">
-      CLOSE
+    <button onclick="closeTradeDetailModal()" class="w-full py-2.5 rounded-xl bg-surfaceHigh text-white font-bold font-mono text-xs hover:bg-white/10 active:scale-98 transition-all border border-white/10 shadow-md">
+      CLOSE AUDIT
     </button>
   </div>
-</div>
-
 </div>
 <!-- Toast Notification Banner -->
 <div class="absolute top-4 inset-x-4 z-50 bg-surfaceHigh/95 backdrop-blur-md border border-cyanAccent/30 p-3 rounded-2xl shadow-2xl flex items-center gap-2.5 transform -translate-y-20 opacity-0 transition-all duration-300 pointer-events-none font-mono text-xs" id="toastNotification">
@@ -1186,7 +720,102 @@ Trigger Condition:
     const TELEGRAM_BOT_TOKEN = '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc';
     const TELEGRAM_CHAT_ID = '5582938659';
 
-    // Real NSE Closing & Market Quotes for Crown 6
+    // Real NSE Closing & Market Quotes for Indian Stock Market Bot
+    
+    // ==============================================
+    // TRADINGVIEW-STYLE INSTRUMENT LOGOS
+    // ==============================================
+    const STOCK_LOGOS = {
+      RELIANCE: `
+        <div class="w-8 h-8 rounded-full bg-[#002D62] border border-blue-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <svg class="w-4.5 h-4.5 text-white" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="16" fill="#002D62"/>
+            <path d="M10 8h7a5 5 0 015 5c0 2.2-1.4 4.1-3.4 4.7L23 24h-4.5l-3.8-5.8H13.5V24H10V8zm3.5 7.2h3.2a2 2 0 000-4H13.5v4z" fill="#38BDF8"/>
+            <path d="M22 8l2 2-2 2-2-2 2-2z" fill="#F59E0B"/>
+          </svg>
+        </div>
+      `,
+      ITC: `
+        <div class="w-8 h-8 rounded-full bg-[#001D4A] border border-amber-400/35 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <span class="font-serif font-black text-amber-400 text-[11px] tracking-tight">ITC</span>
+        </div>
+      `,
+      MARUTI: `
+        <div class="w-8 h-8 rounded-full bg-[#002B7F] border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <svg class="w-4.5 h-4.5" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="16" fill="#002B7F"/>
+            <path d="M23 10L10 15.5l5.5 2.2-6.5 5.5L22 17.5l-5.5-2.2L23 10z" fill="#EF4444"/>
+            <path d="M16 6l-8 7.5h16L16 26" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      `,
+      TATASTEEL: `
+        <div class="w-8 h-8 rounded-full bg-[#003B73] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <svg class="w-4.5 h-4.5" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="16" fill="#003B73"/>
+            <path d="M6 10h20M16 10v14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M10 14c0-3 2.5-4.5 6-4.5s6 1.5 6 4.5" stroke="#38BDF8" stroke-width="1.8" fill="none"/>
+          </svg>
+        </div>
+      `,
+      SUNPHARMA: `
+        <div class="w-8 h-8 rounded-full bg-[#C2410C] border border-amber-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <svg class="w-4.5 h-4.5 text-amber-200" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="16" fill="#C2410C"/>
+            <circle cx="16" cy="16" r="5" fill="#FEF3C7"/>
+            <path d="M16 3v4M16 25v4M3 16h4M25 16h4M6.8 6.8l2.8 2.8M22.4 22.4l2.8 2.8M6.8 25.2l2.8-2.8M22.4 9.6l2.8-2.8" stroke="#FEF3C7" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      `,
+      INFY: `
+        <div class="w-8 h-8 rounded-full bg-[#0284C7] border border-cyan-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <span class="font-sans font-black text-white text-[11px] tracking-tight lowercase">infy</span>
+        </div>
+      `
+    };
+
+    // ==============================================
+    // EXACT INDIAN STATUTORY CHARGES ENGINE
+    // ==============================================
+    function calculateIndianTradingCharges(entryPrice, exitPrice, qty) {
+      const buyTurnover = entryPrice * qty;
+      const sellTurnover = exitPrice * qty;
+      const totalTurnover = buyTurnover + sellTurnover;
+
+      // 1. Brokerage (Discount broker standard: Flat ₹20 per leg or 0.03% max ₹20)
+      const buyBrokerage = Math.min(20, buyTurnover * 0.0003);
+      const sellBrokerage = Math.min(20, sellTurnover * 0.0003);
+      const brokerage = buyBrokerage + sellBrokerage;
+
+      // 2. STT (0.025% on Sell side only for equity intraday)
+      const stt = sellTurnover * 0.00025;
+
+      // 3. NSE Exchange Turnover Fee (0.00297% on both sides)
+      const exchFee = totalTurnover * 0.0000297;
+
+      // 4. SEBI Turnover Fee (₹10 / crore = 0.0001%)
+      const sebiFee = totalTurnover * 0.000001;
+
+      // 5. Stamp Duty (0.003% on Buy side only)
+      const stampDuty = buyTurnover * 0.00003;
+
+      // 6. GST (18% on Brokerage + Exch Fee + SEBI)
+      const gst = (brokerage + exchFee + sebiFee) * 0.18;
+
+      const totalCharges = brokerage + stt + exchFee + sebiFee + stampDuty + gst;
+
+      return {
+        turnover: parseFloat(totalTurnover.toFixed(2)),
+        margin: parseFloat((buyTurnover / 5).toFixed(2)),
+        brokerage: parseFloat(brokerage.toFixed(2)),
+        stt: parseFloat(stt.toFixed(2)),
+        exch: parseFloat(exchFee.toFixed(2)),
+        gst: parseFloat(gst.toFixed(2)),
+        sebiStamp: parseFloat((sebiFee + stampDuty).toFixed(2)),
+        totalCharges: parseFloat(totalCharges.toFixed(2))
+      };
+    }
+
     const CROWN_6_DATA = [
       {
         symbol: "RELIANCE",
@@ -1693,23 +1322,25 @@ Trigger Condition:
         const isUp = item.change >= 0;
         const card = document.createElement('div');
         card.id = `stock-row-${item.symbol}`;
-        card.className = "glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 active:scale-[0.99] shadow-sm";
+        card.className = "glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/25 active:scale-[0.99] shadow-md";
         
         card.innerHTML = `
           <div class="p-3 cursor-pointer" onclick="toggleStockExpansion('${item.symbol}')">
-            <!-- Row 1: Symbol & Sector badge on left, large LTP + % pill on right -->
+            <!-- Row 1: Brand Logo + Symbol + EQ on left, Bold LTP + % pill on right -->
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-[15px] text-white font-mono tracking-tight">${item.symbol}</span>
-                <span class="text-[8.5px] font-mono px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 border border-white/5">EQ</span>
-                <span class="text-[10px] text-slate-400 font-sans truncate max-w-[120px]">${item.sector}</span>
+              <div class="flex items-center gap-2.5 min-w-0">
+                ${STOCK_LOGOS[item.symbol] || ''}
+                <div class="flex items-center gap-1.5">
+                  <span class="font-black text-[15px] text-white font-mono tracking-tight">${item.symbol}</span>
+                  <span class="text-[8.5px] font-mono px-1.5 py-0.5 rounded bg-surfaceHigh text-slate-400 border border-white/10 font-bold">EQ</span>
+                </div>
               </div>
 
-              <div class="flex items-center gap-2">
-                <div id="ltp-${item.symbol}" class="font-mono text-[14px] font-bold text-white tracking-tight transition-colors duration-300">
+              <div class="flex items-center gap-2 shrink-0">
+                <div id="ltp-${item.symbol}" class="font-mono text-[15px] font-black text-white tracking-tight transition-colors duration-300">
                   ₹${item.ltp.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 </div>
-                <div id="pchange-${item.symbol}" class="inline-flex items-center font-mono text-[9.5px] font-semibold px-2 py-0.5 rounded-md ${isUp ? 'bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/25' : 'bg-roseBear/15 text-roseBear border border-roseBear/25'}">
+                <div id="pchange-${item.symbol}" class="inline-flex items-center font-mono text-[9.5px] font-bold px-2 py-0.5 rounded-md ${isUp ? 'bg-emeraldBull/20 text-emeraldBull border border-emeraldBull/30' : 'bg-roseBear/20 text-roseBear border border-roseBear/30'}">
                   ${isUp ? '+' : ''}${item.pChange.toFixed(2)}%
                 </div>
               </div>
@@ -1798,7 +1429,7 @@ Trigger Condition:
             </div>
             <h4 class="text-sm font-bold text-white font-mono mb-1">NO ACTIVE POSITIONS</h4>
             <p class="text-xs text-slate-400 font-mono max-w-[260px] leading-relaxed mb-4">
-              Evaluating 5m setups for Crown 6. Automated 1:3 bracket execution activates once trigger criteria validate.
+              Scanning 5m intraday setups. 1:3 bracket execution automatically activates on trigger.
             </p>
             <button onclick="demoSimulateTrade()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-mono font-bold text-xs active:scale-95 transition-all shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
               <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
@@ -1905,7 +1536,7 @@ Trigger Condition:
     }
 
     async function demoSimulateTrade() {
-      // Pick a random stock from Crown 6 that is not already open
+      // Pick a random stock that is not already open
       const openSymbols = userState.positions.map(p => p.symbol);
       const candidates = CROWN_6_DATA.filter(s => !openSymbols.includes(s.symbol));
       const stock = candidates.length > 0 ? candidates[Math.floor(Math.random() * candidates.length)] : CROWN_6_DATA[0];
@@ -2013,8 +1644,9 @@ Trigger Condition:
           userState.ledger.unshift({ date: "TODAY", dayPnl: "+₹0.00", trades: [] });
         }
 
+        const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty);
         const grossPnl = pos.currentPnl;
-        const charges = parseFloat((Math.abs(grossPnl) * 0.02 + 12).toFixed(2));
+        const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
         const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
 
@@ -2087,8 +1719,9 @@ Trigger Condition:
       }
 
       userState.positions.forEach(pos => {
+        const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty);
         const grossPnl = pos.currentPnl;
-        const charges = parseFloat((Math.abs(grossPnl) * 0.02 + 12).toFixed(2));
+        const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
         const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
 
@@ -2160,19 +1793,22 @@ Trigger Condition:
         day.trades.forEach((t, tradeIdx) => {
           const isWin = String(t.pnl).startsWith('+');
           tradesHtml += `
-            <div onclick="openTradeDetail(${dayIdx}, ${tradeIdx})" class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px] cursor-pointer hover:border-cyanAccent/40 active:scale-[0.99] transition-all group shadow-sm">
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-extrabold text-white text-xs">${t.symbol}</span>
-                  <span class="px-1.5 py-0.2 rounded-full text-[8px] font-extrabold ${t.side === 'BUY' ? 'bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/25' : 'bg-roseBear/15 text-roseBear border border-roseBear/25'}">${t.side}</span>
-                  <span class="text-slate-400 font-sans">${t.qty} Qty • ${t.time}</span>
-                  <button type="button" onclick="event.stopPropagation(); openTradeDetail(${dayIdx}, ${tradeIdx})" class="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 hover:bg-cyanAccent/20 transition-all ml-1">AUDIT ↗</button>
+            <div onclick="openTradeDetail(${dayIdx}, ${tradeIdx})" class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px] cursor-pointer hover:border-cyanAccent/50 active:scale-[0.99] transition-all group shadow-sm">
+              <div class="flex items-center gap-2.5">
+                ${STOCK_LOGOS[t.symbol] || ''}
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-black text-white text-xs">${t.symbol}</span>
+                    <span class="px-1.5 py-0.2 rounded-full text-[8px] font-black ${t.side === 'BUY' ? 'bg-emeraldBull/20 text-emeraldBull border border-emeraldBull/30' : 'bg-roseBear/20 text-roseBear border border-roseBear/30'}">${t.side}</span>
+                    <span class="text-slate-400 font-sans font-semibold">${t.qty} Qty • ${t.time}</span>
+                    <button type="button" onclick="event.stopPropagation(); openTradeDetail(${dayIdx}, ${tradeIdx})" class="text-[8.5px] font-mono font-extrabold px-2 py-0.5 rounded-md bg-cyanAccent/20 text-cyanAccent border border-cyanAccent/35 hover:bg-cyanAccent/30 active:scale-95 transition-all ml-1 shadow-sm">AUDIT ↗</button>
+                  </div>
+                  <span class="text-[9px] text-slate-400 font-mono block mt-0.5">₹${Number(t.entry).toFixed(2)} → ₹${Number(t.exit).toFixed(2)} • ${t.exitReason}</span>
                 </div>
-                <span class="text-[9px] text-slate-400 block mt-0.5">₹${Number(t.entry).toFixed(2)} → ₹${Number(t.exit).toFixed(2)} • ${t.exitReason}</span>
               </div>
               <div class="text-right">
-                <span class="font-bold ${isWin ? 'text-emeraldBull' : 'text-roseBear'} block text-xs">${t.pnl}</span>
-                <span class="text-[9px] ${isWin ? 'text-emeraldBull/80' : 'text-roseBear/80'}">${t.rMultiple}</span>
+                <span class="font-black ${isWin ? 'text-emeraldBull' : 'text-roseBear'} block text-xs tracking-tight">${t.pnl}</span>
+                <span class="text-[9px] font-bold ${isWin ? 'text-emeraldBull/90' : 'text-roseBear/90'}">${t.rMultiple}</span>
               </div>
             </div>
           `;
@@ -2207,37 +1843,56 @@ Trigger Condition:
         if (el) el.innerText = val;
       };
 
+      // Set TradingView Logo
+      const logoEl = document.getElementById('tdModalLogo');
+      if (logoEl && STOCK_LOGOS[t.symbol]) {
+        logoEl.innerHTML = STOCK_LOGOS[t.symbol];
+      }
+
       // Populate Modal Fields safely
       safeSet('tdModalSymbol', t.symbol);
       const badge = document.getElementById('tdModalSideBadge');
       if (badge) {
         badge.innerText = `${t.side} • 5x MIS CASH`;
-        badge.className = `px-2 py-0.5 rounded-full text-[9px] font-extrabold font-mono ${t.side === 'BUY' ? 'bg-emeraldBull/20 text-emeraldBull border border-emeraldBull/30' : 'bg-roseBear/20 text-roseBear border border-roseBear/30'}`;
+        badge.className = `px-2 py-0.5 rounded-full text-[9px] font-black font-mono ${t.side === 'BUY' ? 'bg-emeraldBull/25 text-emeraldBull border border-emeraldBull/40' : 'bg-roseBear/25 text-roseBear border border-roseBear/40'}`;
       }
 
       safeSet('tdModalTime', `${day.date} • ${t.time} IST`);
-      safeSet('tdModalReason', t.exitReason || "Target 1:3 Hit (EMA9 breakdown)");
+      safeSet('tdModalReason', t.exitReason || "1:3 Pullback Target Executed (EMA9 / VWAP rule)");
       safeSet('tdModalEntry', `₹${Number(t.entry).toFixed(2)}`);
       safeSet('tdModalExit', `₹${Number(t.exit).toFixed(2)}`);
-      safeSet('tdModalSL', `₹${Number(t.sl || (t.entry * 0.995)).toFixed(2)}`);
-      safeSet('tdModalTP', `₹${Number(t.tp || (t.entry * 1.015)).toFixed(2)}`);
+      safeSet('tdModalSL', `₹${Number(t.sl || (t.side === 'BUY' ? t.entry * 0.995 : t.entry * 1.005)).toFixed(2)}`);
+      safeSet('tdModalTP', `₹${Number(t.tp || (t.side === 'BUY' ? t.entry * 1.015 : t.entry * 0.985)).toFixed(2)}`);
       safeSet('tdModalQty', `${t.qty} Shares`);
-      safeSet('tdModalTurnover', `₹${(t.turnover || (t.entry * t.qty)).toLocaleString('en-IN', {maximumFractionDigits: 2})}`);
-      safeSet('tdModalMargin', `₹${(t.marginUsed || ((t.entry * t.qty) / 5)).toLocaleString('en-IN', {maximumFractionDigits: 2})}`);
 
-      const charges = t.charges || 12.26;
-      safeSet('tdModalCharges', `₹${charges.toFixed(2)}`);
-      safeSet('tdModalSTT', `₹${(charges * 0.55).toFixed(2)}`);
-      safeSet('tdModalExch', `₹${(charges * 0.25).toFixed(2)}`);
-      safeSet('tdModalGST', `₹${(charges * 0.20).toFixed(2)}`);
+      // Dynamic calculation of exact Indian statutory charges
+      const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+      const turnoverVal = t.turnover || chg.turnover;
+      const marginVal = t.marginUsed || chg.margin;
+      const chargesVal = t.charges || chg.totalCharges;
 
-      const isWin = String(t.pnl).startsWith('+');
+      safeSet('tdModalTurnover', `₹${turnoverVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
+      safeSet('tdModalMargin', `₹${marginVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
+      safeSet('tdModalCharges', `₹${chargesVal.toFixed(2)}`);
+      safeSet('tdModalBrokerage', `₹${(t.brokerage || chg.brokerage).toFixed(2)}`);
+      safeSet('tdModalSTT', `₹${(t.stt || chg.stt).toFixed(2)}`);
+      safeSet('tdModalExch', `₹${(t.exch || chg.exch).toFixed(2)}`);
+      safeSet('tdModalGST', `₹${(t.gst || chg.gst).toFixed(2)}`);
+      safeSet('tdModalSebiStamp', `₹${(t.sebiStamp || chg.sebiStamp).toFixed(2)}`);
+
+      const grossPnl = (t.grossPnl !== undefined) ? t.grossPnl : ((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty);
+      const netPnl = (t.netPnl !== undefined) ? t.netPnl : (grossPnl - chargesVal);
+      const rVal = (t.rMultiple !== undefined) ? t.rMultiple : `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+
+      safeSet('tdModalGrossPnl', `${grossPnl >= 0 ? '+' : ''}₹${grossPnl.toFixed(2)}`);
+      safeSet('tdModalNetPnl', `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`);
+      safeSet('tdModalRMultiple', rVal);
+
+      const isWin = netPnl >= 0;
       const banner = document.getElementById('tdModalPnlBanner');
       if (banner) {
-        banner.className = `p-3.5 rounded-2xl border flex items-center justify-between font-mono ${isWin ? 'bg-emeraldBull/10 border-emeraldBull/25 text-emeraldBull' : 'bg-roseBear/10 border-roseBear/25 text-roseBear'}`;
+        banner.className = `p-3.5 rounded-2xl border flex items-center justify-between font-mono ${isWin ? 'bg-emeraldBull/15 border-emeraldBull/30 text-emeraldBull' : 'bg-roseBear/15 border-roseBear/30 text-roseBear'}`;
       }
-      safeSet('tdModalNetPnl', t.pnl);
-      safeSet('tdModalRMultiple', t.rMultiple);
 
       modal.classList.remove('opacity-0', 'pointer-events-none');
       sheet.classList.remove('translate-y-8');
@@ -2261,7 +1916,7 @@ Trigger Condition:
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `ISMB_CROWN6_MASTER_LEDGER_${new Date().toISOString().slice(0,10)}.csv`);
+      link.setAttribute("download", `INDIAN_STOCK_MARKET_BOT_LEDGER_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -2368,7 +2023,7 @@ Trigger Condition:
       // 2. Direct Telegram API dispatch to guarantee delivery
       if (!sent) {
         try {
-          const msg = `🔔 *INDIAN STOCK MARKET BOT*\n\n✅ *Push Notification Test Successful!*\n\n• *System:* Institutional Crown 6 Quant Core\n• *Status:* Online & Synchronized\n• *Capital:* ₹${userState.capital.toLocaleString('en-IN')}\n• *Risk / Trade:* ₹${userState.riskPerTrade} (1R)\n• *Chat ID:* \`${chatId}\`\n• *Time:* ${new Date().toLocaleTimeString('en-IN')}`;
+          const msg = `🔔 *INDIAN STOCK MARKET BOT*\n\n✅ *Push Notification Test Successful!*\n\n• *System:* Indian Stock Market Bot Quant Core\n• *Status:* Online & Synchronized\n• *Capital:* ₹${userState.capital.toLocaleString('en-IN')}\n• *Risk / Trade:* ₹${userState.riskPerTrade} (1R)\n• *Chat ID:* \`${chatId}\`\n• *Time:* ${new Date().toLocaleTimeString('en-IN')}`;
           const teleRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
