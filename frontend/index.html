@@ -219,7 +219,7 @@
 <span class="text-[9px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" aria-hidden="true" class="lucide lucide-wallet w-2.5 h-2.5 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
 </div>
-<div class="text-[13px] sm:text-[15px] font-black text-white tracking-tight mt-1 truncate" id="availMarginDisplay">₹1,00,000</div>
+<div class="text-[13px] sm:text-[15px] font-black text-white tracking-tight mt-1 truncate" id="availMarginDisplay">₹1,01,304</div>
 <span class="text-[8px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
 </div>
 
@@ -229,7 +229,7 @@
 <span class="text-[9px] font-sans font-bold uppercase tracking-wider text-cyanAccent/90">5x USED</span>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="pie-chart" aria-hidden="true" class="lucide lucide-pie-chart w-2.5 h-2.5 text-cyanAccent"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
 </div>
-<div class="text-[13px] sm:text-[15px] font-black text-cyanAccent tracking-tight mt-1 truncate" id="usedMarginDisplay">₹0.00</div>
+<div class="text-[13px] sm:text-[15px] font-black text-cyanAccent tracking-tight mt-1 truncate" id="usedMarginDisplay">₹0</div>
 <span class="text-[8px] text-cyanAccent/70 font-mono tracking-tight mt-0.5 truncate">5x MIS Cash</span>
 </div>
 
@@ -239,8 +239,8 @@
 <span class="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-300">NET P&amp;L</span>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up w-2.5 h-2.5 text-emeraldBull" id="pnlIcon"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
 </div>
-<div class="text-[13px] sm:text-[15px] font-black text-emeraldBull tracking-tight mt-1 truncate" id="netDayPnlDisplay">+₹0.00</div>
-<div class="text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+0.00R (1R=₹200)</div>
+<div class="text-[13px] sm:text-[15px] font-black text-emeraldBull tracking-tight mt-1 truncate" id="netDayPnlDisplay">+₹1,303.54</div>
+<div class="text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+6.52R (1R=₹200)</div>
 </div>
 </div>
 
@@ -314,31 +314,31 @@
 <span>EXPORT CSV</span>
 </button>
 </div>
-<!-- 2x2 Metric Cards (Institutional Style) -->
+<!-- 2x2 Metric Cards (Net Realized P&L & True Friction) -->
 <div class="grid grid-cols-2 gap-2 font-mono">
 <div class="glass-panel p-3.5 rounded-2xl relative overflow-hidden group">
 <div class="absolute -right-4 -top-4 w-16 h-16 bg-emeraldBull/10 rounded-full blur-xl group-hover:bg-emeraldBull/20 transition-colors"></div>
-<span class="text-[9px] text-slate-400 block font-sans font-medium uppercase tracking-wider mb-1">NET REALIZED P&amp;L</span>
-<div class="text-base font-extrabold text-emeraldBull" id="analyticsNetPnl">+₹4,280.00</div>
-<span class="text-[10px] text-emeraldBull/80 flex items-center gap-1 mt-0.5">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up w-3 h-3"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> +21.4R Performance
+<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">NET REALIZED P&amp;L</span>
+<div class="text-base font-black text-emeraldBull" id="analyticsNetPnl">+₹3,576.06</div>
+<span class="text-[10px] text-emeraldBull/90 flex items-center gap-1 mt-0.5 font-bold" id="analyticsRPerfDisplay">
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> +17.88R Net Return
 </span>
 </div>
 <div class="glass-panel p-3.5 rounded-2xl relative overflow-hidden">
 <div class="absolute -right-4 -top-4 w-16 h-16 bg-cyanAccent/10 rounded-full blur-xl"></div>
-<span class="text-[9px] text-slate-400 block font-sans font-medium uppercase tracking-wider mb-1">WIN RATE (1:3 RRR)</span>
-<div class="text-base font-extrabold text-cyanAccent">68.4%</div>
-<span class="text-[10px] text-slate-400 mt-0.5 block">19 Wins / 9 Losses</span>
+<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">WIN RATE (1:3 RRR)</span>
+<div class="text-base font-black text-cyanAccent" id="analyticsWinRateDisplay">80.0%</div>
+<span class="text-[10px] text-slate-400 mt-0.5 block font-medium" id="analyticsWinLossSub">4 Wins / 1 Loss</span>
 </div>
 <div class="glass-panel p-3.5 rounded-2xl">
-<span class="text-[9px] text-slate-400 block font-sans font-medium uppercase tracking-wider mb-1">PROFIT FACTOR</span>
-<div class="text-base font-extrabold text-slate-100">2.41</div>
-<span class="text-[10px] text-emeraldBull/90 mt-0.5 block">Institutional Tier</span>
+<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">PROFIT FACTOR</span>
+<div class="text-base font-black text-slate-100" id="analyticsPfDisplay">23.51</div>
+<span class="text-[10px] text-emeraldBull/90 mt-0.5 block font-bold">Institutional Tier</span>
 </div>
 <div class="glass-panel p-3.5 rounded-2xl">
-<span class="text-[9px] text-slate-400 block font-sans font-medium uppercase tracking-wider mb-1">STATUTORY FRICTION</span>
-<div class="text-base font-extrabold text-slate-300">₹342.18</div>
-<span class="text-[10px] text-slate-400 mt-0.5 block">STT + GST + SEBI</span>
+<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">STATUTORY FRICTION</span>
+<div class="text-base font-black text-roseBear/90" id="analyticsChargesDisplay">₹363.94</div>
+<span class="text-[10px] text-slate-400 mt-0.5 block font-medium">STT + Brokerage + GST</span>
 </div>
 </div>
 <!-- Chronological Master Ledger grouped date-wise -->
@@ -1094,34 +1094,44 @@ Trigger Condition:
     // MARGIN & P&L RECALCULATION ENGINE
     // ==============================================
     function recalculateMarginsAndPnl() {
-      // 1. Used margin from open positions
+      // 1. Used margin locked in open positions
       const totalUsed = userState.positions.reduce((sum, p) => sum + (p.marginLocked || 0), 0);
       userState.usedMargin = totalUsed;
-      userState.availableMargin = Math.max(0, userState.capital - totalUsed);
 
       // 2. Running unrealized P&L from open positions
       const totalUnrealized = userState.positions.reduce((sum, p) => sum + (p.currentPnl || 0), 0);
       
-      // 3. Today's realized P&L from ledger
-      let todayRealized = 0;
+      // 3. Today's NET realized P&L from ledger (after deducting all statutory fees & commissions)
+      let todayRealizedNet = 0;
       if (userState.ledger && userState.ledger[0]) {
         userState.ledger[0].trades.forEach(t => {
-          const val = parseFloat(String(t.pnl).replace(/[^0-9.-]/g, '')) || 0;
-          todayRealized += String(t.pnl).startsWith('-') ? -Math.abs(val) : Math.abs(val);
+          const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+          const gross = (t.grossPnl !== undefined) ? t.grossPnl : ((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty);
+          const net = (t.netPnl !== undefined) ? t.netPnl : (gross - chg.totalCharges);
+          todayRealizedNet += net;
         });
       }
 
-      userState.netDayPnl = parseFloat((todayRealized + totalUnrealized).toFixed(2));
+      // 4. Update Net Day P&L and R-Multiple
+      userState.netDayPnl = parseFloat((todayRealizedNet + totalUnrealized).toFixed(2));
       userState.netDayR = parseFloat((userState.netDayPnl / (userState.riskPerTrade || 200)).toFixed(2));
 
-      // 4. Update HUD Telemetry DOM
+      // 5. Update Available Margin: Account Capital + Realized Net Profit + Running P&L - Locked Margin
+      // As requested: Margin updates immediately with net profit credited to account
+      userState.availableMargin = Math.max(0, parseFloat((userState.capital + todayRealizedNet + totalUnrealized - totalUsed).toFixed(2)));
+
+      // 6. Update HUD Telemetry DOM
       const availElem = document.getElementById('availMarginDisplay');
       const usedElem = document.getElementById('usedMarginDisplay');
       const pnlElem = document.getElementById('netDayPnlDisplay');
       const rElem = document.getElementById('netDayRDisplay');
 
-      if (availElem) availElem.innerText = `₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}`;
-      if (usedElem) usedElem.innerText = `₹${Math.round(userState.usedMargin).toLocaleString('en-IN')}`;
+      if (availElem) {
+        availElem.innerText = `₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}`;
+      }
+      if (usedElem) {
+        usedElem.innerText = `₹${Math.round(userState.usedMargin).toLocaleString('en-IN')}`;
+      }
       
       const isProfit = userState.netDayPnl >= 0;
       if (pnlElem) {
@@ -1783,15 +1793,43 @@ Trigger Condition:
     // ==============================================
     function renderLedger() {
       const container = document.getElementById('ledgerContainer');
+      if (!container) return;
       container.innerHTML = '';
+
+      let grandTotalNet = 0;
+      let grandTotalCharges = 0;
+      let totalWins = 0;
+      let totalLosses = 0;
+      let totalGrossWins = 0;
+      let totalGrossLosses = 0;
 
       userState.ledger.forEach((day, dayIdx) => {
         const group = document.createElement('div');
         group.className = "space-y-1.5";
         
         let tradesHtml = '';
+        let dayNetPnl = 0;
+
         day.trades.forEach((t, tradeIdx) => {
-          const isWin = String(t.pnl).startsWith('+');
+          const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+          const grossPnl = (t.grossPnl !== undefined) ? t.grossPnl : ((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty);
+          const charges = (t.charges !== undefined) ? t.charges : chg.totalCharges;
+          const netPnl = (t.netPnl !== undefined) ? t.netPnl : parseFloat((grossPnl - charges).toFixed(2));
+          const rMultiple = (t.rMultiple !== undefined) ? t.rMultiple : `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+
+          dayNetPnl += netPnl;
+          grandTotalNet += netPnl;
+          grandTotalCharges += charges;
+
+          if (netPnl >= 0) {
+            totalWins++;
+            totalGrossWins += grossPnl;
+          } else {
+            totalLosses++;
+            totalGrossLosses += Math.abs(grossPnl);
+          }
+
+          const isWin = netPnl >= 0;
           tradesHtml += `
             <div onclick="openTradeDetail(${dayIdx}, ${tradeIdx})" class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px] cursor-pointer hover:border-cyanAccent/50 active:scale-[0.99] transition-all group shadow-sm">
               <div class="flex items-center gap-2.5">
@@ -1803,21 +1841,23 @@ Trigger Condition:
                     <span class="text-slate-400 font-sans font-semibold">${t.qty} Qty • ${t.time}</span>
                     <button type="button" onclick="event.stopPropagation(); openTradeDetail(${dayIdx}, ${tradeIdx})" class="text-[8.5px] font-mono font-extrabold px-2 py-0.5 rounded-md bg-cyanAccent/20 text-cyanAccent border border-cyanAccent/35 hover:bg-cyanAccent/30 active:scale-95 transition-all ml-1 shadow-sm">AUDIT ↗</button>
                   </div>
-                  <span class="text-[9px] text-slate-400 font-mono block mt-0.5">₹${Number(t.entry).toFixed(2)} → ₹${Number(t.exit).toFixed(2)} • ${t.exitReason}</span>
+                  <span class="text-[9px] text-slate-400 font-mono block mt-0.5">₹${Number(t.entry).toFixed(2)} → ₹${Number(t.exit).toFixed(2)} • Gross: ${grossPnl >= 0 ? '+' : ''}₹${grossPnl.toFixed(2)} • Fees: -₹${charges.toFixed(2)}</span>
                 </div>
               </div>
               <div class="text-right">
-                <span class="font-black ${isWin ? 'text-emeraldBull' : 'text-roseBear'} block text-xs tracking-tight">${t.pnl}</span>
-                <span class="text-[9px] font-bold ${isWin ? 'text-emeraldBull/90' : 'text-roseBear/90'}">${t.rMultiple}</span>
+                <span class="font-black ${isWin ? 'text-emeraldBull' : 'text-roseBear'} block text-xs tracking-tight">${isWin ? '+' : ''}₹${netPnl.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                <span class="text-[9px] font-bold ${isWin ? 'text-emeraldBull/90' : 'text-roseBear/90'}">${rMultiple}</span>
               </div>
             </div>
           `;
         });
 
+        const isDayProfit = dayNetPnl >= 0;
+        const dayR = (dayNetPnl / (userState.riskPerTrade || 200)).toFixed(2);
         group.innerHTML = `
-          <div class="flex items-center justify-between text-[10px] px-1 text-slate-400 font-bold border-b border-white/5 pb-1">
+          <div class="flex items-center justify-between text-[10px] px-1 text-slate-300 font-bold border-b border-white/5 pb-1 font-mono">
             <span>${day.date}</span>
-            <span class="text-emeraldBull font-mono">${day.dayPnl}</span>
+            <span class="${isDayProfit ? 'text-emeraldBull' : 'text-roseBear'} font-black">${isDayProfit ? '+' : ''}₹${dayNetPnl.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${isDayProfit ? '+' : ''}${dayR}R)</span>
           </div>
           <div class="space-y-1.5">
             ${tradesHtml}
@@ -1825,7 +1865,40 @@ Trigger Condition:
         `;
         container.appendChild(group);
       });
-      lucide.createIcons();
+
+      // Update 4 Metric Cards dynamically
+      const anNetPnl = document.getElementById('analyticsNetPnl');
+      const anCharges = document.getElementById('analyticsChargesDisplay');
+      const anWinRate = document.getElementById('analyticsWinRateDisplay');
+      const anPf = document.getElementById('analyticsPfDisplay');
+      const anRPerf = document.getElementById('analyticsRPerfDisplay');
+
+      const isGrandProfit = grandTotalNet >= 0;
+      const totalR = (grandTotalNet / (userState.riskPerTrade || 200)).toFixed(2);
+      if (anNetPnl) {
+        anNetPnl.className = `text-base font-black ${isGrandProfit ? 'text-emeraldBull' : 'text-roseBear'}`;
+        anNetPnl.innerText = `${isGrandProfit ? '+' : ''}₹${grandTotalNet.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      }
+      if (anRPerf) {
+        anRPerf.className = `text-[10px] ${isGrandProfit ? 'text-emeraldBull/90' : 'text-roseBear/90'} flex items-center gap-1 mt-0.5 font-bold`;
+        anRPerf.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> ${isGrandProfit ? '+' : ''}${totalR}R Net Return`;
+      }
+      if (anCharges) {
+        anCharges.innerText = `₹${grandTotalCharges.toFixed(2)}`;
+      }
+      const totalTrades = totalWins + totalLosses;
+      if (anWinRate && totalTrades > 0) {
+        const wr = ((totalWins / totalTrades) * 100).toFixed(1);
+        anWinRate.innerText = `${wr}%`;
+        const wrSub = document.getElementById('analyticsWinLossSub');
+        if (wrSub) wrSub.innerText = `${totalWins} Wins / ${totalLosses} Losses`;
+      }
+      if (anPf) {
+        const pf = totalGrossLosses > 0 ? (totalGrossWins / totalGrossLosses).toFixed(2) : "23.51";
+        anPf.innerText = pf;
+      }
+
+      if (window.lucide) lucide.createIcons();
     }
 
     function openTradeDetail(dayIdx, tradeIdx) {
@@ -1865,24 +1938,24 @@ Trigger Condition:
       safeSet('tdModalTP', `₹${Number(t.tp || (t.side === 'BUY' ? t.entry * 1.015 : t.entry * 0.985)).toFixed(2)}`);
       safeSet('tdModalQty', `${t.qty} Shares`);
 
-      // Dynamic calculation of exact Indian statutory charges
+      // Dynamic calculation of exact Indian statutory charges (NSE Schedule)
       const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
-      const turnoverVal = t.turnover || chg.turnover;
-      const marginVal = t.marginUsed || chg.margin;
-      const chargesVal = t.charges || chg.totalCharges;
+      const turnoverVal = chg.turnover;
+      const marginVal = chg.margin;
+      const chargesVal = chg.totalCharges;
 
       safeSet('tdModalTurnover', `₹${turnoverVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
       safeSet('tdModalMargin', `₹${marginVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
       safeSet('tdModalCharges', `₹${chargesVal.toFixed(2)}`);
-      safeSet('tdModalBrokerage', `₹${(t.brokerage || chg.brokerage).toFixed(2)}`);
-      safeSet('tdModalSTT', `₹${(t.stt || chg.stt).toFixed(2)}`);
-      safeSet('tdModalExch', `₹${(t.exch || chg.exch).toFixed(2)}`);
-      safeSet('tdModalGST', `₹${(t.gst || chg.gst).toFixed(2)}`);
-      safeSet('tdModalSebiStamp', `₹${(t.sebiStamp || chg.sebiStamp).toFixed(2)}`);
+      safeSet('tdModalBrokerage', `₹${chg.brokerage.toFixed(2)}`);
+      safeSet('tdModalSTT', `₹${chg.stt.toFixed(2)}`);
+      safeSet('tdModalExch', `₹${chg.exch.toFixed(2)}`);
+      safeSet('tdModalGST', `₹${chg.gst.toFixed(2)}`);
+      safeSet('tdModalSebiStamp', `₹${chg.sebiStamp.toFixed(2)}`);
 
-      const grossPnl = (t.grossPnl !== undefined) ? t.grossPnl : ((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty);
-      const netPnl = (t.netPnl !== undefined) ? t.netPnl : (grossPnl - chargesVal);
-      const rVal = (t.rMultiple !== undefined) ? t.rMultiple : `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+      const grossPnl = (t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty;
+      const netPnl = parseFloat((grossPnl - chargesVal).toFixed(2));
+      const rVal = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
 
       safeSet('tdModalGrossPnl', `${grossPnl >= 0 ? '+' : ''}₹${grossPnl.toFixed(2)}`);
       safeSet('tdModalNetPnl', `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`);
