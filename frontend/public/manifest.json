@@ -1,0 +1,16 @@
+{
+  "name": "Indian Stock Market Bot",
+  "short_name": "ISMB Terminal",
+  "description": "Institutional Crown 6 Algorithmic Trading Terminal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080a0f",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
