@@ -55,6 +55,19 @@
     }
   </script>
 <style>
+    /* Prevent Android horizontal overflow & viewport jitter */
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden !important;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     /* Custom Scrollbar & Touch Polish */
     ::-webkit-scrollbar { width: 3px; height: 3px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -90,9 +103,9 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
-<body class="bg-[#05070B] text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-0 sm:p-4 select-none">
+<body class="bg-[#05070B] text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-0 sm:p-4 select-none overflow-x-hidden w-full">
 <!-- Mobile Frame Container (Institutional Terminal Form Factor) -->
-<div class="relative w-full max-w-[440px] h-[100dvh] sm:h-[900px] sm:max-h-[92vh] bg-obsidian sm:rounded-[38px] overflow-hidden flex flex-col border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.9)]">
+<div class="relative w-full max-w-[440px] h-[100dvh] sm:h-[900px] sm:max-h-[92vh] bg-obsidian sm:rounded-[38px] overflow-hidden flex flex-col border-0 sm:border sm:border-white/10 shadow-none sm:shadow-[0_0_80px_rgba(0,0,0,0.9)]">
 <!-- Ambient luxury mesh background orbs -->
 <div class="absolute -top-24 -left-20 w-64 h-64 bg-cyanAccent/10 rounded-full blur-[80px] pointer-events-none animate-ambient-glow"></div>
 <div class="absolute top-1/3 -right-24 w-72 h-72 bg-emeraldBull/8 rounded-full blur-[90px] pointer-events-none animate-ambient-glow"></div>
@@ -136,64 +149,80 @@
 <!-- ============================================== -->
 <!-- REORGANIZED TOP COMMAND BAR (HUD TILE LAYOUT)  -->
 <!-- ============================================== -->
-<header class="glass-header z-30 shrink-0 px-3.5 pt-3 pb-2.5 relative">
+<header class="glass-header z-30 shrink-0 px-3 pt-2.5 pb-2 relative w-full overflow-hidden">
 <!-- Row 1: Brand & Operational Status Controls -->
-<div class="flex items-center justify-between gap-2 mb-2">
-<div class="flex items-center gap-2">
-<div class="w-7 h-7 rounded-lg bg-gradient-to-br from-amberTactical/20 to-amberTactical/5 border border-amberTactical/30 flex items-center justify-center text-amberTactical shadow-[0_0_10px_rgba(245,158,11,0.18)]">
+<div class="flex items-center justify-between gap-1.5 mb-2 w-full">
+<div class="flex items-center gap-1.5 min-w-0">
+<div class="w-6 h-6 rounded-lg bg-gradient-to-br from-amberTactical/25 to-amberTactical/5 border border-amberTactical/30 flex items-center justify-center text-amberTactical shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.25)]">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="crown" aria-hidden="true" class="lucide lucide-crown w-3.5 h-3.5"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>
 </div>
-<div class="flex items-center gap-1.5">
-<span class="font-bold text-[13px] tracking-tight text-white font-sans">Indian Stock Market Bot</span>
-<span class="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-bold bg-emeraldBull/10 text-emeraldBull border border-emeraldBull/25">
+<div class="flex items-center gap-1 min-w-0">
+<span class="font-extrabold text-[12px] sm:text-[13px] tracking-tight text-white font-sans truncate">ISMB CROWN 6</span>
+<span class="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/30 shrink-0">
 <span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span>
-LIVE 1s
+1s LIVE
 </span>
 </div>
 </div>
-<div class="flex items-center gap-1.5">
+<div class="flex items-center gap-1.5 shrink-0">
 <!-- Engine Status Pill Button -->
-<button class="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9.5px] font-mono font-semibold bg-emeraldBull/10 border border-emeraldBull/25 text-emeraldBull hover:bg-emeraldBull/20 transition-all active:scale-95" id="engineToggleBtn" onclick="toggleEngineState()">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity w-3 h-3 text-emeraldBull"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold bg-emeraldBull/15 border border-emeraldBull/30 text-emeraldBull hover:bg-emeraldBull/25 transition-all active:scale-95" id="engineToggleBtn" onclick="toggleEngineState()">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity w-2.5 h-2.5 text-emeraldBull"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
 <span id="engineStatusLabel">AUTO: ACTIVE</span>
 </button>
 <!-- Panic "Exit All" Button -->
-<button class="px-2.5 py-1 rounded-full text-[9.5px] font-mono font-semibold bg-roseBear/10 text-roseBear border border-roseBear/25 hover:bg-roseBear/20 active:scale-95 transition-all flex items-center gap-1" onclick="openPanicExitModal()">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-octagon" aria-hidden="true" class="lucide lucide-alert-octagon w-3 h-3"><path d="M12 16h.01"></path><path d="M12 8v4"></path><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"></path></svg>
+<button class="px-2.5 py-1 rounded-full text-[9px] font-mono font-bold bg-roseBear/15 text-roseBear border border-roseBear/30 hover:bg-roseBear/25 active:scale-95 transition-all flex items-center gap-1" onclick="openPanicExitModal()">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-octagon" aria-hidden="true" class="lucide lucide-alert-octagon w-2.5 h-2.5"><path d="M12 16h.01"></path><path d="M12 8v4"></path><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"></path></svg>
 <span>EXIT ALL</span>
 </button>
 </div>
 </div>
-<!-- Row 2: Unified Dual-Sided HUD Tile Bar (NIFTY 50 on left + 3 Margin Telemetries stacked on right) -->
-<div class="grid grid-cols-12 gap-2 bg-surfaceLow/90 border border-white/5 rounded-xl p-2 font-mono items-center">
-<!-- Left Side: NIFTY 50 Spot Telemetry Tile (5 cols) -->
-<div class="col-span-5 border-r border-white/5 pr-2 flex flex-col justify-center">
-<div class="flex items-center justify-between mb-0.5">
+<!-- Row 2: 3 High-Visibility Prominent Margin & P&L HUD Telemetry Cards -->
+<div class="grid grid-cols-3 gap-1.5 bg-surfaceLow/95 border border-white/10 rounded-2xl p-2 font-mono shadow-inner w-full">
+<!-- Card 1: Available Margin -->
+<div class="bg-black/40 rounded-xl p-2 border border-white/5 flex flex-col justify-between overflow-hidden">
+<div class="flex items-center justify-between text-slate-400">
+<span class="text-[9px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" aria-hidden="true" class="lucide lucide-wallet w-2.5 h-2.5 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+</div>
+<div class="text-[13px] sm:text-[15px] font-black text-white tracking-tight mt-1 truncate" id="availMarginDisplay">₹1,00,000</div>
+<span class="text-[8px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
+</div>
+
+<!-- Card 2: 5x Used Margin -->
+<div class="bg-black/40 rounded-xl p-2 border border-cyanAccent/15 flex flex-col justify-between overflow-hidden">
+<div class="flex items-center justify-between text-slate-400">
+<span class="text-[9px] font-sans font-bold uppercase tracking-wider text-cyanAccent/90">5x USED</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="pie-chart" aria-hidden="true" class="lucide lucide-pie-chart w-2.5 h-2.5 text-cyanAccent"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
+</div>
+<div class="text-[13px] sm:text-[15px] font-black text-cyanAccent tracking-tight mt-1 truncate" id="usedMarginDisplay">₹0.00</div>
+<span class="text-[8px] text-cyanAccent/70 font-mono tracking-tight mt-0.5 truncate">5x MIS Cash</span>
+</div>
+
+<!-- Card 3: Running Net P&L (Large & Bold) -->
+<div class="bg-black/40 rounded-xl p-2 border border-white/5 flex flex-col justify-between overflow-hidden" id="pnlCardContainer">
+<div class="flex items-center justify-between text-slate-400">
+<span class="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-300">NET P&amp;L</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up w-2.5 h-2.5 text-emeraldBull" id="pnlIcon"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+</div>
+<div class="text-[13px] sm:text-[15px] font-black text-emeraldBull tracking-tight mt-1 truncate" id="netDayPnlDisplay">+₹0.00</div>
+<div class="text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+0.00R (1R=₹200)</div>
+</div>
+</div>
+
+<!-- Row 3: NIFTY 50 Spot Telemetry Strip -->
+<div class="flex items-center justify-between bg-surfaceLow/80 border border-white/5 rounded-xl px-2.5 py-1.5 mt-1.5 font-mono text-[10px] w-full">
+<div class="flex items-center gap-1.5 truncate">
 <div class="flex items-center gap-1">
-<span class="text-[10px] font-bold text-slate-200 tracking-wide">NIFTY 50</span>
-<span class="text-[8px] px-1 rounded bg-surfaceHigh text-slate-400">SPOT</span>
+<span class="font-extrabold text-slate-200 text-[10.5px]">NIFTY 50</span>
+<span class="text-[7.5px] px-1 py-0.2 rounded bg-surfaceHigh text-slate-400 font-bold">SPOT</span>
 </div>
-<svg class="w-10 h-3 text-roseBear/80 stroke-current" fill="none" stroke-width="1.5" viewBox="0 0 48 16">
-<path d="M1 4 L10 8 L18 6 L26 12 L34 9 L42 14 L47 13" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
+<span class="font-extrabold text-white text-[11px] ml-1" id="niftyPrice">₹25,074.10</span>
+<span class="font-semibold text-roseBear text-[9.5px]" id="niftyChange">-181.00 (-0.72%)</span>
 </div>
-<div class="text-[12px] font-bold text-white tracking-tight" id="niftyPrice">₹25,075.20</div>
-<div class="text-[9px] text-roseBear font-semibold tracking-tight" id="niftyChange">-181.00 (-0.72%)</div>
-</div>
-<!-- Right Side: 3-Metric Margin Telemetry Stack (7 cols) -->
-<div class="col-span-7 pl-1 grid grid-cols-3 gap-1 text-[9px] items-center">
-<div>
-<span class="text-slate-400 block text-[8px] font-sans">AVAIL</span>
-<span class="font-bold text-slate-100 truncate block tracking-tight" id="availMarginDisplay">₹1,00,000</span>
-</div>
-<div class="text-center">
-<span class="text-slate-400 block text-[8px] font-sans">5x USED</span>
-<span class="font-bold text-cyanAccent truncate block tracking-tight" id="usedMarginDisplay">₹0.00</span>
-</div>
-<div class="text-right">
-<span class="text-slate-400 block text-[8px] font-sans">NET P&amp;L</span>
-<span class="font-bold text-emeraldBull truncate block tracking-tight" id="netDayPnlDisplay">+₹0.00 (+0.00R)</span>
-</div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emeraldBull/10 text-emeraldBull border border-emeraldBull/25 text-[8.5px] font-bold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span>
+<span>PULLBACKS ON</span>
 </div>
 </div>
 </header>
@@ -233,22 +262,22 @@ LIVE 1s
             </div>
 
             <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
                   <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 82%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
+                <div class="flex items-center gap-1 min-w-0">
                   <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
                   <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    82% • High Probability
+                    82%;">
                   </span>
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('RELIANCE')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-3 h-3"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('RELIANCE')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -301,22 +330,22 @@ LIVE 1s
             </div>
 
             <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
                   <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 78%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
+                <div class="flex items-center gap-1 min-w-0">
                   <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
                   <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    78% • Breakout Pending
+                    78%;">
                   </span>
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('ITC')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-3 h-3"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('ITC')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -369,22 +398,22 @@ LIVE 1s
             </div>
 
             <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-slate-500 to-slate-400 rounded-full" style="width: 61%;"></div>
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 61%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-slate-500"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-slate-400">
-                    61% • Range Bound
+                <div class="flex items-center gap-1 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
+                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
+                    61%;">
                   </span>
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('MARUTI')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-3 h-3"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('MARUTI')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -437,22 +466,22 @@ LIVE 1s
             </div>
 
             <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
                   <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 89%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
+                <div class="flex items-center gap-1 min-w-0">
                   <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
                   <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    89% • Prime Short Setup
+                    89%;">
                   </span>
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('TATASTEEL')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-3 h-3"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('TATASTEEL')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -509,22 +538,22 @@ LIVE 1s
             </div>
 
             <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-slate-500 to-slate-400 rounded-full" style="width: 54%;"></div>
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 54%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-slate-500"></span>
-                  <span class="text-[9.5px] font-mono font-medium truncate text-slate-400">
-                    54% • Consolidating
+                <div class="flex items-center gap-1 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
+                  <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
+                    54%;">
                   </span>
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('SUNPHARMA')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-3 h-3"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('SUNPHARMA')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -577,22 +606,22 @@ LIVE 1s
             </div>
 
             <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r from-slate-500 to-slate-400 rounded-full" style="width: 74%;"></div>
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+                  <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 74%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
+                <div class="flex items-center gap-1 min-w-0">
                   <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
                   <span class="text-[9.5px] font-mono font-medium truncate text-emeraldBull">
-                    74% • Mean Reversion
+                    74%;">
                   </span>
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('INFY')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-3 h-3"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('INFY')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="candlestick-chart" aria-hidden="true" class="lucide lucide-candlestick-chart w-2.5 h-2.5"><path d="M9 5v4"></path><rect width="4" height="6" x="7" y="9" rx="1"></rect><path d="M9 15v2"></path><path d="M17 3v2"></path><rect width="4" height="8" x="15" y="5" rx="1"></rect><path d="M17 13v3"></path><path d="M3 3v16a2 2 0 0 0 2 2h16"></path></svg>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -1286,9 +1315,15 @@ Trigger Condition:
 
           if (availElem) availElem.innerText = `₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}`;
           if (usedElem) usedElem.innerText = `₹${Math.round(userState.usedMargin).toLocaleString('en-IN')}`;
+          const isProfit = netPnl >= 0;
           if (pnlElem) {
-            pnlElem.className = `font-bold ${netPnl >= 0 ? 'text-emeraldBull' : 'text-roseBear'} truncate block tracking-tight`;
-            pnlElem.innerText = `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)} (${userState.netDayR >= 0 ? '+' : ''}${userState.netDayR.toFixed(2)}R)`;
+            pnlElem.className = `text-[13px] sm:text-[15px] font-black ${isProfit ? 'text-emeraldBull' : 'text-roseBear'} tracking-tight mt-1 truncate`;
+            pnlElem.innerText = `${isProfit ? '+' : ''}₹${netPnl.toFixed(2)}`;
+          }
+          const rElem = document.getElementById('netDayRDisplay');
+          if (rElem) {
+            rElem.className = `text-[8.5px] font-bold ${userState.netDayR >= 0 ? 'text-emeraldBull/90' : 'text-roseBear/90'} font-mono tracking-tight mt-0.5 truncate`;
+            rElem.innerText = `${userState.netDayR >= 0 ? '+' : ''}${userState.netDayR.toFixed(2)}R (1R=₹200)`;
           }
 
           if (data.summary.positions && Array.isArray(data.summary.positions) && data.summary.positions.length > 0) {
@@ -1401,13 +1436,13 @@ Trigger Condition:
               </div>
             </div>
 
-            <!-- Row 2: Two-column split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
-            <div class="grid grid-cols-12 gap-2 items-center mt-2.5 pt-2 border-t border-white/5">
-              <div class="col-span-8 flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
+            <!-- Row 2: Flex split (Left: Probability bar/meter & category; Right: 5m Chart CTA) -->
+            <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-12 h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 shrink-0">
                   <div class="h-full bg-gradient-to-r ${item.probScore > 75 ? 'from-emerald-400 to-teal-400' : 'from-slate-500 to-slate-400'} rounded-full" style="width: ${item.probScore}%;"></div>
                 </div>
-                <div class="flex items-center gap-1.5 truncate">
+                <div class="flex items-center gap-1 min-w-0">
                   <span class="w-1.5 h-1.5 rounded-full shrink-0 ${item.probScore > 70 ? 'bg-emeraldBull animate-ping' : 'bg-slate-500'}"></span>
                   <span class="text-[9.5px] font-mono font-medium truncate ${item.probScore > 70 ? 'text-emeraldBull' : 'text-slate-400'}">
                     ${item.probScore}% • ${item.probCategory}
@@ -1415,9 +1450,9 @@ Trigger Condition:
                 </div>
               </div>
 
-              <div class="col-span-4 flex justify-end">
-                <button onclick="event.stopPropagation(); openChartModal('${item.symbol}')" class="px-2.5 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9.5px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
-                  <i data-lucide="candlestick-chart" class="w-3 h-3"></i>
+              <div class="shrink-0">
+                <button onclick="event.stopPropagation(); openChartModal('${item.symbol}')" class="px-2 py-1 rounded-lg bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/25 text-[9px] font-mono font-semibold hover:bg-cyanAccent/10 active:scale-95 transition-all flex items-center gap-1">
+                  <i data-lucide="candlestick-chart" class="w-2.5 h-2.5"></i>
                   <span>5m Chart</span>
                 </button>
               </div>
@@ -1628,9 +1663,17 @@ Trigger Condition:
         document.getElementById('usedMarginDisplay').innerText = `₹${totalUsedMargin.toLocaleString('en-IN')}`;
         document.getElementById('availMarginDisplay').innerText = `₹${userState.availableMargin.toLocaleString('en-IN')}`;
         
+        const isPosProfit = totalPnl >= 0;
         const pnlDisplay = document.getElementById('netDayPnlDisplay');
-        pnlDisplay.className = `font-bold ${totalPnl >= 0 ? 'text-emeraldBull' : 'text-roseBear'}`;
-        pnlDisplay.innerText = `${totalPnl >= 0 ? '+' : ''}₹${totalPnl.toFixed(2)} (${totalPnl >= 0 ? '+' : ''}${userState.netDayR.toFixed(2)}R)`;
+        if (pnlDisplay) {
+          pnlDisplay.className = `text-[13px] sm:text-[15px] font-black ${isPosProfit ? 'text-emeraldBull' : 'text-roseBear'} tracking-tight mt-1 truncate`;
+          pnlDisplay.innerText = `${isPosProfit ? '+' : ''}₹${totalPnl.toFixed(2)}`;
+        }
+        const rDisplay = document.getElementById('netDayRDisplay');
+        if (rDisplay) {
+          rDisplay.className = `text-[8.5px] font-bold ${userState.netDayR >= 0 ? 'text-emeraldBull/90' : 'text-roseBear/90'} font-mono tracking-tight mt-0.5 truncate`;
+          rDisplay.innerText = `${userState.netDayR >= 0 ? '+' : ''}${userState.netDayR.toFixed(2)}R (1R=₹200)`;
+        }
       }
       lucide.createIcons();
     }
