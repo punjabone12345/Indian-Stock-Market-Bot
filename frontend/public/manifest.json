@@ -1,16 +1,33 @@
 {
+  "id": "/?source=pwa",
   "name": "Indian Stock Market Bot",
-  "short_name": "ISMB Terminal",
-  "description": "Institutional Crown 6 Algorithmic Trading Terminal",
-  "start_url": "/",
+  "short_name": "ISMB Crown 6",
+  "description": "Institutional Crown 6 Algorithmic Intraday Trading Terminal",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#080a0f",
-  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "background_color": "#05070B",
+  "theme_color": "#080B11",
+  "categories": ["finance", "business"],
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
