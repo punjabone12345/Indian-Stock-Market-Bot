@@ -239,6 +239,23 @@ def export_trades_csv():
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
 
+# ----------------- TECHNICAL CANDLESTICK CHART -----------------
+@app.get("/api/chart/{symbol}")
+def get_chart_data(symbol: str):
+    sym = symbol.upper()
+    candles = market_service.get_candle_history(sym)
+    quotes = market_service.fetch_live_quotes()
+    q = quotes.get(sym, {})
+    return {
+        "symbol": sym,
+        "candles": candles,
+        "current_price": q.get("price", 0.0),
+        "change_pct": q.get("change_pct", 0.0),
+        "day_high": q.get("day_high", 0.0),
+        "day_low": q.get("day_low", 0.0),
+        "volume": q.get("volume", 0)
+    }
+
 # ----------------- TAB 4: SETTINGS & DANGER ZONE -----------------
 @app.get("/api/settings")
 def get_settings():
