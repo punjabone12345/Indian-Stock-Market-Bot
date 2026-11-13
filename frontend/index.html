@@ -219,7 +219,7 @@
 <span class="text-[9px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" aria-hidden="true" class="lucide lucide-wallet w-2.5 h-2.5 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
 </div>
-<div class="text-[13px] sm:text-[15px] font-black text-white tracking-tight mt-1 truncate" id="availMarginDisplay">₹1,01,304</div>
+<div class="text-[13px] sm:text-[15px] font-black text-white tracking-tight mt-1 truncate" id="availMarginDisplay">₹1,03,576</div>
 <span class="text-[8px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
 </div>
 
@@ -239,7 +239,7 @@
 <span class="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-300">NET P&amp;L</span>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up w-2.5 h-2.5 text-emeraldBull" id="pnlIcon"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
 </div>
-<div class="text-[13px] sm:text-[15px] font-black text-emeraldBull tracking-tight mt-1 truncate" id="netDayPnlDisplay">+₹1,303.54</div>
+<div class="text-[13px] sm:text-[15px] font-black text-emeraldBull tracking-tight mt-1 truncate" id="netDayPnlDisplay">+₹1,303.51</div>
 <div class="text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+6.52R (1R=₹200)</div>
 </div>
 </div>
@@ -319,7 +319,7 @@
 <div class="glass-panel p-3.5 rounded-2xl relative overflow-hidden group">
 <div class="absolute -right-4 -top-4 w-16 h-16 bg-emeraldBull/10 rounded-full blur-xl group-hover:bg-emeraldBull/20 transition-colors"></div>
 <span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">NET REALIZED P&amp;L</span>
-<div class="text-base font-black text-emeraldBull" id="analyticsNetPnl">+₹3,576.06</div>
+<div class="text-base font-black text-emeraldBull" id="analyticsNetPnl">+₹3,575.99</div>
 <span class="text-[10px] text-emeraldBull/90 flex items-center gap-1 mt-0.5 font-bold" id="analyticsRPerfDisplay">
 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> +17.88R Net Return
 </span>
@@ -337,7 +337,7 @@
 </div>
 <div class="glass-panel p-3.5 rounded-2xl">
 <span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">STATUTORY FRICTION</span>
-<div class="text-base font-black text-roseBear/90" id="analyticsChargesDisplay">₹363.94</div>
+<div class="text-base font-black text-roseBear/90" id="analyticsChargesDisplay">₹364.01</div>
 <span class="text-[10px] text-slate-400 mt-0.5 block font-medium">STT + Brokerage + GST</span>
 </div>
 </div>
@@ -920,15 +920,15 @@ Trigger Condition:
       tradingMode: 'PAPER',
       capital: 100000,
       riskPerTrade: 200,
-      availableMargin: 100000,
+      availableMargin: 103575.99,
       usedMargin: 0,
-      netDayPnl: 0,
-      netDayR: 0,
+      netDayPnl: 1303.51,
+      netDayR: 6.52,
       positions: [],
       ledger: [
         {
           date: "TODAY (13 NOV 2026)",
-          dayPnl: "+₹1,440.00 (+7.20R)",
+          dayPnl: "+₹1,303.51 (+6.52R)",
           trades: [
             {
               id: "tr_1",
@@ -939,15 +939,15 @@ Trigger Condition:
               exit: 1332.00,
               sl: 1348.00,
               tp: 1332.00,
-              pnl: "+₹600.00",
+              pnl: "+₹529.32",
               grossPnl: 600.00,
-              charges: 12.26,
-              netPnl: 587.74,
-              rMultiple: "+3.00R",
+              charges: 70.68,
+              netPnl: 529.32,
+              rMultiple: "+2.65R",
               exitReason: "Target 1:3 Hit (EMA9 breakdown)",
               time: "10:15 AM",
               marginUsed: 13440.00,
-              turnover: 67200.00
+              turnover: 133800.00
             },
             {
               id: "tr_2",
@@ -958,21 +958,21 @@ Trigger Condition:
               exit: 154.30,
               sl: 157.00,
               tp: 154.30,
-              pnl: "+₹840.00",
+              pnl: "+₹774.19",
               grossPnl: 840.00,
-              charges: 14.80,
-              netPnl: 825.20,
-              rMultiple: "+4.20R",
+              charges: 65.81,
+              netPnl: 774.19,
+              rMultiple: "+3.87R",
               exitReason: "Target 1:3 Hit (PZ breakdown)",
               time: "11:45 AM",
               marginUsed: 12512.00,
-              turnover: 62560.00
+              turnover: 124280.00
             }
           ]
         },
         {
           date: "YESTERDAY (12 NOV 2026)",
-          dayPnl: "+₹2,840.00 (+14.20R)",
+          dayPnl: "+₹2,272.48 (+11.36R)",
           trades: [
             {
               id: "tr_3",
@@ -983,15 +983,15 @@ Trigger Condition:
               exit: 1910.00,
               sl: 1874.00,
               tp: 1910.00,
-              pnl: "+₹1,050.00",
+              pnl: "+₹979.62",
               grossPnl: 1050.00,
-              charges: 16.50,
-              netPnl: 1033.50,
-              rMultiple: "+5.25R",
+              charges: 70.38,
+              netPnl: 979.62,
+              rMultiple: "+4.90R",
               exitReason: "Trailing SL Protected",
               time: "02:10 PM",
               marginUsed: 13160.00,
-              turnover: 65800.00
+              turnover: 132650.00
             },
             {
               id: "tr_4",
@@ -1002,15 +1002,15 @@ Trigger Condition:
               exit: 492.50,
               sl: 484.50,
               tp: 492.50,
-              pnl: "+₹1,625.00",
+              pnl: "+₹1,534.51",
               grossPnl: 1625.00,
-              charges: 18.20,
-              netPnl: 1606.80,
-              rMultiple: "+8.10R",
+              charges: 90.49,
+              netPnl: 1534.51,
+              rMultiple: "+7.67R",
               exitReason: "EOD Auto-Squareoff",
               time: "03:15 PM",
               marginUsed: 24300.00,
-              turnover: 121500.00
+              turnover: 244625.00
             },
             {
               id: "tr_5",
@@ -1021,15 +1021,15 @@ Trigger Condition:
               exit: 12585.00,
               sl: 12585.00,
               tp: 12445.00,
-              pnl: "-₹175.00",
+              pnl: "-₹241.65",
               grossPnl: -175.00,
-              charges: 15.10,
-              netPnl: -190.10,
-              rMultiple: "-0.87R",
+              charges: 66.65,
+              netPnl: -241.65,
+              rMultiple: "-1.21R",
               exitReason: "Stop Loss Triggered",
               time: "09:40 AM",
               marginUsed: 12550.00,
-              turnover: 62750.00
+              turnover: 125675.00
             }
           ]
         }
@@ -1101,24 +1101,34 @@ Trigger Condition:
       // 2. Running unrealized P&L from open positions
       const totalUnrealized = userState.positions.reduce((sum, p) => sum + (p.currentPnl || 0), 0);
       
-      // 3. Today's NET realized P&L from ledger (after deducting all statutory fees & commissions)
+      // 3. Compute Lifetime Net Realized P&L and Today's Net Realized P&L dynamically using exact NSE charges
+      let lifetimeRealizedNet = 0;
       let todayRealizedNet = 0;
-      if (userState.ledger && userState.ledger[0]) {
-        userState.ledger[0].trades.forEach(t => {
-          const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
-          const gross = (t.grossPnl !== undefined) ? t.grossPnl : ((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty);
-          const net = (t.netPnl !== undefined) ? t.netPnl : (gross - chg.totalCharges);
-          todayRealizedNet += net;
+
+      if (userState.ledger && Array.isArray(userState.ledger)) {
+        userState.ledger.forEach((day, dayIdx) => {
+          if (day.trades && Array.isArray(day.trades)) {
+            day.trades.forEach(t => {
+              const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+              const gross = (t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty;
+              const net = parseFloat((gross - chg.totalCharges).toFixed(2));
+              
+              lifetimeRealizedNet += net;
+              if (dayIdx === 0) {
+                todayRealizedNet += net;
+              }
+            });
+          }
         });
       }
 
-      // 4. Update Net Day P&L and R-Multiple
+      // 4. Update Today's Net Day P&L and R-Multiple (Today's Realized Net + Running Unrealized P&L)
       userState.netDayPnl = parseFloat((todayRealizedNet + totalUnrealized).toFixed(2));
       userState.netDayR = parseFloat((userState.netDayPnl / (userState.riskPerTrade || 200)).toFixed(2));
 
-      // 5. Update Available Margin: Account Capital + Realized Net Profit + Running P&L - Locked Margin
-      // As requested: Margin updates immediately with net profit credited to account
-      userState.availableMargin = Math.max(0, parseFloat((userState.capital + todayRealizedNet + totalUnrealized - totalUsed).toFixed(2)));
+      // 5. Update Available Margin like a real Demat account:
+      // Base Capital (₹1,00,000) + Lifetime Net Realized Profit + Running Unrealized P&L - Margin Locked
+      userState.availableMargin = Math.max(0, parseFloat((userState.capital + lifetimeRealizedNet + totalUnrealized - totalUsed).toFixed(2)));
 
       // 6. Update HUD Telemetry DOM
       const availElem = document.getElementById('availMarginDisplay');
@@ -1798,6 +1808,7 @@ Trigger Condition:
 
       let grandTotalNet = 0;
       let grandTotalCharges = 0;
+      let grandTotalGross = 0;
       let totalWins = 0;
       let totalLosses = 0;
       let totalGrossWins = 0;
@@ -1809,16 +1820,36 @@ Trigger Condition:
         
         let tradesHtml = '';
         let dayNetPnl = 0;
+        let dayGrossPnl = 0;
+        let dayCharges = 0;
 
         day.trades.forEach((t, tradeIdx) => {
+          // ALWAYS calculate exact NSE statutory charges dynamically so outside fees and inside audit are 100% identical
           const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
-          const grossPnl = (t.grossPnl !== undefined) ? t.grossPnl : ((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty);
-          const charges = (t.charges !== undefined) ? t.charges : chg.totalCharges;
-          const netPnl = (t.netPnl !== undefined) ? t.netPnl : parseFloat((grossPnl - charges).toFixed(2));
-          const rMultiple = (t.rMultiple !== undefined) ? t.rMultiple : `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+          const grossPnl = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
+          const charges = chg.totalCharges;
+          const netPnl = parseFloat((grossPnl - charges).toFixed(2));
+          const rMultiple = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+
+          // Synchronize trade object properties
+          t.grossPnl = grossPnl;
+          t.charges = charges;
+          t.netPnl = netPnl;
+          t.rMultiple = rMultiple;
+          t.turnover = chg.turnover;
+          t.marginUsed = chg.margin;
+          t.brokerage = chg.brokerage;
+          t.stt = chg.stt;
+          t.exch = chg.exch;
+          t.gst = chg.gst;
+          t.sebiStamp = chg.sebiStamp;
 
           dayNetPnl += netPnl;
+          dayGrossPnl += grossPnl;
+          dayCharges += charges;
+
           grandTotalNet += netPnl;
+          grandTotalGross += grossPnl;
           grandTotalCharges += charges;
 
           if (netPnl >= 0) {
@@ -1854,10 +1885,12 @@ Trigger Condition:
 
         const isDayProfit = dayNetPnl >= 0;
         const dayR = (dayNetPnl / (userState.riskPerTrade || 200)).toFixed(2);
+        day.dayPnl = `${isDayProfit ? '+' : ''}₹${dayNetPnl.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${isDayProfit ? '+' : ''}${dayR}R)`;
+
         group.innerHTML = `
           <div class="flex items-center justify-between text-[10px] px-1 text-slate-300 font-bold border-b border-white/5 pb-1 font-mono">
             <span>${day.date}</span>
-            <span class="${isDayProfit ? 'text-emeraldBull' : 'text-roseBear'} font-black">${isDayProfit ? '+' : ''}₹${dayNetPnl.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${isDayProfit ? '+' : ''}${dayR}R)</span>
+            <span class="${isDayProfit ? 'text-emeraldBull' : 'text-roseBear'} font-black">${day.dayPnl}</span>
           </div>
           <div class="space-y-1.5">
             ${tradesHtml}
@@ -1983,7 +2016,11 @@ Trigger Condition:
       let csvContent = "data:text/csv;charset=utf-8,TradeID,Date,Symbol,Side,Quantity,EntryPrice,ExitPrice,MarginUsed,StatutoryCharges,GrossPnL,NetPnL,RMultiple,ExitReason\n";
       userState.ledger.forEach(day => {
         day.trades.forEach(t => {
-          csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${t.entry},${t.exit},${t.marginUsed || 0},${t.charges || 0},${t.grossPnl || 0},"${t.pnl}","${t.rMultiple}","${t.exitReason}"\n`;
+          const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+          const gross = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
+          const net = parseFloat((gross - chg.totalCharges).toFixed(2));
+          const r = `${net >= 0 ? '+' : ''}${(net / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+          csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${t.entry},${t.exit},${chg.margin},${chg.totalCharges},${gross},${net},"${r}","${t.exitReason}"\n`;
         });
       });
       const encodedUri = encodeURI(csvContent);
@@ -1996,7 +2033,7 @@ Trigger Condition:
       showToast("📥 Master Ledger CSV exported successfully");
     }
 
-        // ==============================================
+    // ==============================================
     // PWA SERVICE WORKER & INSTALL PROMPT
     // ==============================================
     let deferredInstallPrompt = null;
