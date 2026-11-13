@@ -2,7 +2,7 @@ import asyncio
 import os
 import io
 import csv
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Body, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -98,7 +98,16 @@ def get_dashboard_data():
         })
 
     nifty = quotes.get('NIFTY50', {})
+    now_utc = datetime.now(timezone.utc)
+    now_ist = now_utc + timedelta(hours=5, minutes=30)
+    is_weekday = (0 <= now_ist.weekday() <= 4)
+    time_mins = now_ist.hour * 60 + now_ist.minute
+    is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
+
     return {
+        'is_market_open': is_market_open,
+        'market_status': 'OPEN' if is_market_open else 'CLOSED',
+        'ist_time': now_ist.strftime("%H:%M:%S IST"),
         'nifty50': {
             'price': nifty.get('price', 24350.0),
             'change': nifty.get('change', 0.0),

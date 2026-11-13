@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 try:
     from market_data import market_service, CROWN_6_INSTRUMENTS
     from portfolio import portfolio
@@ -143,16 +143,25 @@ class TradeEngine:
         n_ema21 = float(df_n['close'].ewm(span=21, adjust=False).mean().iloc[-1])
         nifty_trend = 1 if (n_ema9 > n_ema21 and nifty_p > n_ema21) else (-1 if (n_ema9 < n_ema21 and nifty_p < n_ema21) else 0)
 
+        now_utc = datetime.now(timezone.utc)
+        now_ist = now_utc + timedelta(hours=5, minutes=30)
+        is_weekday = (0 <= now_ist.weekday() <= 4)
+        time_mins = now_ist.hour * 60 + now_ist.minute
+        is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
+
         # Evaluate each of the Crown 6 stocks
         scores = {}
         for sym in ['RELIANCE', 'ITC', 'MARUTI', 'TATASTEEL', 'SUNPHARMA', 'INFY']:
             if sym not in quotes: continue
             q = quotes[sym]
             sc = self.calculate_stock_score_and_next_step(sym, q, nifty_trend)
+            if not is_market_open:
+                sc['signal_ready'] = False
+                sc['next_step'] = f"NSE Closed (Recorded LTP: ₹{q['price']:,.2f}). Session starts 09:15 AM."
             scores[sym] = sc
 
-            # Auto Entry if signal confirms and bot is active
-            if sc['signal_ready'] and portfolio.bot_active and len(portfolio.positions) < portfolio.max_open_positions:
+            # Auto Entry if signal confirms and market is open
+            if is_market_open and sc['signal_ready'] and portfolio.bot_active and len(portfolio.positions) < portfolio.max_open_positions:
                 cur_p = q['price']
                 atr = sc['atr']
                 # SL: 0.20% min, 0.70% max

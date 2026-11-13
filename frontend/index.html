@@ -193,9 +193,8 @@
 </div>
 <div class="flex items-center gap-1 min-w-0">
 <span class="font-extrabold text-[12px] sm:text-[13px] tracking-tight text-white font-sans truncate">ISMB CROWN 6</span>
-<span class="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/30 shrink-0">
-<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span>
-1s LIVE
+<span id="marketStatusBadge" class="live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0">
+🌙 NSE CLOSED
 </span>
 </div>
 </div>
@@ -255,9 +254,8 @@
 <span class="font-extrabold text-white text-[11px] ml-1" id="niftyPrice">₹25,074.10</span>
 <span class="font-semibold text-roseBear text-[9.5px]" id="niftyChange">-181.00 (-0.72%)</span>
 </div>
-<div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emeraldBull/10 text-emeraldBull border border-emeraldBull/25 text-[8.5px] font-bold shrink-0">
-<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span>
-<span>PULLBACKS ON</span>
+<div id="niftyRegimeBadge" class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surfaceHigh text-slate-400 border border-white/10 text-[8.5px] font-bold shrink-0">
+<span>MARKET CLOSED</span>
 </div>
 </div>
 </header>
@@ -1435,16 +1433,30 @@ Trigger Condition:
       };
     }
 
-    function updateMarketStatusBadge() {
-      const status = getMarketStatus();
-      const beacon = document.querySelector('.glass-header .live-market-badge');
+    function updateMarketStatusBadge(backendIsOpen) {
+      const localStatus = getMarketStatus();
+      const isOpen = (backendIsOpen !== undefined) ? backendIsOpen : localStatus.isOpen;
+      
+      const beacon = document.getElementById('marketStatusBadge') || document.querySelector('.live-market-badge');
+      const regimeBadge = document.getElementById('niftyRegimeBadge');
+
       if (beacon) {
-        if (status.isOpen) {
+        if (isOpen) {
           beacon.className = "live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/30 shrink-0";
           beacon.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span> 1s LIVE';
         } else {
-          beacon.className = "live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700 shrink-0";
-          beacon.innerHTML = '🌙 NSE: CLOSED (LTP RECORDED)';
+          beacon.className = "live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0";
+          beacon.innerHTML = '🌙 NSE CLOSED';
+        }
+      }
+
+      if (regimeBadge) {
+        if (isOpen) {
+          regimeBadge.className = "flex items-center gap-1 px-2 py-0.5 rounded-full bg-emeraldBull/10 text-emeraldBull border border-emeraldBull/25 text-[8.5px] font-bold shrink-0";
+          regimeBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span><span>PULLBACKS ON</span>';
+        } else {
+          regimeBadge.className = "flex items-center gap-1 px-2 py-0.5 rounded-full bg-surfaceHigh text-slate-400 border border-white/10 text-[8.5px] font-bold shrink-0";
+          regimeBadge.innerHTML = '<span>MARKET CLOSED</span>';
         }
       }
     }
@@ -1541,6 +1553,13 @@ Trigger Condition:
         const res = await fetch(`${BACKEND_URL}/api/dashboard`, { cache: 'no-store' });
         if (!res.ok) return;
         const data = await res.json();
+
+        // 0. Update Market Status
+        if (data.is_market_open !== undefined) {
+          updateMarketStatusBadge(data.is_market_open);
+        } else {
+          updateMarketStatusBadge();
+        }
 
         // 1. Update Nifty 50 Spot
         if (data.nifty50 && data.nifty50.price) {
