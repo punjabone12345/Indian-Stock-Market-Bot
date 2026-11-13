@@ -344,6 +344,64 @@ def toggle_bot():
     telegram_service.send_message(f"🤖 *BOT STATE CHANGED*\n\nCrown 6 Engine is now *{status_str}*.")
     return {'status': 'success', 'bot_active': new_state}
 
+
+# ----------------- COMPATIBILITY & SIMULATION ALIASES -----------------
+@app.post("/api/panic-close")
+def panic_close_alias():
+    return panic_square_off_all()
+
+@app.post("/api/test-telegram")
+def test_telegram_alias(payload: dict = Body(None)):
+    if payload:
+        token = payload.get('token') or payload.get('bot_token')
+        chat_id = payload.get('chat_id')
+        if token or chat_id:
+            telegram_service.set_credentials(token, chat_id)
+    return test_telegram()
+
+@app.post("/api/reset")
+def reset_alias():
+    return reset_danger_zone()
+
+@app.post("/api/positions/delete/{pos_id}")
+def delete_position_post_alias(pos_id: str):
+    return delete_position(pos_id)
+
+@app.post("/api/positions/close/{pos_id}")
+def close_position_post_alias(pos_id: str):
+    return close_position_manually(pos_id)
+
+@app.post("/api/positions/simulate")
+def simulate_paper_position(payload: dict = Body(None)):
+    """Simulate a realistic 1:3 Crown 6 trade with exact 5x MIS margin & Telegram push alert"""
+    import random
+    quotes = market_service.fetch_live_quotes()
+    available_symbols = [s for s in ['RELIANCE', 'ITC', 'MARUTI', 'TATASTEEL', 'SUNPHARMA', 'INFY'] if s not in [p['symbol'] for p in portfolio.positions.values()]]
+    if not available_symbols:
+        available_symbols = ['RELIANCE']
+    
+    sym = random.choice(available_symbols)
+    q = quotes.get(sym, {})
+    cur_p = q.get('price', 1339.7)
+    direction = random.choice(['BUY', 'SELL'])
+    sl_dist = round(cur_p * 0.005, 2)
+    if sl_dist <= 0: sl_dist = 1.0
+
+    sl_price = round(cur_p - sl_dist, 2) if direction == 'BUY' else round(cur_p + sl_dist, 2)
+    tp_price = round(cur_p + (sl_dist * 3.0), 2) if direction == 'BUY' else round(cur_p - (sl_dist * 3.0), 2)
+
+    signal = {
+        'symbol': sym,
+        'direction': direction,
+        'entry_price': cur_p,
+        'stop_loss': sl_price,
+        'take_profit': tp_price,
+        'setup': 'Crown 6 Micro Pullback 1:3 RRR'
+    }
+
+    res = portfolio.open_position(signal)
+    return res
+
 @app.get("/health")
 def health_check():
     return {'status': 'healthy', 'timestamp': datetime.now().isoformat()}
