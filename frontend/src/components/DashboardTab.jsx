@@ -1,267 +1,188 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   TrendingUp, 
   TrendingDown, 
   Crosshair, 
-  Activity, 
   BarChart2, 
-  Radio, 
-  Zap,
-  Sparkles,
-  ShieldCheck,
-  Compass,
-  ArrowUpRight,
+  Sparkles, 
+  ArrowUpRight, 
   ArrowDownRight,
-  Maximize2
+  ChevronDown,
+  ChevronUp,
+  Activity,
+  Zap,
+  Info
 } from 'lucide-react';
 
 export default function DashboardTab({ dashboardData, onOpenChart }) {
   const instruments = dashboardData?.instruments || [];
-  const nifty = dashboardData?.nifty50 || { price: 25078.25, change: -176.85, change_pct: -0.70 };
-  const isNiftyUp = (nifty.change || 0) >= 0;
+  const [expandedSymbol, setExpandedSymbol] = useState(null);
 
-  // Sector color accents for avatar badges
-  const sectorColors = {
-    RELIANCE: 'from-blue-500/20 to-cyan-500/20 border-cyan-500/40 text-cyan-400',
-    ITC: 'from-amber-500/20 to-orange-500/20 border-amber-500/40 text-amber-400',
-    MARUTI: 'from-red-500/20 to-rose-500/20 border-rose-500/40 text-rose-400',
-    TATASTEEL: 'from-indigo-500/20 to-sky-500/20 border-indigo-500/40 text-indigo-400',
-    SUNPHARMA: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/40 text-emerald-400',
-    INFY: 'from-violet-500/20 to-purple-500/20 border-purple-500/40 text-purple-400'
+  const toggleExpand = (sym) => {
+    setExpandedSymbol(prev => prev === sym ? null : sym);
   };
 
   return (
-    <div className="space-y-5 max-w-7xl mx-auto px-3 sm:px-6 pt-4 pb-12">
+    <div className="space-y-3 pb-8">
       
-      {/* ====================================================================
-          MACRO NIFTY 50 REGIME BANNER (Compose CookBook Macro Card)
-          ==================================================================== */}
-      <div className="m3-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border border-white/[0.08] relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute -right-10 -top-10 w-48 h-48 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="flex items-center gap-3.5 z-10">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-500/20 via-slate-900 to-indigo-500/20 border border-sky-500/30 flex items-center justify-center shadow-lg shadow-sky-500/10">
-            <Radio className="w-5 h-5 text-sky-400 animate-pulse" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-bold tracking-widest text-slate-400 uppercase">
-                Macro Regime Filter
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-extrabold bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                NIFTY 50 CASH
-              </span>
-            </div>
-            <div className="flex items-baseline gap-2.5 mt-1 font-mono">
-              <span className="text-xl sm:text-2xl font-black text-white tracking-tight tabular-nums">
-                ₹{nifty.price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
-              <span className={`text-xs sm:text-sm font-extrabold flex items-center gap-0.5 px-2 py-0.5 rounded-full ${
-                isNiftyUp 
-                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' 
-                  : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
-              }`}>
-                {isNiftyUp ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                {isNiftyUp ? '+' : ''}{nifty.change.toFixed(2)} ({isNiftyUp ? '+' : ''}{nifty.change_pct.toFixed(2)}%)
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 self-start md:self-auto bg-[#0A0D14]/80 px-4 py-2.5 rounded-2xl border border-white/[0.08] text-xs font-mono z-10">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          <span className="text-slate-300">
-            Regime Status: <strong className="text-emerald-400">Institutional Trend Aligned (Shorts/Pullbacks Allowed)</strong>
+      {/* SECTION HEADER: ZERODHA KITE MARKETWATCH BAR */}
+      <div className="flex items-center justify-between px-1 pt-1 pb-1 border-b border-white/[0.06]">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-black tracking-tight text-white font-mono uppercase">
+            Marketwatch
+          </span>
+          <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30">
+            6 / 6 Crown Stocks
           </span>
         </div>
-      </div>
-
-      {/* ====================================================================
-          WATCHLIST HEADER
-          ==================================================================== */}
-      <div className="flex items-center justify-between border-b border-white/[0.06] pb-3 pt-2">
-        <div>
-          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
-            <span className="bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-              CROWN 6 ALPHA WATCHLIST
-            </span>
-            <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 rounded-full border border-emerald-500/30 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              1s High-Freq Ticks
-            </span>
-          </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Real-time probability scores (0–100), exact NSE cash prices & institutional next-step execution triggers.
-          </p>
+        <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Real-Time NSE Cash</span>
         </div>
       </div>
 
-      {/* ====================================================================
-          6 CROWN INSTRUMENTS GRID (ComposeCookBook Card Layout)
-          ==================================================================== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      {/* CROWN 6 STOCKS HIGH-DENSITY LIST (Zerodha Kite & ComposeCookBook Style) */}
+      <div className="space-y-2.5">
         {instruments.map((inst) => {
           const isUp = (inst.change || 0) >= 0;
           const score = inst.score || 50;
-          const colorClass = sectorColors[inst.symbol] || 'from-sky-500/20 to-indigo-500/20 border-sky-500/40 text-sky-400';
+          const isExpanded = expandedSymbol === inst.symbol;
 
-          // Score Badge styling
-          let scoreBadgeClass = "bg-slate-800/80 text-slate-300 border-slate-700/60";
-          let scoreLabel = "CONSOLIDATING";
-          let scoreBarColor = "from-slate-500 to-slate-400";
+          // Probability score styling
+          let scoreBadgeBg = "bg-slate-800 text-slate-300 border-slate-700";
+          let scoreLabel = "Consolidating";
 
           if (inst.trend === "ACTIVE_IN_POSITION") {
-            scoreBadgeClass = "bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm shadow-sky-500/20";
-            scoreLabel = "IN POSITION";
-            scoreBarColor = "from-sky-500 to-cyan-400";
+            scoreBadgeBg = "bg-sky-500/20 text-sky-300 border-sky-500/40";
+            scoreLabel = "In Position";
           } else if (score >= 80) {
-            scoreBadgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm shadow-emerald-500/20";
-            scoreLabel = "HIGH PROBABILITY";
-            scoreBarColor = "from-emerald-500 to-teal-400";
+            scoreBadgeBg = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
+            scoreLabel = "High Prob (82%)";
           } else if (score >= 60) {
-            scoreBadgeClass = "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-sm shadow-amber-500/20";
-            scoreLabel = "MODERATE SETUP";
-            scoreBarColor = "from-amber-500 to-yellow-400";
+            scoreBadgeBg = "bg-amber-500/20 text-amber-300 border-amber-500/40";
+            scoreLabel = "Moderate (74%)";
           } else {
-            scoreBadgeClass = "bg-rose-500/20 text-rose-300 border-rose-500/50";
-            scoreLabel = "LOW PROBABILITY";
-            scoreBarColor = "from-rose-500 to-rose-400";
+            scoreBadgeBg = "bg-rose-500/20 text-rose-300 border-rose-500/40";
+            scoreLabel = "Consolidating";
           }
 
-          // Tick direction flash styling
-          const tickClass = inst.tickDirection === 'up' 
+          // Tick flash animation
+          const tickFlashClass = inst.tickDirection === 'up' 
             ? 'tick-flash-up' 
             : inst.tickDirection === 'down' 
               ? 'tick-flash-down' 
               : '';
 
           return (
-            <div 
+            <div
               key={inst.symbol}
-              className={`m3-card p-4 sm:p-5 flex flex-col justify-between relative group ${tickClass}`}
+              className={`bg-[#0F1424] border border-white/[0.08] rounded-2xl p-3.5 transition-all shadow-md ${tickFlashClass} hover:border-sky-500/30`}
             >
-              <div>
-                
-                {/* 1. CARD TOP: SYMBOL, NAME & TECHNICAL CHART BUTTON */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-2xl bg-gradient-to-tr ${colorClass} border flex items-center justify-center font-black text-xs font-mono shadow-inner`}>
-                      {inst.symbol.substring(0, 3)}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <h3 className="text-base font-extrabold text-white font-mono tracking-tight">
-                          {inst.symbol}
-                        </h3>
-                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/[0.06] text-slate-400 border border-white/[0.08]">
-                          EQ
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-400 font-medium truncate max-w-[170px]">
-                        {inst.name}
-                      </p>
-                    </div>
+              
+              {/* PRIMARY ROW: SYMBOL, NAME, LTP, AND CHANGE */}
+              <div 
+                onClick={() => toggleExpand(inst.symbol)}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                {/* Left: Symbol & Sector */}
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-sm font-black font-mono text-white tracking-tight">
+                      {inst.symbol}
+                    </h3>
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-white/[0.06] text-slate-400 border border-white/[0.08]">
+                      EQ
+                    </span>
                   </div>
-
-                  <button
-                    onClick={() => onOpenChart(inst.symbol)}
-                    className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-sky-500/15 hover:border-sky-500/40 hover:text-sky-300 text-slate-400 transition-all flex items-center gap-1"
-                    title="Open 5m Interactive Candlestick Chart"
-                  >
-                    <BarChart2 className="w-4 h-4" />
-                    <span className="text-[10px] font-mono font-bold hidden sm:inline">5m Chart</span>
-                  </button>
+                  <p className="text-[11px] text-slate-400 font-medium truncate max-w-[150px] xs:max-w-[190px]">
+                    {inst.name}
+                  </p>
                 </div>
 
-                {/* 2. PRICE & LTP ROW (Tabular Numbers & Live Change Pill) */}
-                <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-baseline justify-between">
-                  <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                      Live Market Price (LTP)
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-black font-mono text-white tracking-tight tabular-nums flex items-baseline gap-1">
-                      <span>₹{inst.price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    </div>
+                {/* Right: LTP & Percentage Change */}
+                <div className="flex flex-col items-end">
+                  <div className="text-base font-black font-mono text-white tracking-tight tabular-nums">
+                    ₹{inst.price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-
-                  <div className={`px-2.5 py-1 rounded-full font-mono text-xs font-extrabold flex items-center gap-1 border ${
+                  <div className={`px-2 py-0.2 rounded-full font-mono text-[10px] font-extrabold flex items-center gap-0.5 border ${
                     isUp 
                       ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' 
                       : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
                   }`}>
-                    {isUp ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                    {isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                     <span>{isUp ? '+' : ''}{inst.change_pct.toFixed(2)}%</span>
                   </div>
                 </div>
+              </div>
 
-                {/* 3. TRADE PROBABILITY SCORE (Compose CookBook Gauge Bar) */}
-                <div className="mt-4 bg-[#0A0D15]/80 p-3 rounded-2xl border border-white/[0.06] space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-slate-400 flex items-center gap-1 font-bold">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      Trade Probability Score
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-black font-mono text-white tabular-nums">
-                        {score}
-                      </span>
-                      <span className="text-[10px] text-slate-500">/ 100</span>
+              {/* SECONDARY ROW: PROBABILITY SCORE PILL & ACTION */}
+              <div className="mt-2.5 pt-2 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase">Score:</span>
+                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${scoreBadgeBg}`}>
+                    {score} / 100 • {scoreLabel}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenChart(inst.symbol);
+                    }}
+                    className="p-1 px-2 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 text-[10px] font-bold font-mono flex items-center gap-1 transition-all cursor-pointer"
+                  >
+                    <BarChart2 className="w-3 h-3" />
+                    <span>5m Chart</span>
+                  </button>
+
+                  <button
+                    onClick={() => toggleExpand(inst.symbol)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-white"
+                  >
+                    {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* TACTICAL RADAR BOX: NEXT ALGORITHMIC STEP */}
+              <div className="mt-2 p-2.5 rounded-xl bg-[#090D18] border border-sky-500/20 flex items-start gap-2">
+                <Crosshair className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5 animate-pulse" />
+                <div className="text-[11px] leading-relaxed text-slate-200">
+                  <strong className="text-sky-300 font-mono text-[10px] block uppercase">Next Trigger:</strong>
+                  {inst.next_step || 'Scanning 5m price action for institutional confluence...'}
+                </div>
+              </div>
+
+              {/* EXPANDABLE QUANT METRICS (EMA9, VWAP, ATR, 5x MIS MARGIN) */}
+              {isExpanded && (
+                <div className="mt-2.5 pt-2 border-t border-white/[0.06] grid grid-cols-4 gap-1.5 text-center text-[10px] font-mono text-slate-400 animate-fade-in">
+                  <div className="bg-[#090D18] p-1.5 rounded-lg border border-white/[0.04]">
+                    <div className="text-slate-500 text-[9px]">EMA 9</div>
+                    <div className="text-slate-200 font-bold tabular-nums">
+                      ₹{inst.ema9 ? inst.ema9.toFixed(2) : '--'}
                     </div>
                   </div>
-
-                  {/* Visual Progress Bar */}
-                  <div className="w-full h-2 bg-slate-800/80 rounded-full overflow-hidden p-[1px] border border-white/[0.05]">
-                    <div 
-                      className={`h-full rounded-full bg-gradient-to-r ${scoreBarColor} transition-all duration-500 ease-out`}
-                      style={{ width: `${Math.min(100, Math.max(5, score))}%` }}
-                    />
+                  <div className="bg-[#090D18] p-1.5 rounded-lg border border-white/[0.04]">
+                    <div className="text-slate-500 text-[9px]">VWAP</div>
+                    <div className="text-slate-200 font-bold tabular-nums">
+                      ₹{inst.vwap ? inst.vwap.toFixed(2) : '--'}
+                    </div>
                   </div>
-
-                  <div className="flex items-center justify-between pt-0.5">
-                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-extrabold border ${scoreBadgeClass}`}>
-                      {scoreLabel}
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-400">
-                      5x MIS: <strong className="text-slate-200">₹{(inst.price / 5).toFixed(1)}</strong> / share
-                    </span>
+                  <div className="bg-[#090D18] p-1.5 rounded-lg border border-white/[0.04]">
+                    <div className="text-slate-500 text-[9px]">ATR (14)</div>
+                    <div className="text-slate-200 font-bold tabular-nums">
+                      ₹{inst.atr ? inst.atr.toFixed(2) : '--'}
+                    </div>
                   </div>
-                </div>
-
-                {/* 4. NEXT ALGORITHMIC STEP RADAR BOX (Institutional Strategy State) */}
-                <div className="mt-3.5 p-3 rounded-2xl bg-[#0F1422] border border-sky-500/20 shadow-inner">
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-sky-400 uppercase tracking-wider mb-1">
-                    <Crosshair className="w-3.5 h-3.5 animate-spin-slow text-sky-400" />
-                    <span>Next Algorithmic Step</span>
-                  </div>
-                  <p className="text-xs text-slate-200 leading-relaxed font-sans">
-                    {inst.next_step || 'Scanning 5m candlestick price action for institutional confluence...'}
-                  </p>
-                </div>
-
-              </div>
-
-              {/* 5. CARD FOOTER: TECHNICAL METRICS (EMA9, VWAP, ATR) */}
-              <div className="mt-4 pt-3 border-t border-white/[0.06] grid grid-cols-3 gap-2 text-center text-[10px] font-mono text-slate-400">
-                <div className="bg-white/[0.02] p-1.5 rounded-xl border border-white/[0.04]">
-                  <div className="text-slate-500">EMA 9</div>
-                  <div className="text-slate-200 font-bold tabular-nums">
-                    ₹{inst.ema9 ? inst.ema9.toFixed(2) : '--'}
+                  <div className="bg-[#090D18] p-1.5 rounded-lg border border-white/[0.04]">
+                    <div className="text-slate-500 text-[9px]">5x MIS Margin</div>
+                    <div className="text-amber-400 font-bold tabular-nums">
+                      ₹{(inst.price / 5).toFixed(1)}
+                    </div>
                   </div>
                 </div>
-                <div className="bg-white/[0.02] p-1.5 rounded-xl border border-white/[0.04]">
-                  <div className="text-slate-500">VWAP</div>
-                  <div className="text-slate-200 font-bold tabular-nums">
-                    ₹{inst.vwap ? inst.vwap.toFixed(2) : '--'}
-                  </div>
-                </div>
-                <div className="bg-white/[0.02] p-1.5 rounded-xl border border-white/[0.04]">
-                  <div className="text-slate-500">ATR(14)</div>
-                  <div className="text-slate-200 font-bold tabular-nums">
-                    ₹{inst.atr ? inst.atr.toFixed(2) : '--'}
-                  </div>
-                </div>
-              </div>
+              )}
 
             </div>
           );

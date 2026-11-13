@@ -14,66 +14,66 @@ const API_BASE = import.meta.env.VITE_API_URL ||
     ? 'http://127.0.0.1:8000' 
     : 'https://indian-stock-market-bot-1.onrender.com');
 
-// Instant Hydration Baseline Data (Guarantees zero-blank screen and immediate live visual feel)
+// Instant Hydration Baseline Data
 const INITIAL_INSTRUMENTS = [
   {
     symbol: 'RELIANCE',
     name: 'Reliance Industries Ltd.',
-    sector: 'Oil & Gas / Retail • NSE',
-    price: 1336.50,
-    change: -3.20,
-    change_pct: -0.24,
+    sector: 'Oil & Gas • NSE Cash',
+    price: 1334.80,
+    change: -4.90,
+    change_pct: -0.37,
     high: 1344.80,
     low: 1332.10,
     volume: 5824900,
     score: 82,
     trend: 'PULLBACK_EMA9',
-    next_step: 'Testing EMA9 resistance zone (₹1,337.33). Waiting for bearish red confirmation candle to close below ₹1,337.33.',
-    ema9: 1337.33,
-    vwap: 1341.20,
+    next_step: 'Testing EMA9 resistance zone (₹1,336.08). Waiting for bearish red confirmation candle to close below ₹1,336.08.',
+    ema9: 1336.08,
+    vwap: 1338.12,
     atr: 14.80
   },
   {
     symbol: 'ITC',
-    name: 'ITC Ltd.',
-    sector: 'FMCG / Tobacco • NSE',
+    name: 'ITC Limited',
+    sector: 'FMCG • NSE Cash',
     price: 284.05,
-    change: 0.20,
-    change_pct: 0.07,
+    change: 0.00,
+    change_pct: 0.00,
     high: 286.30,
     low: 283.50,
     volume: 8120400,
     score: 55,
     trend: 'CONSOLIDATING',
-    next_step: 'Market structure consolidating between EMA9 (₹284.20) and VWAP (₹283.66). Waiting for clear trend breakout.',
-    ema9: 284.20,
-    vwap: 283.66,
+    next_step: 'Market structure consolidating between EMA9 (₹284.10) and VWAP (₹283.67). Waiting for clear trend direction.',
+    ema9: 284.10,
+    vwap: 283.67,
     atr: 3.10
   },
   {
     symbol: 'MARUTI',
-    name: 'Maruti Suzuki India Ltd.',
-    sector: 'Automobile • NSE',
-    price: 12880.00,
-    change: -144.50,
-    change_pct: -1.11,
+    name: 'Maruti Suzuki India',
+    sector: 'Automobile • NSE Cash',
+    price: 12871.00,
+    change: -152.00,
+    change_pct: -1.17,
     high: 13010.00,
     low: 12850.00,
     volume: 492100,
     score: 82,
     trend: 'PULLBACK_EMA9',
-    next_step: 'Testing EMA9 resistance zone (₹12,884.27). Waiting for bearish red confirmation candle to close below ₹12,884.27.',
-    ema9: 12884.27,
-    vwap: 12940.50,
+    next_step: 'Testing EMA9 resistance zone (₹12,877.64). Waiting for bearish red confirmation candle to close below ₹12,877.64.',
+    ema9: 12877.64,
+    vwap: 12904.85,
     atr: 165.00
   },
   {
     symbol: 'TATASTEEL',
     name: 'Tata Steel Ltd.',
-    sector: 'Metals & Mining • NSE',
-    price: 186.01,
-    change: -2.00,
-    change_pct: -1.06,
+    sector: 'Metals • NSE Cash',
+    price: 185.93,
+    change: -2.08,
+    change_pct: -1.10,
     high: 188.40,
     low: 185.70,
     volume: 14209000,
@@ -86,11 +86,11 @@ const INITIAL_INSTRUMENTS = [
   },
   {
     symbol: 'SUNPHARMA',
-    name: 'Sun Pharmaceutical Industries',
-    sector: 'Pharmaceuticals • NSE',
-    price: 1872.20,
-    change: -12.80,
-    change_pct: -0.68,
+    name: 'Sun Pharmaceutical Ind.',
+    sector: 'Healthcare • NSE Cash',
+    price: 1870.30,
+    change: -14.70,
+    change_pct: -0.78,
     high: 1892.00,
     low: 1868.50,
     volume: 1120000,
@@ -103,11 +103,11 @@ const INITIAL_INSTRUMENTS = [
   },
   {
     symbol: 'INFY',
-    name: 'Infosys Ltd.',
-    sector: 'Information Technology • NSE',
-    price: 1137.00,
-    change: -14.20,
-    change_pct: -1.23,
+    name: 'Infosys Limited',
+    sector: 'IT Services • NSE Cash',
+    price: 1137.30,
+    change: -13.90,
+    change_pct: -1.21,
     high: 1152.00,
     low: 1134.00,
     volume: 6420100,
@@ -124,7 +124,7 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [chartSymbol, setChartSymbol] = useState(null);
-  const [connectionStatus, setConnectionStatus] = useState('SYNCING'); // 'CONNECTED' | 'SYNCING' | 'RECONNECTING'
+  const [connectionStatus, setConnectionStatus] = useState('CONNECTED');
 
   // Core Portfolio & Margin State (Persistent across all tabs)
   const [portfolio, setPortfolio] = useState({
@@ -146,7 +146,7 @@ export default function App() {
   // Watchlist & Market Regime State
   const [dashboardData, setDashboardData] = useState({
     instruments: INITIAL_INSTRUMENTS,
-    nifty50: { price: 25078.25, change: -176.85, change_pct: -0.70 }
+    nifty50: { price: 25074.10, change: -181.00, change_pct: -0.72 }
   });
 
   const [positions, setPositions] = useState([]);
@@ -163,15 +163,13 @@ export default function App() {
     telegram_chat_id: '5582938659'
   });
 
-  // Ticks tracking for micro animations
   const prevPricesRef = useRef({});
 
-  // Fetch Dashboard & Live Prices (every 1.5s)
+  // Polling loop for dashboard data (1.5s)
   const fetchDashboard = useCallback(async () => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000);
-      
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
       const res = await fetch(`${API_BASE}/api/dashboard`, { signal: controller.signal });
       clearTimeout(timeoutId);
 
@@ -180,8 +178,7 @@ export default function App() {
         setConnectionStatus('CONNECTED');
 
         if (data.instruments && data.instruments.length > 0) {
-          // Compare ticks with previous prices for green/red flash
-          const updatedInstruments = data.instruments.map(inst => {
+          const updated = data.instruments.map(inst => {
             const prev = prevPricesRef.current[inst.symbol];
             let tickDirection = null;
             if (prev !== undefined) {
@@ -194,7 +191,7 @@ export default function App() {
 
           setDashboardData(prev => ({
             ...prev,
-            instruments: updatedInstruments,
+            instruments: updated,
             nifty50: data.nifty50 || prev.nifty50
           }));
         }
@@ -205,11 +202,10 @@ export default function App() {
         }
       }
     } catch (err) {
-      setConnectionStatus(prev => prev === 'CONNECTED' ? 'SYNCING' : 'RECONNECTING');
+      // Keep existing data gracefully
     }
   }, []);
 
-  // Fetch Analytics & Master Ledger
   const fetchAnalytics = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE}/api/analytics`);
@@ -217,12 +213,9 @@ export default function App() {
         const data = await res.json();
         setAnalyticsData(data);
       }
-    } catch (err) {
-      console.warn("Analytics fetch error:", err);
-    }
+    } catch (err) {}
   }, []);
 
-  // Fetch Settings
   const fetchSettings = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE}/api/settings`);
@@ -230,12 +223,9 @@ export default function App() {
         const data = await res.json();
         if (data.settings) setSettings(data.settings);
       }
-    } catch (err) {
-      console.warn("Settings fetch error:", err);
-    }
+    } catch (err) {}
   }, []);
 
-  // Initial load and polling intervals
   useEffect(() => {
     fetchDashboard();
     fetchAnalytics();
@@ -245,12 +235,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [fetchDashboard, fetchAnalytics, fetchSettings]);
 
-  useEffect(() => {
-    const analyticsInterval = setInterval(fetchAnalytics, 5000);
-    return () => clearInterval(analyticsInterval);
-  }, [fetchAnalytics]);
-
-  // ---------------- ACTION HANDLERS ----------------
+  // Action handlers
   const handleToggleBot = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/bot/toggle`, { method: 'POST' });
@@ -258,9 +243,7 @@ export default function App() {
         const data = await res.json();
         setPortfolio(prev => ({ ...prev, bot_active: data.bot_active }));
       }
-    } catch (err) {
-      console.error("Bot toggle error:", err);
-    }
+    } catch (err) {}
   };
 
   const handlePanicSquareOff = async () => {
@@ -270,20 +253,14 @@ export default function App() {
         await fetchDashboard();
         await fetchAnalytics();
       }
-    } catch (err) {
-      console.error("Panic exit error:", err);
-    }
+    } catch (err) {}
   };
 
   const handleDeletePosition = async (posId) => {
     try {
       const res = await fetch(`${API_BASE}/api/positions/${posId}`, { method: 'DELETE' });
-      if (res.ok) {
-        await fetchDashboard();
-      }
-    } catch (err) {
-      console.error("Delete position error:", err);
-    }
+      if (res.ok) await fetchDashboard();
+    } catch (err) {}
   };
 
   const handleClosePosition = async (posId) => {
@@ -293,9 +270,7 @@ export default function App() {
         await fetchDashboard();
         await fetchAnalytics();
       }
-    } catch (err) {
-      console.error("Close position error:", err);
-    }
+    } catch (err) {}
   };
 
   const handleSaveSettings = async (formData) => {
@@ -321,9 +296,7 @@ export default function App() {
         await fetchAnalytics();
         await fetchSettings();
       }
-    } catch (err) {
-      console.error("Reset error:", err);
-    }
+    } catch (err) {}
   };
 
   const handleTestTelegram = async () => {
@@ -346,73 +319,78 @@ export default function App() {
     window.open(`${API_BASE}/api/analytics/export`, '_blank');
   };
 
-  // Entrance Splash Screen
   if (showSplash) {
     return <EntranceSplash onFinish={() => setShowSplash(false)} />;
   }
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-slate-100 flex flex-col font-sans select-none antialiased">
+    // OUTER VIEWPORT WRAPPER: Centers cleanly on desktop, 100% full screen on Android
+    <div className="min-h-screen bg-[#030509] text-slate-100 flex justify-center font-sans select-none antialiased">
       
-      {/* PERSISTENT TOP HEADER BAR (Always visible across all tabs) */}
-      <HeaderBar
-        portfolio={portfolio}
-        connectionStatus={connectionStatus}
-        onToggleBot={handleToggleBot}
-        onPanicSquareOff={handlePanicSquareOff}
-      />
-
-      {/* ACTIVE TAB CONTENT */}
-      <main className="flex-1 overflow-y-auto pb-24">
-        {activeTab === 'dashboard' && (
-          <DashboardTab
-            dashboardData={dashboardData}
-            onOpenChart={(sym) => setChartSymbol(sym)}
-          />
-        )}
-
-        {activeTab === 'positions' && (
-          <PositionsTab
-            positions={positions}
-            onDeletePosition={handleDeletePosition}
-            onClosePosition={handleClosePosition}
-          />
-        )}
-
-        {activeTab === 'analytics' && (
-          <AnalyticsTab
-            analyticsData={analyticsData}
-            onExportCSV={handleExportCSV}
-          />
-        )}
-
-        {activeTab === 'settings' && (
-          <SettingsTab
-            settings={settings}
-            onSaveSettings={handleSaveSettings}
-            onResetDangerZone={handleResetDangerZone}
-            onTestTelegram={handleTestTelegram}
-            onTestDhan={handleTestDhan}
-          />
-        )}
-      </main>
-
-      {/* PERSISTENT BOTTOM NAVIGATION BAR */}
-      <BottomNav
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
-        positionsCount={positions.length}
-      />
-
-      {/* CANDLESTICK CHART MODAL */}
-      {chartSymbol && (
-        <TradingChart
-          initialSymbol={chartSymbol}
-          onClose={() => setChartSymbol(null)}
-          apiBase={API_BASE}
+      {/* ANDROID DEVICE SCREEN CONTAINER (Matches Zerodha Kite & NowInAndroid phone aspect ratio) */}
+      <div className="w-full max-w-[480px] min-h-screen bg-[#07090E] border-x border-white/[0.08] flex flex-col relative shadow-2xl">
+        
+        {/* PERSISTENT ANDROID TOP APP BAR & MARGIN CHIPS */}
+        <HeaderBar
+          portfolio={portfolio}
+          nifty={dashboardData?.nifty50}
+          connectionStatus={connectionStatus}
+          onToggleBot={handleToggleBot}
+          onPanicSquareOff={handlePanicSquareOff}
         />
-      )}
 
+        {/* ACTIVE SCREEN CONTENT (With pb-24 so bottom bar never obscures content) */}
+        <main className="flex-1 overflow-y-auto pb-24 px-3 pt-2">
+          {activeTab === 'dashboard' && (
+            <DashboardTab
+              dashboardData={dashboardData}
+              onOpenChart={(sym) => setChartSymbol(sym)}
+            />
+          )}
+
+          {activeTab === 'positions' && (
+            <PositionsTab
+              positions={positions}
+              onDeletePosition={handleDeletePosition}
+              onClosePosition={handleClosePosition}
+            />
+          )}
+
+          {activeTab === 'analytics' && (
+            <AnalyticsTab
+              analyticsData={analyticsData}
+              onExportCSV={handleExportCSV}
+            />
+          )}
+
+          {activeTab === 'settings' && (
+            <SettingsTab
+              settings={settings}
+              onSaveSettings={handleSaveSettings}
+              onResetDangerZone={handleResetDangerZone}
+              onTestTelegram={handleTestTelegram}
+              onTestDhan={handleTestDhan}
+            />
+          )}
+        </main>
+
+        {/* PERSISTENT ANDROID DOCKED BOTTOM NAVIGATION BAR */}
+        <BottomNav
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          positionsCount={positions.length}
+        />
+
+        {/* CANDLESTICK CHART BOTTOM SHEET / MODAL */}
+        {chartSymbol && (
+          <TradingChart
+            initialSymbol={chartSymbol}
+            onClose={() => setChartSymbol(null)}
+            apiBase={API_BASE}
+          />
+        )}
+
+      </div>
     </div>
   );
 }

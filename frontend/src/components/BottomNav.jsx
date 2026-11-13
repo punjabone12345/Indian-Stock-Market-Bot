@@ -8,15 +8,15 @@ import {
 
 export default function BottomNav({ activeTab, onSelectTab, positionsCount = 0 }) {
   const tabs = [
-    { id: 'dashboard', label: 'Home', icon: LayoutDashboard },
+    { id: 'dashboard', label: 'Watchlist', icon: LayoutDashboard },
     { id: 'positions', label: 'Positions', icon: Layers, badge: positionsCount },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Settings', icon: Sliders }
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 m3-dock border-t border-white/[0.08] py-2 px-3 sm:px-8 shadow-2xl backdrop-blur-2xl">
-      <div className="max-w-md sm:max-w-xl mx-auto flex items-center justify-around">
+    <nav className="fixed bottom-0 w-full max-w-[480px] z-40 bg-[#090D16]/95 backdrop-blur-2xl border-t border-white/[0.08] py-1.5 px-3 shadow-2xl">
+      <div className="flex items-center justify-around">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -25,9 +25,9 @@ export default function BottomNav({ activeTab, onSelectTab, positionsCount = 0 }
             <button
               key={tab.id}
               onClick={() => onSelectTab(tab.id)}
-              className={`relative flex flex-col items-center justify-center py-1.5 px-3 sm:px-6 rounded-2xl transition-all duration-200 cursor-pointer ${
+              className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 cursor-pointer ${
                 isActive 
-                  ? 'text-sky-400 font-black' 
+                  ? 'text-sky-300 font-black' 
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -47,8 +47,8 @@ export default function BottomNav({ activeTab, onSelectTab, positionsCount = 0 }
                 )}
               </div>
 
-              <span className={`text-[10px] sm:text-[11px] mt-1 font-mono tracking-tight ${
-                isActive ? 'text-sky-300 font-black' : 'text-slate-400 font-medium'
+              <span className={`text-[10px] mt-0.5 font-mono tracking-tight ${
+                isActive ? 'text-sky-300 font-extrabold' : 'text-slate-400 font-medium'
               }`}>
                 {tab.label}
               </span>
