@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
 
 :root {
   --bg-deep: #080A0F;
@@ -40,7 +41,7 @@ code, .font-mono {
 
 /* Glassmorphism Classes */
 .glass-panel {
-  background: rgba(14, 18, 27, 0.75);
+  background: rgba(14, 18, 27, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);

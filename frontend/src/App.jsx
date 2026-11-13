@@ -12,7 +12,7 @@ import TradingChart from './components/TradingChart';
 const API_BASE = import.meta.env.VITE_API_URL || 
   (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://127.0.0.1:8000' 
-    : 'https://indian-stock-market-bot.onrender.com');
+    : 'https://indian-stock-market-bot-1.onrender.com');
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
