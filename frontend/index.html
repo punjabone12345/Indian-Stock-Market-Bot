@@ -86,17 +86,27 @@
     }
 
     @media (min-width: 640px) {
-      /* Centered luxury terminal frame on desktop / tablet */
+      /* Widescreen luxury institutional terminal on desktop / tablet */
       html, body {
         position: static;
         height: auto;
         min-height: 100vh;
         overflow-y: auto !important;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
         touch-action: auto;
+        padding: 1.25rem 1rem;
+        background-color: #04060A;
       }
+    }
+    
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+    .desktop-tab-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     *, *::before, *::after {
@@ -140,7 +150,8 @@
 </head>
 <body class="bg-[#05070B] text-slate-100 font-sans antialiased min-h-screen flex items-center justify-center p-0 sm:p-4 select-none overflow-x-hidden w-full">
 <!-- Mobile Frame Container (Institutional Terminal Form Factor) -->
-<div class="relative w-full max-w-[460px] h-full sm:h-[92vh] sm:max-h-[900px] bg-obsidian sm:rounded-[32px] overflow-hidden flex flex-col border-0 sm:border sm:border-white/10 shadow-none sm:shadow-[0_0_80px_rgba(0,0,0,0.9)] mx-auto">
+<!-- Institutional Trading Terminal (Responsive Desktop Widescreen + Mobile Form Factor) -->
+<div class="relative w-full max-w-7xl min-h-screen sm:min-h-[95vh] bg-[#07090E] sm:rounded-3xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10 shadow-none sm:shadow-[0_0_100px_rgba(0,0,0,0.95)] mx-auto">
 <!-- Ambient luxury mesh background orbs -->
 <div class="absolute -top-24 -left-20 w-64 h-64 bg-cyanAccent/10 rounded-full blur-[80px] pointer-events-none animate-ambient-glow"></div>
 <div class="absolute top-1/3 -right-24 w-72 h-72 bg-emeraldBull/8 rounded-full blur-[90px] pointer-events-none animate-ambient-glow"></div>
@@ -182,87 +193,141 @@
 </div>
 </div>
 <!-- ============================================== -->
-<!-- REORGANIZED TOP COMMAND BAR (HUD TILE LAYOUT)  -->
+<!-- REORGANIZED TOP COMMAND BAR (INSTITUTIONAL HUD) -->
 <!-- ============================================== -->
-<header class="glass-header z-30 shrink-0 px-3 pt-2.5 pb-2 relative w-full overflow-hidden">
-<!-- Row 1: Brand & Operational Status Controls -->
-<div class="flex items-center justify-between gap-1.5 mb-2 w-full">
-<div class="flex items-center gap-1.5 min-w-0">
-<div class="w-6 h-6 rounded-lg bg-gradient-to-br from-amberTactical/25 to-amberTactical/5 border border-amberTactical/30 flex items-center justify-center text-amberTactical shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.25)]">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="crown" aria-hidden="true" class="lucide lucide-crown w-3.5 h-3.5"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>
-</div>
-<div class="flex items-center gap-1 min-w-0">
-<span class="font-black text-[12.5px] sm:text-[13.5px] tracking-tight text-white font-sans truncate">Indian Stock Market Bot</span>
-<span id="marketStatusBadge" class="live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0">
-🌙 NSE CLOSED
-</span>
-</div>
-</div>
-<div class="flex items-center gap-1.5 shrink-0">
-<!-- Engine Status Pill Button -->
-<button class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold bg-emeraldBull/15 border border-emeraldBull/30 text-emeraldBull hover:bg-emeraldBull/25 transition-all active:scale-95" id="engineToggleBtn" onclick="toggleEngineState()">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity w-2.5 h-2.5 text-emeraldBull"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
-<span id="engineStatusLabel">AUTO: ACTIVE</span>
-</button>
-<!-- Panic "Exit All" Button -->
-<button class="px-2.5 py-1 rounded-full text-[9px] font-mono font-bold bg-roseBear/15 text-roseBear border border-roseBear/30 hover:bg-roseBear/25 active:scale-95 transition-all flex items-center gap-1" onclick="openPanicExitModal()">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-octagon" aria-hidden="true" class="lucide lucide-alert-octagon w-2.5 h-2.5"><path d="M12 16h.01"></path><path d="M12 8v4"></path><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"></path></svg>
-<span>EXIT ALL</span>
-</button>
-</div>
-</div>
-<!-- Row 2: 3 High-Visibility Prominent Margin & P&L HUD Telemetry Cards -->
-<div class="grid grid-cols-3 gap-1.5 bg-surfaceLow/95 border border-white/10 rounded-2xl p-2 font-mono shadow-inner w-full">
-<!-- Card 1: Available Margin -->
-<div class="bg-black/40 rounded-xl p-2 border border-white/5 flex flex-col justify-between overflow-hidden">
-<div class="flex items-center justify-between text-slate-400">
-<span class="text-[9px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" aria-hidden="true" class="lucide lucide-wallet w-2.5 h-2.5 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
-</div>
-<div class="text-[13px] sm:text-[15px] font-black text-white tracking-tight mt-1 truncate" id="availMarginDisplay">₹1,00,000</div>
-<span class="text-[8px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
-</div>
+<header class="glass-header z-30 shrink-0 px-3 sm:px-5 pt-3 pb-2.5 relative w-full overflow-hidden border-b border-white/10 bg-[#080B12]/95 backdrop-blur-2xl">
+  <!-- Row 1: Brand Logo, Desktop Navigation Tab Dock, & Engine Control Buttons -->
+  <div class="flex items-center justify-between gap-3 mb-2.5 w-full">
+    <!-- Left: Brand + Status -->
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amberTactical/30 to-amberTactical/5 border border-amberTactical/40 flex items-center justify-center text-amberTactical shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.3)]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="crown" aria-hidden="true" class="lucide lucide-crown w-4 h-4"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path><path d="M5 21h14"></path></svg>
+      </div>
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="font-extrabold text-sm sm:text-base tracking-tight text-white font-sans truncate">Indian Stock Market Bot</span>
+        <span class="hidden sm:inline-block px-2 py-0.5 text-[9px] font-mono font-bold tracking-wider text-cyanAccent bg-cyanAccent/10 border border-cyanAccent/25 rounded-full shrink-0">v6.4.2 QUANT CORE</span>
+        <span id="marketStatusBadge" class="live-market-badge flex items-center gap-1 px-2 py-0.5 rounded-full text-[8.5px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0">
+          🌙 NSE CLOSED
+        </span>
+      </div>
+    </div>
 
-<!-- Card 2: 5x Used Margin -->
-<div class="bg-black/40 rounded-xl p-2 border border-cyanAccent/15 flex flex-col justify-between overflow-hidden">
-<div class="flex items-center justify-between text-slate-400">
-<span class="text-[9px] font-sans font-bold uppercase tracking-wider text-cyanAccent/90">5x USED</span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="pie-chart" aria-hidden="true" class="lucide lucide-pie-chart w-2.5 h-2.5 text-cyanAccent"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
-</div>
-<div class="text-[13px] sm:text-[15px] font-black text-cyanAccent tracking-tight mt-1 truncate" id="usedMarginDisplay">₹0</div>
-<span class="text-[8px] text-cyanAccent/70 font-mono tracking-tight mt-0.5 truncate">5x MIS Cash</span>
-</div>
+    <!-- Center: Desktop Top Navigation Tab Dock (Shown on screens >= 768px) -->
+    <div class="hidden md:flex items-center gap-1 bg-surfaceLow/90 p-1 rounded-2xl border border-white/10 shadow-inner">
+      <button id="desktopNavBtn-watchlist" onclick="switchTab('watchlist')" class="desktop-tab-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold font-sans flex items-center gap-1.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyanAccent border border-cyanAccent/40 shadow-[0_0_12px_rgba(56,189,248,0.2)]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+        <span>Watchlist</span>
+      </button>
+      <button id="desktopNavBtn-positions" onclick="switchTab('positions')" class="desktop-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
+        <span>Positions</span>
+        <span id="desktopPosBadge" class="hidden px-1.5 py-0.2 bg-gradient-to-r from-cyanAccent to-blue-500 text-black font-mono font-black text-[9px] rounded-full shadow-[0_0_8px_rgba(56,189,248,0.6)]">0</span>
+      </button>
+      <button id="desktopNavBtn-analytics" onclick="switchTab('analytics')" class="desktop-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
+        <span>Analytics</span>
+      </button>
+      <button id="desktopNavBtn-settings" onclick="switchTab('settings')" class="desktop-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+        <span>Settings</span>
+      </button>
+    </div>
 
-<!-- Card 3: Running Net P&L (Large & Bold) -->
-<div class="bg-black/40 rounded-xl p-2 border border-white/5 flex flex-col justify-between overflow-hidden" id="pnlCardContainer">
-<div class="flex items-center justify-between text-slate-400">
-<span class="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-300">NET P&amp;L</span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up w-2.5 h-2.5 text-emeraldBull" id="pnlIcon"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
-</div>
-<div class="text-[13px] sm:text-[15px] font-black text-emeraldBull tracking-tight mt-1 truncate" id="netDayPnlDisplay">+₹0.00</div>
-<div class="text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+0.00R (1R=₹200)</div>
-</div>
-</div>
+    <!-- Right: Operational Controls -->
+    <div class="flex items-center gap-2 shrink-0">
+      <!-- Quick Simulate Button (Desktop only) -->
+      <button class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-mono font-bold bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/25 hover:bg-cyanAccent/20 transition-all active:scale-95 shadow-sm" onclick="demoSimulateTrade()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+        <span>SIMULATE SETUP</span>
+      </button>
+      <!-- Engine Status Pill Button -->
+      <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-mono font-bold bg-emeraldBull/15 border border-emeraldBull/30 text-emeraldBull hover:bg-emeraldBull/25 transition-all active:scale-95 shadow-sm" id="engineToggleBtn" onclick="toggleEngineState()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity w-3 h-3 text-emeraldBull"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+        <span id="engineStatusLabel">AUTO: ACTIVE</span>
+      </button>
+      <!-- Panic "Exit All" Button -->
+      <button class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold bg-roseBear/15 text-roseBear border border-roseBear/30 hover:bg-roseBear/25 active:scale-95 transition-all flex items-center gap-1.5 shadow-sm" onclick="openPanicExitModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-octagon" aria-hidden="true" class="lucide lucide-alert-octagon w-3 h-3"><path d="M12 16h.01"></path><path d="M12 8v4"></path><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"></path></svg>
+        <span>EXIT ALL</span>
+      </button>
+    </div>
+  </div>
 
-<!-- Row 3: NIFTY 50 Spot Telemetry Strip -->
-<div class="flex items-center justify-between bg-surfaceLow/80 border border-white/5 rounded-xl px-2.5 py-1.5 mt-1.5 font-mono text-[10px] w-full">
-<div class="flex items-center gap-1.5 truncate">
-<div class="flex items-center gap-1">
-<span class="font-extrabold text-slate-200 text-[10.5px]">NIFTY 50</span>
-<span class="text-[7.5px] px-1 py-0.2 rounded bg-surfaceHigh text-slate-400 font-bold">SPOT</span>
-</div>
-<span class="font-extrabold text-white text-[11px] ml-1" id="niftyPrice">₹25,074.10</span>
-<span class="font-semibold text-roseBear text-[9.5px]" id="niftyChange">-181.00 (-0.72%)</span>
-</div>
-<div id="niftyRegimeBadge" class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surfaceHigh text-slate-400 border border-white/10 text-[8.5px] font-bold shrink-0">
-<span>MARKET CLOSED</span>
-</div>
-</div>
+  <!-- Row 2: Expansive HUD Telemetry Deck (3 cols on mobile, 5 cols on desktop) -->
+  <div class="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3 bg-surfaceLow/95 border border-white/10 rounded-2xl p-2 md:p-3 font-mono shadow-inner w-full">
+    <!-- Card 1: Available Margin -->
+    <div class="bg-black/40 rounded-xl p-2 md:p-2.5 border border-white/5 flex flex-col justify-between overflow-hidden">
+      <div class="flex items-center justify-between text-slate-400">
+        <span class="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+      </div>
+      <div class="text-[13px] sm:text-base md:text-lg font-black text-white tracking-tight mt-1 truncate tabular-nums" id="availMarginDisplay">₹1,00,000</div>
+      <span class="text-[8px] md:text-[9px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
+    </div>
+
+    <!-- Card 2: 5x Used Margin -->
+    <div class="bg-black/40 rounded-xl p-2 md:p-2.5 border border-cyanAccent/15 flex flex-col justify-between overflow-hidden">
+      <div class="flex items-center justify-between text-slate-400">
+        <span class="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-wider text-cyanAccent/90">5x USED</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 text-cyanAccent"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
+      </div>
+      <div class="text-[13px] sm:text-base md:text-lg font-black text-cyanAccent tracking-tight mt-1 truncate tabular-nums" id="usedMarginDisplay">₹0</div>
+      <span class="text-[8px] md:text-[9px] text-cyanAccent/70 font-mono tracking-tight mt-0.5 truncate">5x MIS Cash</span>
+    </div>
+
+    <!-- Card 3: Running Net P&L (Large & Bold) -->
+    <div class="bg-black/40 rounded-xl p-2 md:p-2.5 border border-white/5 flex flex-col justify-between overflow-hidden" id="pnlCardContainer">
+      <div class="flex items-center justify-between text-slate-400">
+        <span class="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-wider text-slate-300">NET P&amp;L</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 text-emeraldBull" id="pnlIcon"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+      </div>
+      <div class="text-[13px] sm:text-base md:text-lg font-black text-emeraldBull tracking-tight mt-1 truncate tabular-nums" id="netDayPnlDisplay">+₹0.00</div>
+      <div class="text-[8.5px] md:text-[9px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+0.00R (1R=₹200)</div>
+    </div>
+
+    <!-- Card 4: Strategy Performance Rate (Hidden on mobile, prominent on desktop) -->
+    <div class="hidden md:flex bg-black/40 rounded-xl p-2.5 border border-white/5 flex-col justify-between overflow-hidden">
+      <div class="flex items-center justify-between text-slate-400">
+        <span class="text-[10px] font-sans font-bold uppercase tracking-wider text-slate-300">WIN RATE</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 text-amberTactical"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34c0-.36.19-.68.5-.86l1.7-.97a2 2 0 0 1 1.6 0l1.7.97c.31.18.5.5.5.86Z"></path></svg>
+      </div>
+      <div class="text-base md:text-lg font-black text-cyanAccent tracking-tight mt-1 truncate tabular-nums" id="hudWinRateDisplay">68.4% WR</div>
+      <span class="text-[9px] text-slate-400 font-mono tracking-tight mt-0.5 truncate">1:3 Asymmetric RRR</span>
+    </div>
+
+    <!-- Card 5: NIFTY 50 Telemetry (Unified on desktop) -->
+    <div class="hidden md:flex bg-black/40 rounded-xl p-2.5 border border-white/5 flex-col justify-between overflow-hidden">
+      <div class="flex items-center justify-between text-slate-400">
+        <span class="text-[10px] font-sans font-bold uppercase tracking-wider text-slate-300">NIFTY 50 SPOT</span>
+        <span class="text-[8px] px-1.5 py-0.2 rounded bg-surfaceHigh text-slate-400 font-bold">NSE</span>
+      </div>
+      <div class="flex items-baseline gap-1.5 mt-1 truncate">
+        <span class="text-base md:text-lg font-black text-white tracking-tight tabular-nums" id="niftyPriceDesktop">₹25,074.10</span>
+        <span class="text-[10px] font-bold text-roseBear tabular-nums" id="niftyChangeDesktop">-0.72%</span>
+      </div>
+      <span class="text-[9px] text-amberTactical font-mono tracking-tight mt-0.5 truncate" id="niftyRegimeBadgeDesktop">MARKET CLOSED</span>
+    </div>
+  </div>
+
+  <!-- Row 3: NIFTY 50 Spot Telemetry Strip (Mobile only, md:hidden) -->
+  <div class="flex md:hidden items-center justify-between bg-surfaceLow/80 border border-white/5 rounded-xl px-2.5 py-1.5 mt-1.5 font-mono text-[10px] w-full">
+    <div class="flex items-center gap-1.5 truncate">
+      <div class="flex items-center gap-1">
+        <span class="font-extrabold text-slate-200 text-[10.5px]">NIFTY 50</span>
+        <span class="text-[7.5px] px-1 py-0.2 rounded bg-surfaceHigh text-slate-400 font-bold">SPOT</span>
+      </div>
+      <span class="font-extrabold text-white text-[11px] ml-1" id="niftyPrice">₹25,074.10</span>
+      <span class="font-semibold text-roseBear text-[9.5px]" id="niftyChange">-181.00 (-0.72%)</span>
+    </div>
+    <div id="niftyRegimeBadge" class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surfaceHigh text-slate-400 border border-white/10 text-[8.5px] font-bold shrink-0">
+      <span>MARKET CLOSED</span>
+    </div>
+  </div>
 </header>
 <!-- ============================================== -->
 <!-- MAIN SCROLLABLE VIEWPORT FOR TABS             -->
 <!-- ============================================== -->
-<main class="flex-1 overflow-y-auto pb-24 relative bg-obsidian/60" id="tabContentArea">
+<main class="flex-1 overflow-y-auto pb-24 md:pb-6 relative bg-obsidian/60 p-3 sm:p-5" id="tabContentArea">
 <!-- TAB 1: WATCHLIST / MARKETWATCH -->
 <section class="p-3 space-y-2.5" id="tab-watchlist">
 <!-- Watchlist Header -->
@@ -274,7 +339,7 @@
 <span class="text-[9.5px] font-mono text-slate-400">NSE Intraday</span>
 </div>
 <!-- 6 High-Density Instrument Cards Container -->
-<div class="space-y-2.5" id="watchlistContainer">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="watchlistContainer">
   <!-- Dynamic 6 Instrument Cards rendered via renderWatchlist() with TradingView Logos -->
 </div>
 </section>
@@ -289,7 +354,7 @@
 </div>
 </div>
 <!-- Positions List Container -->
-<div class="space-y-3" id="positionsContainer">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="positionsContainer">
           <div class="py-16 px-4 flex flex-col items-center justify-center text-center">
             <div class="relative w-28 h-28 flex items-center justify-center mb-4">
               <div class="absolute inset-0 rounded-full border border-cyanAccent/20"></div>
@@ -315,7 +380,7 @@
 </button>
 </div>
 <!-- 2x2 Metric Cards (Net Realized P&L & True Friction) -->
-<div class="grid grid-cols-2 gap-2 font-mono">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 font-mono">
 <div class="glass-panel p-3.5 rounded-2xl relative overflow-hidden group">
 <div class="absolute -right-4 -top-4 w-16 h-16 bg-emeraldBull/10 rounded-full blur-xl group-hover:bg-emeraldBull/20 transition-colors"></div>
 <span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">NET REALIZED P&amp;L</span>
@@ -350,7 +415,9 @@
 </div>
 </section>
 <!-- TAB 4: SETTINGS & BROKER CONTROL CENTER -->
-<section class="p-3.5 space-y-3.5 hidden" id="tab-settings">
+<section class="space-y-4 hidden" id="tab-settings">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="space-y-3.5">
 <!-- PWA Install Banner -->
 <div class="glass-panel p-3.5 rounded-2xl space-y-2 border border-cyanAccent/25 bg-gradient-to-r from-cyanAccent/10 via-surfaceCard to-surfaceCard">
 <div class="flex items-center justify-between">
@@ -422,6 +489,8 @@ Fast 1-tap Android install with offline caching and zero lag.
 </button>
 </div>
 </div>
+</div>
+<div class="space-y-3.5">
 <!-- Telegram Push Alerts -->
 <div class="glass-panel p-4 rounded-2xl space-y-3">
 <div class="flex items-center gap-2">
@@ -458,12 +527,14 @@ Clears local cache, orders, and resets capital to ₹1,00,000.
 FACTORY RESET ENGINE
 </button>
 </div>
+</div>
+</div>
 </section>
 </main>
 <!-- ============================================== -->
 <!-- LUXURY DOCKED FLOATING NAVIGATION BAR          -->
 <!-- ============================================== -->
-<nav class="glass-nav shrink-0 z-30 h-[64px] px-3 flex items-center justify-around shadow-[0_-8px_30px_rgba(0,0,0,0.5)]">
+<nav class="glass-nav md:hidden shrink-0 z-30 h-[64px] px-3 flex items-center justify-around shadow-[0_-8px_30px_rgba(0,0,0,0.5)]">
 <!-- Tab 1: Watchlist -->
 <button class="relative flex flex-col items-center justify-center flex-1 h-full py-1 text-cyanAccent group transition-all" id="navBtn-watchlist" onclick="switchTab('watchlist')">
 <div class="nav-indicator absolute -top-0.5 w-8 h-1 rounded-full bg-cyanAccent shadow-[0_0_10px_#38BDF8] opacity-100 transition-all duration-300"></div>
@@ -496,8 +567,8 @@ FACTORY RESET ENGINE
 <!-- ============================================== -->
 <!-- 5m CANDLESTICK CHART BOTTOM SHEET MODAL        -->
 <!-- ============================================== -->
-<div class="absolute inset-0 z-40 bg-black/85 backdrop-blur-md flex flex-col justify-end opacity-0 pointer-events-none transition-opacity duration-300" id="chartModal">
-<div class="w-full h-[85%] bg-surfaceLow rounded-t-[30px] border-t border-white/15 flex flex-col transform translate-y-full transition-transform duration-300 shadow-[0_-20px_50px_rgba(0,0,0,0.8)] overflow-hidden" id="chartSheet">
+<div class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300" id="chartModal">
+<div class="w-full sm:max-w-4xl h-[90vh] sm:h-[82vh] bg-surfaceLow rounded-t-[30px] sm:rounded-3xl border border-white/15 flex flex-col transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300 shadow-[0_0_80px_rgba(0,0,0,0.95)] overflow-hidden" id="chartSheet">
 <!-- Handle Bar -->
 <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mt-2.5 mb-1"></div>
 <!-- Header -->
@@ -1105,11 +1176,20 @@ Trigger Condition:
         if (data.nifty50 && data.nifty50.price) {
           const nPrice = document.getElementById('niftyPrice');
           const nChange = document.getElementById('niftyChange');
-          if (nPrice) nPrice.innerText = `₹${data.nifty50.price.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+          const nPriceD = document.getElementById('niftyPriceDesktop');
+          const nChangeD = document.getElementById('niftyChangeDesktop');
+          const priceStr = `₹${data.nifty50.price.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+          if (nPrice) nPrice.innerText = priceStr;
+          if (nPriceD) nPriceD.innerText = priceStr;
           if (nChange) {
             const isUp = data.nifty50.change >= 0;
             nChange.className = `font-semibold ${isUp ? 'text-emeraldBull' : 'text-roseBear'} text-[9.5px]`;
             nChange.innerText = `${isUp ? '+' : ''}${data.nifty50.change.toFixed(2)} (${isUp ? '+' : ''}${data.nifty50.change_pct.toFixed(2)}%)`;
+          }
+          if (nChangeD) {
+            const isUp = data.nifty50.change >= 0;
+            nChangeD.className = `font-bold ${isUp ? 'text-emeraldBull' : 'text-roseBear'} text-[10px] tabular-nums`;
+            nChangeD.innerText = `${isUp ? '+' : ''}${data.nifty50.change_pct.toFixed(2)}%`;
           }
         }
 
@@ -1241,22 +1321,35 @@ Trigger Condition:
       tabs.forEach(t => {
         const sec = document.getElementById(`tab-${t}`);
         const btn = document.getElementById(`navBtn-${t}`);
-        const indicator = btn.querySelector('.nav-indicator');
+        const dBtn = document.getElementById(`desktopNavBtn-${t}`);
+        
         if (t === tabId) {
-          sec.classList.remove('hidden');
-          btn.classList.add('text-cyanAccent');
-          btn.classList.remove('text-slate-400');
-          if (indicator) {
-            indicator.classList.remove('opacity-0');
-            indicator.classList.add('opacity-100');
+          if (sec) sec.classList.remove('hidden');
+          if (btn) {
+            btn.classList.add('text-cyanAccent');
+            btn.classList.remove('text-slate-400');
+            const indicator = btn.querySelector('.nav-indicator');
+            if (indicator) {
+              indicator.classList.remove('opacity-0');
+              indicator.classList.add('opacity-100');
+            }
+          }
+          if (dBtn) {
+            dBtn.className = "desktop-tab-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold font-sans flex items-center gap-1.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyanAccent border border-cyanAccent/40 shadow-[0_0_12px_rgba(56,189,248,0.2)]";
           }
         } else {
-          sec.classList.add('hidden');
-          btn.classList.remove('text-cyanAccent');
-          btn.classList.add('text-slate-400');
-          if (indicator) {
-            indicator.classList.add('opacity-0');
-            indicator.classList.remove('opacity-100');
+          if (sec) sec.classList.add('hidden');
+          if (btn) {
+            btn.classList.remove('text-cyanAccent');
+            btn.classList.add('text-slate-400');
+            const indicator = btn.querySelector('.nav-indicator');
+            if (indicator) {
+              indicator.classList.add('opacity-0');
+              indicator.classList.remove('opacity-100');
+            }
+          }
+          if (dBtn) {
+            dBtn.className = "desktop-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold font-sans flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-white/5 border border-transparent transition-all";
           }
         }
       });
@@ -1367,11 +1460,13 @@ Trigger Condition:
     function renderPositions() {
       const container = document.getElementById('positionsContainer');
       const badge = document.getElementById('posBadge');
+      const dBadge = document.getElementById('desktopPosBadge');
 
       if (userState.positions.length === 0) {
         if (badge) badge.classList.add('hidden');
+        if (dBadge) dBadge.classList.add('hidden');
         container.innerHTML = `
-          <div class="py-16 px-4 flex flex-col items-center justify-center text-center">
+          <div class="col-span-full py-16 px-4 flex flex-col items-center justify-center text-center">
             <div class="relative w-28 h-28 flex items-center justify-center mb-4">
               <div class="absolute inset-0 rounded-full border border-cyanAccent/20"></div>
               <div class="absolute inset-2 rounded-full border border-dashed border-cyanAccent/30"></div>
@@ -1393,6 +1488,10 @@ Trigger Condition:
         if (badge) {
           badge.classList.remove('hidden');
           badge.innerText = userState.positions.length;
+        }
+        if (dBadge) {
+          dBadge.classList.remove('hidden');
+          dBadge.innerText = userState.positions.length;
         }
         container.innerHTML = '';
 
@@ -2139,7 +2238,8 @@ Trigger Condition:
       const modal = document.getElementById('chartModal');
       const sheet = document.getElementById('chartSheet');
       modal.classList.remove('opacity-0', 'pointer-events-none');
-      sheet.classList.remove('translate-y-full');
+      sheet.classList.remove('translate-y-full', 'sm:scale-95');
+      sheet.classList.add('sm:scale-100');
       setTimeout(() => drawCandlesticks(), 100);
 
       try {
@@ -2159,7 +2259,8 @@ Trigger Condition:
     function closeChartModal() {
       const modal = document.getElementById('chartModal');
       const sheet = document.getElementById('chartSheet');
-      sheet.classList.add('translate-y-full');
+      sheet.classList.add('translate-y-full', 'sm:scale-95');
+      sheet.classList.remove('sm:scale-100');
       modal.classList.add('opacity-0', 'pointer-events-none');
     }
 

@@ -43,3 +43,5 @@ ui_ux_skill_ref/
 # OS
 .DS_Store
 Thumbs.db
+
+scratch/
