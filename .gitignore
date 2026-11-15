@@ -37,6 +37,8 @@ frontend/node_modules/
 # Large local backtest data archives (preventing GitHub push failure)
 data/
 reports/*.csv
+reports/*.parquet
+ui_ux_skill_ref/
 
 # OS
 .DS_Store

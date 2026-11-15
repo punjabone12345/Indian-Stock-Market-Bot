@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CandlestickSeries } from 'lightweight-charts';
-import { BarChart3, TrendingUp, RefreshCw, X } from 'lucide-react';
+import { BarChart3, TrendingUp, RefreshCw, X, ArrowUpRight, ArrowDownRight, Layers } from 'lucide-react';
 
 const CROWN_SYMBOLS = [
-  { id: 'RELIANCE', label: 'Reliance' },
-  { id: 'ITC', label: 'ITC' },
-  { id: 'MARUTI', label: 'Maruti' },
-  { id: 'TATASTEEL', label: 'Tata Steel' },
-  { id: 'SUNPHARMA', label: 'Sun Pharma' },
-  { id: 'INFY', label: 'Infosys' },
-  { id: 'NIFTY50', label: 'Nifty 50' }
+  { id: 'RELIANCE', label: 'Reliance', sector: 'Oil & Gas' },
+  { id: 'MARUTI', label: 'Maruti', sector: 'Auto' },
+  { id: 'TCS', label: 'TCS', sector: 'IT' },
+  { id: 'SUNPHARMA', label: 'Sun Pharma', sector: 'Pharma' },
+  { id: 'TATASTEEL', label: 'Tata Steel', sector: 'Metals' },
+  { id: 'TATAMOTORS', label: 'Tata Motors', sector: 'Auto' },
+  { id: 'NIFTY50', label: 'Nifty 50', sector: 'Index' }
 ];
 
 export default function TradingChart({ initialSymbol = 'RELIANCE', onClose, apiBase = '' }) {
@@ -20,6 +20,7 @@ export default function TradingChart({ initialSymbol = 'RELIANCE', onClose, apiB
   const [selectedSymbol, setSelectedSymbol] = useState(initialSymbol);
   const [chartMeta, setChartMeta] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeTf, setActiveTf] = useState('5m');
 
   const fetchCandles = async (symbol) => {
     try {
@@ -56,9 +57,10 @@ export default function TradingChart({ initialSymbol = 'RELIANCE', onClose, apiB
 
     chartInstance.current = createChart(chartContainerRef.current, {
       layout: {
-        background: { color: '#0A0D15' },
+        background: { color: '#07090E' },
         textColor: '#94A3B8',
-        fontSize: 11
+        fontSize: 11,
+        fontFamily: "'JetBrains Mono', monospace"
       },
       grid: {
         vertLines: { color: 'rgba(255, 255, 255, 0.04)' },
@@ -78,7 +80,6 @@ export default function TradingChart({ initialSymbol = 'RELIANCE', onClose, apiB
       }
     });
 
-    // Lightweight charts v5 compatibility
     if (typeof chartInstance.current.addSeries === 'function' && CandlestickSeries) {
       candleSeries.current = chartInstance.current.addSeries(CandlestickSeries, {
         upColor: '#10B981',
@@ -109,11 +110,11 @@ export default function TradingChart({ initialSymbol = 'RELIANCE', onClose, apiB
     };
 
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
       if (chartInstance.current) {
         chartInstance.current.remove();
-        chartInstance.current = null;
       }
     };
   }, []);
@@ -123,74 +124,90 @@ export default function TradingChart({ initialSymbol = 'RELIANCE', onClose, apiB
     fetchCandles(sym);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in">
-      <div className="m3-card-elevated border border-white/10 w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden shadow-2xl">
-        
-        {/* Header Bar */}
-        <div className="p-4 border-b border-white/[0.08] flex items-center justify-between flex-wrap gap-3 bg-[#0D111A]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
-              <BarChart3 className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-black font-mono text-white">
-                  {selectedSymbol}
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                  5m INTRADAY
-                </span>
-              </div>
-              <p className="text-xs text-slate-400">
-                Institutional EMA9 Pullback & 1:3 RRR Execution Engine
-              </p>
-            </div>
-          </div>
+  const currentPrice = chartMeta?.price ?? 0;
+  const change = chartMeta?.change ?? 0;
+  const changePct = chartMeta?.change_pct ?? 0;
+  const isUp = change >= 0;
 
-          {/* Symbol Selectors */}
-          <div className="flex items-center gap-1.5 overflow-x-auto max-w-full py-1">
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-[#0A0D17] border border-white/10 rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden shadow-2xl relative glow-cyan">
+        
+        {/* TOP BAR: INSTRUMENT SELECTOR & ACTIONS */}
+        <div className="p-3 sm:px-5 border-b border-white/[0.08] flex items-center justify-between flex-wrap gap-2 bg-[#06080F]">
+          
+          {/* Symbol Selector Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
             {CROWN_SYMBOLS.map((s) => (
               <button
                 key={s.id}
                 onClick={() => handleSelectSymbol(s.id)}
-                className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-black transition-all cursor-pointer flex-shrink-0 ${
                   selectedSymbol === s.id
-                    ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30'
-                    : 'bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]'
+                    ? 'bg-sky-500/20 text-sky-300 border border-sky-400/40 shadow-md shadow-sky-500/15'
+                    : 'bg-white/[0.04] text-slate-400 hover:text-white border border-white/[0.06]'
                 }`}
               >
-                {s.id}
+                {s.label}
               </button>
             ))}
           </div>
 
+          {/* Right Controls: Refresh & Close */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => fetchCandles(selectedSymbol)}
-              className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 transition-all"
+              className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/10 text-slate-300 transition-all cursor-pointer border border-white/10"
               title="Refresh Candles"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-sky-400' : ''}`} />
             </button>
+
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all"
+              className="p-2 rounded-xl bg-white/[0.05] hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 transition-all cursor-pointer border border-white/10"
+              title="Close Chart"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
+          </div>
+
+        </div>
+
+        {/* PRICE & STATS HEADER STRIP */}
+        <div className="px-4 py-2.5 bg-[#0C101C] border-b border-white/[0.06] flex items-center justify-between flex-wrap gap-2 font-mono text-xs">
+          <div className="flex items-center gap-3">
+            <span className="text-sm sm:text-base font-black text-white">{selectedSymbol}</span>
+            <span className="text-base sm:text-lg font-black text-white tabular-nums">
+              ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+            <div className={`px-2 py-0.5 rounded-full text-[10px] font-black flex items-center gap-0.5 border ${
+              isUp ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+            }`}>
+              {isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+              <span>{isUp ? '+' : ''}{change.toFixed(2)} ({isUp ? '+' : ''}{changePct.toFixed(2)}%)</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-[10px] text-slate-400">
+            <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-sky-300 font-bold">
+              Timeframe: 5m Pullback
+            </span>
+            <span className="hidden sm:inline">EMA 9 / VWAP Confluence</span>
           </div>
         </div>
 
-        {/* Chart Viewport */}
-        <div className="flex-1 relative w-full h-full min-h-[350px] bg-[#0A0D15]">
-          <div ref={chartContainerRef} className="w-full h-full" />
+        {/* CHART CANVAS */}
+        <div className="flex-1 w-full relative bg-[#07090E]">
           {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] text-xs font-mono text-sky-400 gap-2">
-              <RefreshCw className="w-4 h-4 animate-spin" />
-              <span>Streaming 5m candles...</span>
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+              <div className="flex items-center gap-2 font-mono text-xs text-sky-400 bg-[#0C101C] px-3.5 py-2 rounded-xl border border-sky-500/30 shadow-xl">
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Streaming 5m Candles...</span>
+              </div>
             </div>
           )}
+          <div ref={chartContainerRef} className="w-full h-full" />
         </div>
 
       </div>

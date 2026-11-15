@@ -7,7 +7,12 @@ import {
   Save, 
   CheckCircle2, 
   Trash2,
-  X
+  X,
+  Shield,
+  Radio,
+  Eye,
+  EyeOff,
+  Cpu
 } from 'lucide-react';
 
 export default function SettingsTab({ settings, onSaveSettings, onResetDangerZone, onTestTelegram, onTestDhan }) {
@@ -21,6 +26,7 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
     telegram_chat_id: settings?.telegram_chat_id || '5582938659'
   });
 
+  const [showToken, setShowToken] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
   const [telegramStatus, setTelegramStatus] = useState('');
@@ -48,10 +54,10 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
   };
 
   const handleTestTelegram = async () => {
-    setTelegramStatus('Sending test notification...');
+    setTelegramStatus('Delivering test message to Telegram...');
     try {
       const res = await onTestTelegram();
-      setTelegramStatus(res?.message || 'Telegram alert delivered!');
+      setTelegramStatus(res?.message || 'Telegram alert delivered successfully!');
       setTimeout(() => setTelegramStatus(''), 5000);
     } catch (err) {
       setTelegramStatus('Failed to send Telegram alert.');
@@ -59,10 +65,10 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
   };
 
   const handleTestDhan = async () => {
-    setDhanStatus('Verifying Dhan API...');
+    setDhanStatus('Authenticating with Dhan API servers...');
     try {
       const res = await onTestDhan(formData.dhan_client_id, formData.dhan_access_token);
-      setDhanStatus(res?.message || 'Dhan API Verified!');
+      setDhanStatus(res?.message || 'Dhan API Verified Successfully!');
       setTimeout(() => setDhanStatus(''), 5000);
     } catch (err) {
       setDhanStatus('Dhan API verification error.');
@@ -70,181 +76,206 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
   };
 
   return (
-    <div className="space-y-3 pb-8">
+    <div className="space-y-4 pb-12 max-w-3xl mx-auto">
       
       {/* SECTION HEADER */}
-      <div className="flex items-center justify-between px-1 pt-1 pb-1 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-1 pt-1 pb-2 border-b border-white/[0.08]">
         <div>
-          <h2 className="text-xs font-black tracking-tight text-white font-mono uppercase">
-            Broker & Risk Config
+          <h2 className="text-xs sm:text-sm font-black tracking-tight text-white font-mono uppercase">
+            Broker & Risk Command Center
           </h2>
         </div>
-        <span className="text-[10px] font-mono text-slate-400">Control Center</span>
+        <span className="text-[10px] font-mono text-slate-400 bg-[#0D121F] px-2.5 py-1 rounded-lg border border-white/10">
+          Persistent Database Configuration
+        </span>
       </div>
 
       {saveStatus && (
-        <div className="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-2.5 glow-emerald">
           <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
           <span>{saveStatus}</span>
         </div>
       )}
 
-      <form onSubmit={handleSave} className="space-y-3">
+      <form onSubmit={handleSave} className="space-y-4 font-mono text-xs">
         
-        {/* 1. CAPITAL & RISK SIZING */}
-        <div className="bg-[#0F1424] border border-white/[0.08] rounded-2xl p-3.5 space-y-3 shadow-md">
-          <h3 className="text-[11px] font-bold font-mono uppercase tracking-wider text-white flex items-center gap-1.5">
-            <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Capital & Risk Parameters</span>
+        {/* 1. CAPITAL & RISK PARAMETERS */}
+        <div className="bento-card p-4 space-y-3.5">
+          <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+            <DollarSign className="w-4 h-4 text-emerald-400" />
+            <span>Capital Sizing & Fixed Fractional Risk</span>
           </h3>
 
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                Capital (₹)
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                Account Starting Capital (₹)
               </label>
               <input
                 type="number"
                 name="capital"
                 value={formData.capital}
                 onChange={handleChange}
-                step="1000"
-                min="10000"
-                className="w-full px-3 py-2 rounded-xl bg-[#090D18] border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-sky-400"
+                className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-bold text-sm focus:border-sky-500 focus:outline-none tabular-nums"
                 required
               />
+              <span className="text-[9px] text-slate-500 mt-1 block">Baseline equity for position sizing</span>
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                Risk / Trade 1R (₹)
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                Risk Per Trade (1R in ₹)
               </label>
               <input
                 type="number"
                 name="risk_per_trade"
                 value={formData.risk_per_trade}
                 onChange={handleChange}
-                step="25"
-                min="50"
-                className="w-full px-3 py-2 rounded-xl bg-[#090D18] border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-sky-400"
+                className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-bold text-sm focus:border-sky-500 focus:outline-none tabular-nums"
                 required
               />
-            </div>
-          </div>
-
-          {/* Trading Mode */}
-          <div>
-            <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-              Execution Mode
-            </label>
-            <div className="grid grid-cols-2 gap-2 font-mono text-xs">
-              <button
-                type="button"
-                onClick={() => setFormData((p) => ({ ...p, trading_mode: 'PAPER' }))}
-                className={`py-2 px-2 rounded-xl border flex flex-col items-center justify-center transition-all cursor-pointer ${
-                  formData.trading_mode === 'PAPER'
-                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-black'
-                    : 'bg-[#090D18] border-white/[0.08] text-slate-400'
-                }`}
-              >
-                <span>PAPER TRADING</span>
-                <span className="text-[9px] text-slate-400">Live Ticks + Friction</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setFormData((p) => ({ ...p, trading_mode: 'LIVE' }))}
-                className={`py-2 px-2 rounded-xl border flex flex-col items-center justify-center transition-all cursor-pointer ${
-                  formData.trading_mode === 'LIVE'
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-black'
-                    : 'bg-[#090D18] border-white/[0.08] text-slate-400'
-                }`}
-              >
-                <span>LIVE DHAN BROKER</span>
-                <span className="text-[9px] text-slate-400">Real Demat Execution</span>
-              </button>
+              <span className="text-[9px] text-emerald-400 mt-1 block">
+                Strict 0.20% risk model = ₹{((formData.risk_per_trade / (formData.capital || 1)) * 100).toFixed(2)}% of capital
+              </span>
             </div>
           </div>
         </div>
 
-        {/* 2. DHAN API CREDENTIALS */}
-        <div className="bg-[#0F1424] border border-white/[0.08] rounded-2xl p-3.5 space-y-3 shadow-md">
+        {/* 2. TRADING EXECUTION MODE */}
+        <div className="bento-card p-4 space-y-3">
+          <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-sky-400" />
+            <span>Execution Environment</span>
+          </h3>
+
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, trading_mode: 'PAPER' }))}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                formData.trading_mode === 'PAPER'
+                  ? 'bg-amber-500/15 border-amber-500/50 text-white shadow-md'
+                  : 'bg-[#0A0E1A] border-white/10 text-slate-400 hover:border-white/20'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-black text-sm">PAPER SIMULATION</span>
+                <span className={`w-2 h-2 rounded-full ${formData.trading_mode === 'PAPER' ? 'bg-amber-400 animate-pulse' : 'bg-slate-700'}`} />
+              </div>
+              <p className="text-[10px] text-slate-400 font-sans leading-relaxed">
+                Executes orders in memory without risking real cash. Perfect for weekend testing and dry runs.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, trading_mode: 'DHAN_LIVE' }))}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                formData.trading_mode === 'DHAN_LIVE'
+                  ? 'bg-emerald-500/15 border-emerald-500/50 text-white shadow-md glow-emerald'
+                  : 'bg-[#0A0E1A] border-white/10 text-slate-400 hover:border-white/20'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-black text-sm text-emerald-400">DHAN LIVE API</span>
+                <span className={`w-2 h-2 rounded-full ${formData.trading_mode === 'DHAN_LIVE' ? 'bg-emerald-400 beacon-pulse-emerald' : 'bg-slate-700'}`} />
+              </div>
+              <p className="text-[10px] text-slate-400 font-sans leading-relaxed">
+                Places real MIS orders on your Dhan trading account via authenticated SuperFast API.
+              </p>
+            </button>
+          </div>
+        </div>
+
+        {/* 3. DHAN BROKER CREDENTIALS */}
+        <div className="bento-card p-4 space-y-3.5">
           <div className="flex items-center justify-between">
-            <h3 className="text-[11px] font-bold font-mono uppercase tracking-wider text-white flex items-center gap-1.5">
-              <Key className="w-3.5 h-3.5 text-sky-400" />
-              <span>DhanHQ API Credentials</span>
+            <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+              <Key className="w-4 h-4 text-sky-400" />
+              <span>Dhan HQ API Credentials</span>
             </h3>
+
             <button
               type="button"
               onClick={handleTestDhan}
-              className="px-2 py-1 rounded-lg bg-sky-500/15 border border-sky-500/30 text-sky-300 text-[10px] font-bold font-mono hover:bg-sky-500/25"
+              className="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/40 text-sky-300 text-[10px] font-bold transition-all cursor-pointer"
             >
-              Test API
+              Verify API Connection
             </button>
           </div>
 
           {dhanStatus && (
-            <p className="text-[11px] font-mono text-sky-300 bg-sky-500/10 p-2 rounded-xl border border-sky-500/20">
+            <div className="p-2.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-300 text-[11px]">
               {dhanStatus}
-            </p>
+            </div>
           )}
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                Dhan Client ID
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                Dhan Client ID (6 or 10 digits)
               </label>
               <input
                 type="text"
                 name="dhan_client_id"
                 value={formData.dhan_client_id}
                 onChange={handleChange}
-                placeholder="e.g. 1000289123"
-                className="w-full px-3 py-2 rounded-xl bg-[#090D18] border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-sky-400"
+                placeholder="e.g. 1100345678"
+                className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:border-sky-500 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                Dhan Access Token
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                Dhan JWT Access Token
               </label>
-              <input
-                type="password"
-                name="dhan_access_token"
-                value={formData.dhan_access_token}
-                onChange={handleChange}
-                placeholder="eyJhbGciOi..."
-                className="w-full px-3 py-2 rounded-xl bg-[#090D18] border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-sky-400"
-              />
+              <div className="relative">
+                <input
+                  type={showToken ? "text" : "password"}
+                  name="dhan_access_token"
+                  value={formData.dhan_access_token}
+                  onChange={handleChange}
+                  placeholder="Paste your 24-hour Dhan Access Token"
+                  className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 pr-10 text-white font-mono text-xs focus:border-sky-500 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowToken(!showToken)}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-white cursor-pointer"
+                >
+                  {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 3. TELEGRAM BOT NOTIFICATIONS */}
-        <div className="bg-[#0F1424] border border-white/[0.08] rounded-2xl p-3.5 space-y-3 shadow-md">
+        {/* 4. TELEGRAM ALERTS */}
+        <div className="bento-card p-4 space-y-3.5">
           <div className="flex items-center justify-between">
-            <h3 className="text-[11px] font-bold font-mono uppercase tracking-wider text-white flex items-center gap-1.5">
-              <Send className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Telegram Live Alerts</span>
+            <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+              <Send className="w-4 h-4 text-emerald-400" />
+              <span>Telegram Real-Time Dispatcher</span>
             </h3>
+
             <button
               type="button"
               onClick={handleTestTelegram}
-              className="px-2 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold font-mono hover:bg-emerald-500/25"
+              className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold transition-all cursor-pointer"
             >
-              Test Ping
+              Send Test Alert
             </button>
           </div>
 
           {telegramStatus && (
-            <p className="text-[11px] font-mono text-emerald-300 bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/20">
+            <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px]">
               {telegramStatus}
-            </p>
+            </div>
           )}
 
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
                 Telegram Bot Token
               </label>
               <input
@@ -252,12 +283,12 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
                 name="telegram_token"
                 value={formData.telegram_token}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded-xl bg-[#090D18] border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-emerald-400"
+                className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:border-sky-500 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
                 Telegram Chat ID
               </label>
               <input
@@ -265,88 +296,75 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
                 name="telegram_chat_id"
                 value={formData.telegram_chat_id}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded-xl bg-[#090D18] border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-emerald-400"
+                className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:border-sky-500 focus:outline-none"
               />
             </div>
           </div>
         </div>
 
-        {/* SAVE BUTTON */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black text-xs font-mono flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-500/20 cursor-pointer disabled:opacity-50"
-        >
-          <Save className="w-3.5 h-3.5" />
-          <span>SAVE CONFIGURATION</span>
-        </button>
+        {/* SUBMIT BUTTON */}
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-slate-950 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-sky-500/20"
+          >
+            <Save className="w-4 h-4" />
+            <span>{isLoading ? 'Saving Changes...' : 'Save Configuration to Database'}</span>
+          </button>
+        </div>
+
+        {/* 5. DANGER ZONE */}
+        <div className="bento-card p-4 border border-rose-500/30 bg-rose-500/[0.03] space-y-3 mt-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-black uppercase tracking-wider text-rose-400 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" />
+              <span>Danger Zone: Factory Database Reset</span>
+            </h3>
+
+            <button
+              type="button"
+              onClick={() => setShowResetModal(true)}
+              className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/50 text-rose-300 text-xs font-bold transition-all cursor-pointer"
+            >
+              Reset Data
+            </button>
+          </div>
+          <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+            Purges all closed trade records and active positions from SQLite database, resetting starting capital to ₹1,00,000.
+          </p>
+        </div>
 
       </form>
 
-      {/* 4. DANGER ZONE: FACTORY RESET */}
-      <div className="border border-rose-500/40 rounded-2xl p-3.5 bg-rose-500/[0.04] space-y-2.5 mt-4">
-        <div className="flex items-center gap-2 text-rose-400">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-          <h3 className="text-[11px] font-black font-mono uppercase tracking-wider">
-            DANGER ZONE: FACTORY RESET APP
-          </h3>
-        </div>
-
-        <p className="text-[11px] text-slate-300 leading-relaxed">
-          Clears all open positions, deletes all trade history, and resets balance to <strong>₹1,00,000.00 with 0 trades</strong>.
-        </p>
-
-        <button
-          type="button"
-          onClick={() => setShowResetModal(true)}
-          className="w-full py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-300 text-xs font-bold font-mono flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-        >
-          <Trash2 className="w-3.5 h-3.5 text-rose-400" />
-          <span>FACTORY RESET APP</span>
-        </button>
-      </div>
-
-      {/* CONFIRMATION MODAL */}
+      {/* DANGER ZONE CONFIRMATION MODAL */}
       {showResetModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-[#101626] border border-rose-500/50 rounded-2xl max-w-sm w-full p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <button onClick={() => setShowResetModal(false)} className="p-1 rounded-lg text-slate-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#0D121F] border border-rose-500/40 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative glow-rose">
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
+              <Trash2 className="w-6 h-6" />
             </div>
-
-            <div>
-              <h3 className="text-sm font-black text-white">CONFIRM FACTORY RESET</h3>
-              <p className="text-[11px] text-rose-400 font-mono mt-0.5">Irreversible Action</p>
+            <div className="text-center space-y-1">
+              <h3 className="text-base font-black text-white font-mono">Factory Reset Database?</h3>
+              <p className="text-xs text-slate-400 font-sans leading-relaxed">
+                This action is permanent and cannot be undone. All trade ledger entries will be erased.
+              </p>
             </div>
-
-            <p className="text-xs text-slate-300 leading-relaxed">
-              • Purges all trade history and ledger records.
-              <br />
-              • Resets capital to <strong className="text-white font-mono">₹1,00,000.00</strong>.
-            </p>
-
-            <div className="flex items-center justify-end gap-2 pt-1">
+            <div className="flex items-center gap-2 pt-2 font-mono text-xs">
               <button
-                type="button"
                 onClick={() => setShowResetModal(false)}
-                className="flex-1 py-2 rounded-xl text-xs font-bold text-slate-300 bg-white/5 border border-white/10"
+                className="flex-1 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:bg-white/5 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                type="button"
                 onClick={() => {
-                  onResetDangerZone();
                   setShowResetModal(false);
+                  onResetDangerZone();
                 }}
-                className="flex-1 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 border border-rose-400"
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black transition-all cursor-pointer shadow-lg shadow-rose-600/40"
               >
-                YES, RESET
+                Confirm Reset
               </button>
             </div>
           </div>

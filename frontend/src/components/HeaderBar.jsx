@@ -9,8 +9,12 @@ import {
   Pause, 
   Wallet, 
   Activity, 
+  ShieldCheck,
+  CheckCircle2,
   X,
-  Radio
+  Radio,
+  ArrowUpRight,
+  ArrowDownRight
 } from 'lucide-react';
 
 export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggleBot, onPanicSquareOff }) {
@@ -23,126 +27,182 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
   const totalR = portfolio?.total_r ?? 0;
   const botActive = portfolio?.bot_active ?? true;
   const tradingMode = portfolio?.trading_mode ?? 'PAPER';
+  const openPositionsCount = portfolio?.open_positions_count ?? Object.keys(portfolio?.positions || {}).length;
 
   const isPositive = totalPnl >= 0;
-  const niftyPrice = nifty?.price ?? 25074.10;
-  const niftyChange = nifty?.change ?? -181.00;
-  const niftyPct = nifty?.change_pct ?? -0.72;
+  const niftyPrice = nifty?.price ?? 24350.00;
+  const niftyChange = nifty?.change ?? 0.00;
+  const niftyPct = nifty?.change_pct ?? 0.00;
   const isNiftyUp = niftyChange >= 0;
+
+  // Margin buffer percentage: (Avail / Capital) * 100
+  const marginBufferPct = capital > 0 ? Math.min(100, Math.max(0, (availMargin / capital) * 100)) : 100;
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-[#090D16]/95 backdrop-blur-xl border-b border-white/[0.08] px-3.5 py-2.5 shadow-xl">
-        <div className="flex flex-col gap-2">
+      <header className="sticky top-0 z-40 w-full glass-panel px-3 sm:px-6 py-2.5 sm:py-3 shadow-2xl transition-all">
+        <div className="max-w-7xl mx-auto flex flex-col gap-2.5">
           
-          {/* ROW 1: ANDROID APP TITLE, LIVE STATUS & ENGINE CONTROLS */}
-          <div className="flex items-center justify-between">
+          {/* TOP ROW: BRAND LOGO, NIFTY 50 TICKER & ENGINE CONTROLS */}
+          <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap sm:flex-nowrap">
             
-            {/* Brand Title */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500/20 to-emerald-500/20 border border-sky-400/40 flex items-center justify-center shadow-md shadow-sky-500/10">
-                <Zap className="w-4 h-4 text-sky-400 fill-sky-400/20" />
+            {/* Left: Terminal Logo & Live Engine Status */}
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-500/20 via-emerald-500/10 to-indigo-500/20 border border-sky-400/30 flex items-center justify-center shadow-lg shadow-sky-500/10 flex-shrink-0">
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400 fill-sky-400/20" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5 leading-none">
-                  <span className="text-sm font-black tracking-tight text-white font-mono">
+                  <span className="text-sm sm:text-base font-black tracking-tight text-white font-mono">
                     ISMB CROWN 6
                   </span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                    ALPHA
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-extrabold bg-sky-500/15 text-sky-300 border border-sky-500/30 uppercase tracking-wider">
+                    ALPHA PRO
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 mt-1">
+                <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 mt-1">
                   <span className="flex items-center gap-1 text-emerald-400 font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 beacon-pulse-emerald" />
                     LIVE 1s
                   </span>
                   <span>•</span>
-                  <span>{tradingMode} MODE</span>
+                  <span className={`px-1.5 py-0.2 rounded font-extrabold text-[9px] ${
+                    tradingMode === 'DHAN_LIVE' 
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
+                      : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  }`}>
+                    {tradingMode}
+                  </span>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="hidden sm:flex items-center gap-1 text-slate-400 text-[10px]">
+                    <ShieldCheck className="w-3 h-3 text-sky-400" />
+                    3:00 PM Squareoff Active
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Quick Engine Actions */}
-            <div className="flex items-center gap-1.5">
+            {/* Center: Nifty 50 Macro Ticker (Responsive Compact Pill) */}
+            <div className="order-3 sm:order-2 w-full sm:w-auto flex items-center justify-between sm:justify-center bg-[#0C111E]/90 px-3 py-1.5 rounded-xl border border-white/[0.08] shadow-inner font-mono text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">
+                  NIFTY 50
+                </span>
+                <span className="font-extrabold text-white text-xs sm:text-sm tabular-nums tracking-tight">
+                  ₹{niftyPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+                <div className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold flex items-center gap-0.5 border ${
+                  isNiftyUp 
+                    ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' 
+                    : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                }`}>
+                  {isNiftyUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                  <span>{isNiftyUp ? '+' : ''}{niftyChange.toFixed(2)} ({isNiftyUp ? '+' : ''}{niftyPct.toFixed(2)}%)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Engine Action Buttons */}
+            <div className="order-2 sm:order-3 flex items-center gap-2">
               <button
                 onClick={onToggleBot}
-                className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono flex items-center gap-1 border transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono flex items-center gap-1.5 border transition-all cursor-pointer shadow-md ${
                   botActive 
-                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25' 
+                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25 glow-emerald' 
                     : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
                 }`}
+                title={botActive ? "Pause automated trade scanning" : "Activate automated trading"}
               >
-                {botActive ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                {botActive ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                 <span>{botActive ? 'Active' : 'Paused'}</span>
               </button>
 
               <button
                 onClick={() => setShowPanicModal(true)}
-                className="px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono bg-rose-500/15 border border-rose-500/40 text-rose-300 flex items-center gap-1 hover:bg-rose-500/30 transition-all cursor-pointer"
-                title="Emergency Square Off All"
+                className="px-3 py-1.5 rounded-xl text-xs font-bold font-mono bg-rose-500/15 border border-rose-500/40 text-rose-300 flex items-center gap-1.5 hover:bg-rose-500/25 transition-all cursor-pointer shadow-md"
+                title="Emergency Square Off All Open Positions"
               >
-                <Power className="w-3 h-3 text-rose-400" />
-                <span>Exit All</span>
+                <Power className="w-3.5 h-3.5 text-rose-400" />
+                <span className="hidden xs:inline">Exit All</span>
               </button>
             </div>
 
           </div>
 
-          {/* ROW 2: ZERODHA KITE STYLE NIFTY 50 TICKER BAR */}
-          <div className="flex items-center justify-between bg-[#111726]/80 px-2.5 py-1.5 rounded-xl border border-white/[0.06] text-[11px] font-mono">
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-400 font-bold">NIFTY 50:</span>
-              <span className="font-extrabold text-white tabular-nums">
-                ₹{niftyPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
-              <span className={`flex items-center text-[10px] font-bold ${isNiftyUp ? 'text-emerald-400' : 'text-rose-400'}`}>
-                {isNiftyUp ? '+' : ''}{niftyChange.toFixed(2)} ({isNiftyUp ? '+' : ''}{niftyPct.toFixed(2)}%)
-              </span>
-            </div>
-            <span className="text-[10px] text-emerald-400 font-bold hidden xs:inline">
-              5x MIS Aligned
-            </span>
-          </div>
-
-          {/* ROW 3: PERSISTENT MARGIN STRIP (AVAILABLE, USED, DAY P&L) */}
-          <div className="grid grid-cols-3 gap-1.5 pt-0.5">
+          {/* ROW 2: BENTO METRICS BAR (AVAILABLE MARGIN & REALIZED P&L) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-white/[0.06] text-xs font-mono">
             
-            {/* Available Margin */}
-            <div className="bg-[#121828]/90 border border-white/[0.06] rounded-xl px-2.5 py-1.5 flex flex-col justify-center">
-              <span className="text-[9px] font-mono uppercase text-slate-400 tracking-wider">
-                Avail Margin
-              </span>
-              <span className="text-xs font-black font-mono text-slate-100 tabular-nums">
-                ₹{availMargin.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
-            </div>
-
-            {/* Used Margin (5x) */}
-            <div className="bg-[#121828]/90 border border-white/[0.06] rounded-xl px-2.5 py-1.5 flex flex-col justify-center">
-              <span className="text-[9px] font-mono uppercase text-slate-400 tracking-wider">
-                Used (5x)
-              </span>
-              <span className="text-xs font-black font-mono text-amber-400 tabular-nums">
-                ₹{usedMargin.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
-            </div>
-
-            {/* Net Day P&L */}
-            <div className={`rounded-xl px-2.5 py-1.5 flex flex-col justify-center border transition-all ${
-              isPositive 
-                ? 'bg-emerald-500/10 border-emerald-500/30' 
-                : 'bg-rose-500/10 border-rose-500/30'
-            }`}>
-              <span className="text-[9px] font-mono uppercase text-slate-400 tracking-wider">
-                Net Day P&L
-              </span>
-              <div className="flex items-baseline gap-1">
-                <span className={`text-xs font-black font-mono tabular-nums ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {isPositive ? '+' : ''}₹{totalPnl.toFixed(2)}
+            {/* 1. Available Margin */}
+            <div className="bg-[#0D121F]/90 px-3 py-2 rounded-xl border border-white/[0.07] flex flex-col justify-between">
+              <div className="flex items-center justify-between text-[10px] text-slate-400">
+                <span className="flex items-center gap-1 font-medium">
+                  <Wallet className="w-3 h-3 text-sky-400" />
+                  Available Cash
                 </span>
-                <span className={`text-[9px] font-mono font-bold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  ({isPositive ? '+' : ''}{totalR.toFixed(2)}R)
+                <span className="text-emerald-400 font-bold">{marginBufferPct.toFixed(0)}% Free</span>
+              </div>
+              <div className="mt-1 flex items-baseline justify-between">
+                <span className="text-sm sm:text-base font-extrabold text-white tabular-nums tracking-tight">
+                  ₹{availMargin.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+
+            {/* 2. Total Margin Used / Cap */}
+            <div className="bg-[#0D121F]/90 px-3 py-2 rounded-xl border border-white/[0.07] flex flex-col justify-between">
+              <div className="flex items-center justify-between text-[10px] text-slate-400">
+                <span className="font-medium">Total Capital</span>
+                <span className="text-sky-400 font-bold">5x MIS Max</span>
+              </div>
+              <div className="mt-1 flex items-baseline justify-between">
+                <span className="text-sm sm:text-base font-extrabold text-slate-200 tabular-nums tracking-tight">
+                  ₹{capital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  Used: ₹{usedMargin.toFixed(0)}
+                </span>
+              </div>
+            </div>
+
+            {/* 3. Realized Daily P&L */}
+            <div className="bg-[#0D121F]/90 px-3 py-2 rounded-xl border border-white/[0.07] flex flex-col justify-between">
+              <div className="flex items-center justify-between text-[10px] text-slate-400">
+                <span className="font-medium">Today's Realized</span>
+                {isPositive ? <TrendingUp className="w-3 h-3 text-emerald-400" /> : <TrendingDown className="w-3 h-3 text-rose-400" />}
+              </div>
+              <div className="mt-1 flex items-baseline justify-between">
+                <span className={`text-sm sm:text-base font-extrabold tabular-nums tracking-tight ${
+                  isPositive ? 'text-emerald-400' : 'text-rose-400'
+                }`}>
+                  {isPositive ? '+' : ''}₹{totalPnl.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+                <span className={`text-[10px] font-bold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {isPositive ? '+' : ''}{totalR.toFixed(2)} R
+                </span>
+              </div>
+            </div>
+
+            {/* 4. Active Positions Capacity */}
+            <div className="bg-[#0D121F]/90 px-3 py-2 rounded-xl border border-white/[0.07] flex flex-col justify-between">
+              <div className="flex items-center justify-between text-[10px] text-slate-400">
+                <span className="font-medium">Open Positions</span>
+                <span className="text-slate-400 font-bold">{openPositionsCount} / 6 Max</span>
+              </div>
+              <div className="mt-1 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  {[...Array(6)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`w-3.5 h-1.5 rounded-sm transition-all ${
+                        i < openPositionsCount 
+                          ? 'bg-sky-400 shadow-sm shadow-sky-400/50' 
+                          : 'bg-white/10'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-[10px] font-mono text-slate-400">
+                  {openPositionsCount === 0 ? 'All 6 Idle' : `${openPositionsCount} Live`}
                 </span>
               </div>
             </div>
@@ -152,42 +212,45 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
         </div>
       </header>
 
-      {/* PANIC SQUARE-OFF MODAL */}
+      {/* PANIC SQUARE OFF VERIFICATION MODAL */}
       {showPanicModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-          <div className="bg-[#101626] border border-rose-500/50 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <button 
-                onClick={() => setShowPanicModal(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-[#0D121F] border border-rose-500/40 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative glow-rose">
+            <button 
+              onClick={() => setShowPanicModal(false)}
+              className="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
+              <AlertTriangle className="w-6 h-6" />
             </div>
 
-            <div>
-              <h3 className="text-base font-black text-white">Emergency Panic Square-Off?</h3>
-              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                Immediately exits all open positions at market price, releases 100% of used margin, and halts automated entries.
+            <div className="text-center space-y-1">
+              <h3 className="text-base font-black text-white font-mono">
+                Emergency Exit All?
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                This will immediately close all open intraday positions at the current Market Price and cancel all pending orders.
               </p>
             </div>
 
-            <div className="flex items-center gap-2.5 pt-2">
+            <div className="flex items-center gap-2 pt-2">
               <button
+                type="button"
                 onClick={() => setShowPanicModal(false)}
-                className="flex-1 py-2 rounded-xl text-xs font-bold text-slate-300 bg-white/5 border border-white/10 hover:bg-white/10"
+                className="flex-1 py-2.5 rounded-xl border border-white/10 text-xs font-bold font-mono text-slate-300 hover:bg-white/5 transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={() => {
-                  onPanicSquareOff();
                   setShowPanicModal(false);
+                  onPanicSquareOff();
                 }}
-                className="flex-1 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 border border-rose-500"
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-black font-mono text-white transition-all cursor-pointer shadow-lg shadow-rose-600/40"
               >
                 Confirm Exit All
               </button>
