@@ -3,6 +3,10 @@ import ssl
 import json
 import time
 from datetime import datetime
+try:
+    from ist_time import now_ist_str
+except ImportError:
+    from backend.ist_time import now_ist_str
 
 CROWN_6_INSTRUMENTS = {
     'RELIANCE': {'ticker': 'RELIANCE.NS', 'name': 'Reliance Industries', 'sector': 'Energy'},
@@ -93,7 +97,7 @@ class MarketDataService:
                         'day_high': round(float(d_high), 2),
                         'day_low': round(float(d_low), 2),
                         'volume': int(vol),
-                        'updated_at': datetime.now().strftime("%H:%M:%S")
+                        'updated_at': now_ist_str("%H:%M:%S")
                     }
             except Exception as e:
                 # Keep existing cache or use real baseline
@@ -110,7 +114,7 @@ class MarketDataService:
                         'day_high': base_p,
                         'day_low': base_p,
                         'volume': 0,
-                        'updated_at': datetime.now().strftime("%H:%M:%S")
+                        'updated_at': now_ist_str("%H:%M:%S")
                     }
 
     def get_candle_history(self, symbol: str):

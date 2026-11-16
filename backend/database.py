@@ -3,6 +3,10 @@ import sqlite3
 import json
 from datetime import datetime
 try:
+    from ist_time import now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+except ImportError:
+    from backend.ist_time import now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+try:
     import psycopg2
     from psycopg2.extras import RealDictCursor
     HAS_PSYCOPG2 = True
@@ -98,7 +102,7 @@ class Database:
         row = cur.fetchone()
         count = row[0] if not isinstance(row, dict) else list(row.values())[0]
         if count == 0:
-            now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            now_str = now_ist_datetime_str()
             cur.execute("""
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
                 VALUES (1, 100000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, ?)
@@ -106,6 +110,17 @@ class Database:
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
                 VALUES (1, 100000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, %s)
             """, (now_str,))
+
+        # One-time migration: Convert any UTC timestamps in positions table to IST
+        try:
+            cur.execute("SELECT id, entry_time FROM positions")
+            for r in cur.fetchall():
+                row_dict = dict(r)
+                ist_t = to_ist_time_str(row_dict.get('entry_time', ''))
+                if ist_t and ist_t != row_dict.get('entry_time'):
+                    cur.execute("UPDATE positions SET entry_time = ? WHERE id = ?" if not self.is_postgres else "UPDATE positions SET entry_time = %s WHERE id = %s", (ist_t, row_dict['id']))
+        except Exception as e:
+            pass
 
         conn.commit()
         conn.close()
@@ -137,7 +152,7 @@ class Database:
     def update_settings(self, updates: dict):
         current = self.get_settings()
         current.update(updates)
-        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_str = now_ist_datetime_str()
 
         conn = self.get_connection()
         cur = conn.cursor()
@@ -194,7 +209,12 @@ class Database:
         cur.execute("SELECT * FROM positions ORDER BY created_at DESC")
         rows = cur.fetchall()
         conn.close()
-        return [dict(r) for r in rows]
+        positions = []
+        for r in rows:
+            d = dict(r)
+            d['entry_time'] = to_ist_time_str(d.get('entry_time', ''))
+            positions.append(d)
+        return positions
 
     def save_position(self, pos: dict):
         conn = self.get_connection()
@@ -209,8 +229,8 @@ class Database:
         params = (
             pos['id'], pos['symbol'], pos['direction'], pos['entry_price'],
             pos['stop_loss'], pos['take_profit'], pos['quantity'], pos['margin_used'],
-            pos['entry_time'], pos.get('setup', 'EMA Pullback 1:3'), pos['sl_dist'],
-            pos.get('created_at', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            to_ist_time_str(pos['entry_time']), pos.get('setup', 'EMA Pullback 1:3'), pos['sl_dist'],
+            pos.get('created_at', now_ist_datetime_str())
         )
         cur.execute(sql, params)
         conn.commit()
@@ -230,7 +250,13 @@ class Database:
         cur.execute("SELECT * FROM trade_history ORDER BY created_at DESC")
         rows = cur.fetchall()
         conn.close()
-        return [dict(r) for r in rows]
+        trades = []
+        for r in rows:
+            d = dict(r)
+            d['entry_time'] = to_ist_time_str(d.get('entry_time', ''))
+            d['exit_time'] = to_ist_time_str(d.get('exit_time', ''))
+            trades.append(d)
+        return trades
 
     def save_closed_trade(self, trade: dict):
         conn = self.get_connection()
@@ -245,10 +271,10 @@ class Database:
         params = (
             trade['id'], trade['symbol'], trade['direction'], trade['entry_price'],
             trade['exit_price'], trade['quantity'], trade['margin_used'],
-            trade['entry_time'], trade['exit_time'], trade['exit_reason'],
+            to_ist_time_str(trade['entry_time']), to_ist_time_str(trade['exit_time']), trade['exit_reason'],
             trade['realized_pnl'], trade['realized_r'], trade.get('charges', 0.0),
-            trade.get('trade_date', datetime.now().strftime("%Y-%m-%d")),
-            trade.get('created_at', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            trade.get('trade_date', now_ist_date_str()),
+            trade.get('created_at', now_ist_datetime_str())
         )
         cur.execute(sql, params)
         conn.commit()
@@ -260,7 +286,7 @@ class Database:
         cur = conn.cursor()
         cur.execute("DELETE FROM positions")
         cur.execute("DELETE FROM trade_history")
-        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_str = now_ist_datetime_str()
         sql = """
             UPDATE settings SET
                 capital = 100000.0,

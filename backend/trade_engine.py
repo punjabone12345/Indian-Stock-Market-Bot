@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timezone, timedelta
 try:
+    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, to_ist_time_str
+except ImportError:
+    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, to_ist_time_str
+try:
     from market_data import market_service, CROWN_6_INSTRUMENTS
     from portfolio import portfolio
 except ImportError:
@@ -200,7 +204,7 @@ class TradeEngine:
 
     def run_market_scan(self):
         quotes = market_service.fetch_live_quotes()
-        self.last_scan_time = datetime.now().strftime("%H:%M:%S")
+        self.last_scan_time = now_ist_str("%H:%M:%S IST")
 
         # First, update active positions and trigger any SL/TP exits
         closed_trades = portfolio.update_live_prices_and_check_triggers(quotes)
@@ -218,10 +222,9 @@ class TradeEngine:
         n_close = float(df_n['close'].iloc[-1])
         nifty_trend = 1 if (n_ema9 > n_ema21 and n_close > n_ema21) else (-1 if (n_ema9 < n_ema21 and n_close < n_ema21) else 0)
 
-        now_utc = datetime.now(timezone.utc)
-        now_ist = now_utc + timedelta(hours=5, minutes=30)
-        is_weekday = (0 <= now_ist.weekday() <= 4)
-        time_mins = now_ist.hour * 60 + now_ist.minute
+        now_ist_obj = now_ist()
+        is_weekday = (0 <= now_ist_obj.weekday() <= 4)
+        time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
         is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
         is_entry_window = is_weekday and (9 * 60 + 30 <= time_mins <= 14 * 60 + 15)  # No new entries after 2:15 PM IST
         is_past_3pm = is_weekday and (time_mins >= 15 * 60)  # All open positions squared off by 3:00 PM IST

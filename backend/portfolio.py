@@ -1,6 +1,10 @@
 import uuid
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+try:
+    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+except ImportError:
+    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
 try:
     from database import db
     from telegram_alerts import telegram_service
@@ -34,13 +38,13 @@ class PortfolioManager:
                 'take_profit': float(p['take_profit']),
                 'quantity': int(p['quantity']),
                 'margin_used': float(p['margin_used']),
-                'entry_time': p['entry_time'],
+                'entry_time': to_ist_time_str(p['entry_time']),
                 'setup': p.get('setup', 'Crown 6 EMA Pullback'),
                 'sl_dist': float(p['sl_dist']),
                 'current_price': float(p['entry_price']),
                 'unrealized_pnl': 0.0,
                 'unrealized_r': 0.0,
-                'created_at': p.get('created_at', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                'created_at': p.get('created_at', now_ist_datetime_str())
             }
 
     def calculate_statutory_charges(self, entry_price: float, exit_price: float, qty: int, direction: str) -> float:
@@ -110,7 +114,7 @@ class PortfolioManager:
             }
 
         pos_id = str(uuid.uuid4())[:8]
-        entry_time_str = datetime.now().strftime("%H:%M:%S")
+        entry_time_str = now_ist_str("%H:%M:%S")
 
         pos_dict = {
             'id': pos_id,
@@ -127,7 +131,7 @@ class PortfolioManager:
             'current_price': round(entry_price, 2),
             'unrealized_pnl': 0.0,
             'unrealized_r': 0.0,
-            'created_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            'created_at': now_ist_datetime_str()
         }
 
         # Save to DB & memory
@@ -183,14 +187,14 @@ class PortfolioManager:
             'exit_price': exit_p,
             'quantity': qty,
             'margin_used': pos['margin_used'],
-            'entry_time': pos['entry_time'],
-            'exit_time': datetime.now().strftime("%H:%M:%S"),
+            'entry_time': to_ist_time_str(pos['entry_time']),
+            'exit_time': now_ist_str("%H:%M:%S"),
             'exit_reason': 'MANUAL_USER_CLOSE',
             'realized_pnl': net_pnl,
             'realized_r': realized_r,
             'charges': charges,
-            'trade_date': datetime.now().strftime("%Y-%m-%d"),
-            'created_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            'trade_date': now_ist_date_str(),
+            'created_at': now_ist_datetime_str()
         }
 
         db.save_closed_trade(trade_record)
@@ -222,9 +226,8 @@ class PortfolioManager:
             exit_reason = None
             exit_price = None
 
-            now_utc = datetime.now(timezone.utc)
-            now_ist = now_utc + timedelta(hours=5, minutes=30)
-            time_mins = now_ist.hour * 60 + now_ist.minute
+            now_ist_obj = now_ist()
+            time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
             is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST
 
             if is_eod_cutoff:
@@ -266,14 +269,14 @@ class PortfolioManager:
                     'exit_price': exit_price,
                     'quantity': qty,
                     'margin_used': pos['margin_used'],
-                    'entry_time': pos['entry_time'],
-                    'exit_time': datetime.now().strftime("%H:%M:%S"),
+                    'entry_time': to_ist_time_str(pos['entry_time']),
+                    'exit_time': now_ist_str("%H:%M:%S"),
                     'exit_reason': exit_reason,
                     'realized_pnl': net_pnl,
                     'realized_r': realized_r,
                     'charges': charges,
-                    'trade_date': datetime.now().strftime("%Y-%m-%d"),
-                    'created_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    'trade_date': now_ist_date_str(),
+                    'created_at': now_ist_datetime_str()
                 }
                 db.save_closed_trade(trade_record)
                 telegram_service.notify_trade_exit(trade_record)

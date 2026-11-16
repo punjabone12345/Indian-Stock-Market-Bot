@@ -2,6 +2,10 @@ import urllib.request
 import ssl
 import json
 from datetime import datetime
+try:
+    from ist_time import now_ist_str, now_ist_datetime_str
+except ImportError:
+    from backend.ist_time import now_ist_str, now_ist_datetime_str
 
 class TelegramService:
     def __init__(self, token="9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc", chat_id="5582938659"):
@@ -43,7 +47,7 @@ class TelegramService:
             f"• *Take Profit (1:3):* `₹{pos['take_profit']:,.2f}`\n"
             f"• *Quantity:* `{pos['quantity']} shares`\n"
             f"• *Margin Locked (5x MIS):* `₹{pos['margin_used']:,.2f}`\n"
-            f"• *Time:* `{datetime.now().strftime('%H:%M:%S IST')}`\n"
+            f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`\n"
             f"• *Setup:* `{pos.get('setup', 'Crown 6 EMA Pullback')}`"
         )
         return self.send_message(text)
@@ -62,7 +66,7 @@ class TelegramService:
             f"• *Reason:* `{trade['exit_reason']}`\n"
             f"• *Statutory Charges:* `₹{trade.get('charges', 0):,.2f}`\n"
             f"• *Margin Released:* `₹{trade['margin_used']:,.2f}`\n"
-            f"• *Exit Time:* `{datetime.now().strftime('%H:%M:%S IST')}`"
+            f"• *Exit Time:* `{now_ist_str('%H:%M:%S IST')}`"
         )
         return self.send_message(text)
 
@@ -75,7 +79,7 @@ class TelegramService:
             f"• *Exit Price:* `₹{trade['exit_price']:,.2f}`\n"
             f"• *P&L:* *{pnl_str}*\n"
             f"• *Margin Released:* `₹{trade['margin_used']:,.2f}`\n"
-            f"• *Time:* `{datetime.now().strftime('%H:%M:%S IST')}`"
+            f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`"
         )
         return self.send_message(text)
 
@@ -85,7 +89,7 @@ class TelegramService:
             f"• *Symbol:* `{symbol}`\n"
             f"• *Margin Released:* `₹{margin_released:,.2f}`\n"
             f"• *P&L Counted:* `₹0.00` (Cancelled without impact)\n"
-            f"• *Time:* `{datetime.now().strftime('%H:%M:%S IST')}`"
+            f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`"
         )
         return self.send_message(text)
 
@@ -93,7 +97,7 @@ class TelegramService:
         text = (
             f"🔔 *TEST NOTIFICATION SUCCESSFUL*\n\n"
             f"Your Telegram bot is successfully linked to **Indian Stock Market Bot**!\n"
-            f"• *Time:* `{datetime.now().strftime('%Y-%m-%d %H:%M:%S IST')}`\n"
+            f"• *Time:* `{now_ist_datetime_str('%Y-%m-%d %H:%M:%S IST')}`\n"
             f"• *Status:* Online & Listening for live trade signals."
         )
         return self.send_message(text)

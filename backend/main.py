@@ -12,6 +12,10 @@ import ssl
 import json
 
 try:
+    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+except ImportError:
+    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+try:
     from database import db
     from market_data import market_service, CROWN_6_INSTRUMENTS
     from portfolio import portfolio
@@ -56,8 +60,8 @@ app.add_middleware(
 @app.get("/api/portfolio")
 def get_portfolio_status():
     summary = portfolio.get_summary()
-    summary['server_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S IST")
-    summary['last_scan_time'] = trade_engine.last_scan_time or datetime.now().strftime("%H:%M:%S")
+    summary['server_time'] = now_ist_datetime_str() + " IST"
+    summary['last_scan_time'] = trade_engine.last_scan_time or (now_ist_str() + " IST")
     return summary
 
 # ----------------- TAB 1: HOME / DASHBOARD -----------------
@@ -94,20 +98,21 @@ def get_dashboard_data():
             'score': sc.get('score', 60),
             'trend': sc.get('trend', 'NEUTRAL'),
             'next_step': sc.get('next_step', 'Analyzing micro-structure...'),
-            'updated_at': q.get('updated_at', datetime.now().strftime("%H:%M:%S"))
+            'updated_at': q.get('updated_at', now_ist_str())
         })
 
     nifty = quotes.get('NIFTY50', {})
-    now_utc = datetime.now(timezone.utc)
-    now_ist = now_utc + timedelta(hours=5, minutes=30)
-    is_weekday = (0 <= now_ist.weekday() <= 4)
-    time_mins = now_ist.hour * 60 + now_ist.minute
+    now_ist_obj = now_ist()
+    is_weekday = (0 <= now_ist_obj.weekday() <= 4)
+    time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
     is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
 
     return {
         'is_market_open': is_market_open,
         'market_status': 'OPEN' if is_market_open else 'CLOSED',
-        'ist_time': now_ist.strftime("%H:%M:%S IST"),
+        'ist_time': now_ist_obj.strftime("%H:%M:%S IST"),
+        'server_time': now_ist_obj.strftime("%Y-%m-%d %H:%M:%S IST"),
+        'last_scan_time': trade_engine.last_scan_time or now_ist_obj.strftime("%H:%M:%S IST"),
         'nifty50': {
             'price': nifty.get('price', 24350.0),
             'change': nifty.get('change', 0.0),
@@ -241,7 +246,7 @@ def export_trades_csv():
         ])
         
     output.seek(0)
-    filename = f"indian_stock_market_bot_trades_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+    filename = f"indian_stock_market_bot_trades_{now_ist().strftime('%Y%m%d_%H%M%S')}.csv"
     return StreamingResponse(
         io.BytesIO(output.getvalue().encode('utf-8')),
         media_type="text/csv",
@@ -413,4 +418,4 @@ def simulate_paper_position(payload: dict = Body(None)):
 
 @app.get("/health")
 def health_check():
-    return {'status': 'healthy', 'timestamp': datetime.now().isoformat()}
+    return {'status': 'healthy', 'timestamp': now_ist().isoformat()}
