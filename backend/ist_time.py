@@ -21,7 +21,7 @@ def now_ist_date_str(fmt: str = "%Y-%m-%d") -> str:
 
 def to_ist_time_str(time_str: str) -> str:
     """
-    Takes any time string (e.g. '06:57:49' UTC or '12:27:49' IST)
+    Takes any time string (e.g. '06:57:49' UTC or '12:27:49' IST or '2026-11-16 12:27:49')
     and converts it to a clean IST time string.
     """
     if not time_str:
@@ -29,7 +29,16 @@ def to_ist_time_str(time_str: str) -> str:
     time_str = str(time_str).strip()
     if 'IST' in time_str or 'PM' in time_str or 'AM' in time_str:
         return time_str
-    parts = time_str.split(':')
+    
+    # If date and time are space separated, isolate the time part
+    clean_time = time_str
+    if ' ' in clean_time:
+        for p in clean_time.split(' '):
+            if ':' in p:
+                clean_time = p
+                break
+                
+    parts = clean_time.split(':')
     if len(parts) >= 2:
         try:
             h = int(parts[0])
