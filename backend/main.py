@@ -188,6 +188,7 @@ def get_analytics():
         date_groups.append({
             'date': dt,
             'day_pnl': round(day_pnl, 2),
+            'total_pnl': round(day_pnl, 2),
             'day_r': round(day_r, 2),
             'trades_count': len(group_trades),
             'trades': group_trades

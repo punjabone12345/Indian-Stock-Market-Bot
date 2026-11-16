@@ -140,7 +140,8 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
           </div>
         ) : (
           dateGroups.map((grp) => {
-            const isGrpProfit = (grp.total_pnl || 0) >= 0;
+            const grpPnl = grp.day_pnl !== undefined ? grp.day_pnl : (grp.total_pnl || 0);
+            const isGrpProfit = grpPnl >= 0;
             const isExpanded = expandedDates[grp.date] !== false; // expanded by default
 
             return (
@@ -165,7 +166,7 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
                     <span className={`text-xs sm:text-sm font-black font-mono tabular-nums ${
                       isGrpProfit ? 'text-emerald-400' : 'text-rose-400'
                     }`}>
-                      {isGrpProfit ? '+' : ''}₹{(grp.total_pnl || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {isGrpProfit ? '+' : ''}₹{grpPnl.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                     {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                   </div>

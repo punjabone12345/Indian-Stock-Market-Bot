@@ -1119,10 +1119,10 @@ Trigger Condition:
             day.trades.forEach(t => {
               const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
               const gross = (t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty;
-              const net = parseFloat((gross - chg.totalCharges).toFixed(2));
+              const net = (t.netPnl !== undefined) ? t.netPnl : parseFloat((gross - chg.totalCharges).toFixed(2));
               
               lifetimeRealizedNet += net;
-              if (dayIdx === 0) {
+              if (dayIdx === 0 || day.date === 'TODAY' || day.fullDate === new Date().toISOString().slice(0, 10)) {
                 todayRealizedNet += net;
               }
             });
@@ -1174,6 +1174,7 @@ Trigger Condition:
       updateMarketStatusBadge();
       recalculateMarginsAndPnl();
       syncWithLiveBackend();
+      syncAnalyticsFromBackend();
       setInterval(syncWithLiveBackend, 2000);
       setInterval(updateMarketStatusBadge, 30000);
     });
@@ -1294,23 +1295,30 @@ Trigger Condition:
         }
 
         // 3. Sync positions from backend if any exist
-        if (data.summary && data.summary.positions && data.summary.positions.length > 0) {
-          userState.positions = data.summary.positions.map(p => ({
-            id: p.id || ("pos_" + p.symbol),
-            symbol: p.symbol,
-            side: p.direction || p.side,
-            qty: p.quantity || p.qty,
-            entry: p.entry_price || p.entry,
-            currentLtp: p.current_price || p.currentLtp || p.entry_price || p.entry,
-            sl: p.stop_loss || p.sl,
-            tp: p.take_profit || p.tp,
-            marginLocked: p.margin_used || p.marginLocked || Math.round((p.entry_price * p.quantity) / 5),
-            currentPnl: p.unrealized_pnl || p.currentPnl || 0,
-            rMultiple: p.unrealized_r || p.rMultiple || 0,
-            time: formatToIST(p.entry_time || p.time || "10:00 AM")
-          }));
+        if (data.summary && Array.isArray(data.summary.positions)) {
+          if (data.summary.positions.length > 0) {
+            userState.positions = data.summary.positions.map(p => ({
+              id: p.id || ("pos_" + p.symbol),
+              symbol: p.symbol,
+              side: p.direction || p.side,
+              qty: p.quantity || p.qty,
+              entry: p.entry_price || p.entry,
+              currentLtp: p.current_price || p.currentLtp || p.entry_price || p.entry,
+              sl: p.stop_loss || p.sl,
+              tp: p.take_profit || p.tp,
+              marginLocked: p.margin_used || p.marginLocked || Math.round((p.entry_price * p.quantity) / 5),
+              currentPnl: p.unrealized_pnl || p.currentPnl || 0,
+              rMultiple: p.unrealized_r || p.rMultiple || 0,
+              time: formatToIST(p.entry_time || p.time || "10:00 AM")
+            }));
+          } else {
+            userState.positions = [];
+          }
           renderPositions();
         }
+
+        // Also sync closed trades from backend analytics
+        syncAnalyticsFromBackend();
 
         // 4. Auto Square-off any open intraday positions before 3:00 PM IST
         const marketStatus = getMarketStatus();
@@ -1360,9 +1368,69 @@ Trigger Condition:
     }
 
     // ==============================================
+    // SYNC ANALYTICS & CLOSED TRADES FROM BACKEND
+    // ==============================================
+    async function syncAnalyticsFromBackend() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/analytics`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && Array.isArray(data.date_groups)) {
+          const todayIso = new Date().toISOString().slice(0, 10);
+          userState.ledger = data.date_groups.map(group => ({
+            date: group.date === todayIso ? "TODAY" : group.date,
+            fullDate: group.date,
+            dayPnl: `${group.day_pnl >= 0 ? '+' : ''}₹${group.day_pnl.toFixed(2)} (${group.day_r >= 0 ? '+' : ''}${group.day_r.toFixed(2)}R)`,
+            trades: (group.trades || []).map(t => {
+              const chg = calculateIndianTradingCharges(t.entry_price, t.exit_price, t.quantity);
+              const grossPnl = parseFloat(((t.direction === 'BUY' ? (t.exit_price - t.entry_price) : (t.entry_price - t.exit_price)) * t.quantity).toFixed(2));
+              const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
+              const netPnl = t.realized_pnl !== undefined ? t.realized_pnl : parseFloat((grossPnl - charges).toFixed(2));
+              const rMultiple = `${t.realized_r !== undefined ? (t.realized_r >= 0 ? '+' : '') + t.realized_r.toFixed(2) : (netPnl >= 0 ? '+' : '') + (netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+              
+              let friendlyExit = t.exit_reason || "1:3 Pullback Target Executed";
+              if (t.exit_reason === 'STOP_LOSS_HIT') friendlyExit = 'Stop Loss Hit (Bracket Protection)';
+              else if (t.exit_reason === 'TARGET_REACHED') friendlyExit = '1:3 Target Reached';
+              else if (t.exit_reason === 'EOD_AUTO_SQUAREOFF_3PM') friendlyExit = '03:00 PM IST Auto Square-off';
+              else if (t.exit_reason === 'MANUAL_USER_CLOSE') friendlyExit = 'Manual Market Close';
+
+              return {
+                id: t.id,
+                symbol: t.symbol,
+                side: t.direction,
+                qty: t.quantity,
+                entry: t.entry_price,
+                exit: t.exit_price,
+                sl: t.stop_loss || (t.direction === 'BUY' ? t.entry_price * 0.995 : t.entry_price * 1.005),
+                tp: t.take_profit || (t.direction === 'BUY' ? t.entry_price * 1.015 : t.entry_price * 0.985),
+                time: formatToIST(t.entry_time),
+                exitTime: formatToIST(t.exit_time),
+                exitReason: friendlyExit,
+                pnl: `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`,
+                grossPnl: grossPnl,
+                charges: charges,
+                netPnl: netPnl,
+                rMultiple: rMultiple,
+                marginUsed: t.margin_used,
+                turnover: t.entry_price * t.quantity
+              };
+            })
+          }));
+          renderLedger();
+          recalculateMarginsAndPnl();
+        }
+      } catch (err) {
+        console.log("Analytics sync error:", err);
+      }
+    }
+
+    // ==============================================
     // TAB SWITCHING
     // ==============================================
     function switchTab(tabId) {
+      if (tabId === 'analytics') {
+        syncAnalyticsFromBackend();
+      }
       const tabs = ['watchlist', 'positions', 'analytics', 'settings'];
       tabs.forEach(t => {
         const sec = document.getElementById(`tab-${t}`);
@@ -1923,8 +1991,8 @@ Trigger Condition:
           day.trades.forEach((t, tradeIdx) => {
             const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
             const grossPnl = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
-            const charges = chg.totalCharges;
-            const netPnl = parseFloat((grossPnl - charges).toFixed(2));
+            const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
+            const netPnl = (t.netPnl !== undefined) ? t.netPnl : parseFloat((grossPnl - charges).toFixed(2));
             const rMultiple = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
 
             t.grossPnl = grossPnl;
