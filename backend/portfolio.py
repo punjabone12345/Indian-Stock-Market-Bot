@@ -19,7 +19,7 @@ class PortfolioManager:
     def refresh_from_db(self):
         settings = db.get_settings()
         self.capital = float(settings.get('capital', 125000.0))
-        self.risk_per_trade = float(settings.get('risk_per_trade', 250.0))
+        self.risk_per_trade = float(settings.get('risk_per_trade', 200.0))
         self.trading_mode = settings.get('trading_mode', 'PAPER')
         self.max_open_positions = int(settings.get('max_open_positions', 6))
         self.target_rr = float(settings.get('target_rr', 3.0))
