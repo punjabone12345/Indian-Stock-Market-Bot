@@ -224,6 +224,12 @@ def get_analytics():
         'date_groups': date_groups
     }
 
+@app.post("/api/admin/recalculate-charges")
+def admin_recalculate_charges():
+    db.recalculate_all_trade_charges()
+    portfolio.refresh_from_db()
+    return {'status': 'success', 'message': 'All trade charges recalculated to 100% Zerodha / Dhan standard.'}
+
 @app.get("/api/analytics/export")
 def export_trades_csv():
     trades = db.get_trade_history()

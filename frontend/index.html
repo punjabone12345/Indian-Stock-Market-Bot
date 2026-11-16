@@ -773,27 +773,27 @@ Trigger Condition:
       <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[9px] text-slate-400">
         <div class="flex justify-between">
           <span>Brokerage:</span>
-          <span class="text-slate-200 font-bold" id="tdModalBrokerage">₹39.98</span>
+          <span class="text-slate-200 font-bold" id="tdModalBrokerage">₹40.00</span>
         </div>
         <div class="flex justify-between">
           <span>STT (0.025%):</span>
-          <span class="text-slate-200 font-bold" id="tdModalSTT">₹16.65</span>
+          <span class="text-slate-200 font-bold" id="tdModalSTT">₹22.02</span>
         </div>
         <div class="flex justify-between">
           <span>NSE Exch:</span>
-          <span class="text-slate-200 font-bold" id="tdModalExch">₹3.97</span>
+          <span class="text-slate-200 font-bold" id="tdModalExch">₹5.23</span>
         </div>
         <div class="flex justify-between">
           <span>GST (18%):</span>
-          <span class="text-slate-200 font-bold" id="tdModalGST">₹7.94</span>
+          <span class="text-slate-200 font-bold" id="tdModalGST">₹8.17</span>
         </div>
         <div class="flex justify-between">
-          <span>SEBI + Stamp:</span>
-          <span class="text-slate-200 font-bold" id="tdModalSebiStamp">₹2.15</span>
+          <span>Stamp Duty:</span>
+          <span class="text-slate-200 font-bold" id="tdModalStamp">₹2.64</span>
         </div>
         <div class="flex justify-between">
-          <span>Margin Status:</span>
-          <span class="text-emeraldBull font-bold">RELEASED (100%)</span>
+          <span>SEBI Fee:</span>
+          <span class="text-slate-200 font-bold" id="tdModalSebi">₹0.18</span>
         </div>
       </div>
     </div>
@@ -894,41 +894,60 @@ Trigger Condition:
     };
 
     // ==============================================
-    // EXACT INDIAN STATUTORY CHARGES ENGINE
+    // EXACT INDIAN STATUTORY CHARGES ENGINE (100% ZERODHA & DHAN EQUITY INTRADAY MIS)
     // ==============================================
-    function calculateIndianTradingCharges(entryPrice, exitPrice, qty) {
-      const tradeValue = entryPrice * qty;
+    function calculateIndianTradingCharges(entryPrice, exitPrice, qty, direction = 'BUY') {
+      entryPrice = parseFloat(entryPrice) || 0;
+      exitPrice = parseFloat(exitPrice) || entryPrice;
+      qty = parseInt(qty, 10) || 1;
 
-      // 1. Brokerage (Dhan / Zerodha standard: Flat ₹20 or 0.03% max ₹20 per trade)
-      const brokerage = Math.min(20, parseFloat((tradeValue * 0.0003).toFixed(2)));
-
-      // 2. NSE Exchange Turnover Fee (0.00297%)
-      const exchFee = parseFloat((tradeValue * 0.0000297).toFixed(2));
-
-      // 3. SEBI Turnover Fee (₹10 / crore = 0.0001%)
-      const sebiFee = parseFloat((tradeValue * 0.000001).toFixed(2));
-
-      // 4. Stamp Duty (0.003%)
-      const stampDuty = parseFloat((tradeValue * 0.00003).toFixed(2));
-
-      // 5. GST (18% on Brokerage + Exch Fee + SEBI)
-      const gst = parseFloat(((brokerage + exchFee + sebiFee) * 0.18).toFixed(2));
-
-      // Total Charges (Matches Dhan / Zerodha standard: exactly ₹28.10 for 50 shares of Reliance)
-      let totalCharges = parseFloat((brokerage + exchFee + sebiFee + stampDuty + gst).toFixed(2));
-      if (Math.abs(totalCharges - 28.06) < 0.05) {
-        totalCharges = 28.10; // Exact match to user verified Dhan / Zerodha quote
+      let buyVal, sellVal;
+      if (direction === 'SELL') {
+        sellVal = parseFloat((entryPrice * qty).toFixed(2));
+        buyVal = parseFloat((exitPrice * qty).toFixed(2));
+      } else {
+        buyVal = parseFloat((entryPrice * qty).toFixed(2));
+        sellVal = parseFloat((exitPrice * qty).toFixed(2));
       }
 
+      const turnover = parseFloat((buyVal + sellVal).toFixed(2));
+
+      // 1. Brokerage: min(₹20, 0.03%) on both Buy and Sell legs (Zerodha & Dhan standard)
+      const buyBrokerage = Math.min(20, parseFloat((buyVal * 0.0003).toFixed(2)));
+      const sellBrokerage = Math.min(20, parseFloat((sellVal * 0.0003).toFixed(2)));
+      const brokerage = parseFloat((buyBrokerage + sellBrokerage).toFixed(2));
+
+      // 2. STT (Securities Transaction Tax): 0.025% on SELL turnover only
+      const stt = parseFloat((sellVal * 0.00025).toFixed(2));
+
+      // 3. NSE Exchange Turnover Fee: 0.00297% on round-trip turnover
+      const exchFee = parseFloat((turnover * 0.0000297).toFixed(2));
+
+      // 4. SEBI Turnover Fee: ₹10 / crore = 0.0001% on round-trip turnover
+      const sebiFee = parseFloat((turnover * 0.000001).toFixed(2));
+
+      // 5. Stamp Duty: 0.003% (₹300 / crore) on BUY turnover only
+      const stampDuty = parseFloat((buyVal * 0.00003).toFixed(2));
+
+      // 6. GST: 18% on (Brokerage + Exchange Fee + SEBI Fee)
+      const gst = parseFloat(((brokerage + exchFee + sebiFee) * 0.18).toFixed(2));
+
+      // Total Statutory Round-Trip Charges
+      const totalCharges = parseFloat((brokerage + stt + exchFee + sebiFee + stampDuty + gst).toFixed(2));
+
       return {
-        turnover: parseFloat(tradeValue.toFixed(2)),
-        margin: parseFloat((tradeValue / 5).toFixed(2)),
-        brokerage: parseFloat(brokerage.toFixed(2)),
-        stt: 0.00,
-        exch: parseFloat(exchFee.toFixed(2)),
-        gst: parseFloat(gst.toFixed(2)),
+        buyTurnover: buyVal,
+        sellTurnover: sellVal,
+        turnover: turnover,
+        margin: parseFloat(((entryPrice * qty) / 5).toFixed(2)),
+        brokerage: brokerage,
+        stt: stt,
+        exch: exchFee,
+        sebi: sebiFee,
+        stamp: stampDuty,
         sebiStamp: parseFloat((sebiFee + stampDuty).toFixed(2)),
-        totalCharges: parseFloat(totalCharges.toFixed(2))
+        gst: gst,
+        totalCharges: totalCharges
       };
     }
 
@@ -1164,9 +1183,9 @@ Trigger Condition:
         userState.ledger.forEach((day, dayIdx) => {
           if (day.trades && Array.isArray(day.trades)) {
             day.trades.forEach(t => {
-              const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+              const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty, t.side || t.direction);
               const gross = (t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty;
-              const net = (t.netPnl !== undefined) ? t.netPnl : parseFloat((gross - chg.totalCharges).toFixed(2));
+              const net = (t.netPnl !== undefined) ? t.netPnl : parseFloat((gross - (t.charges || chg.totalCharges)).toFixed(2));
               
               lifetimeRealizedNet += net;
               if (dayIdx === 0 || day.date === 'TODAY' || day.fullDate === new Date().toISOString().slice(0, 10)) {
@@ -1387,7 +1406,7 @@ Trigger Condition:
         const marketStatus = getMarketStatus();
         if (marketStatus.isPast3PM && userState.positions && userState.positions.length > 0) {
           userState.positions.forEach(pos => {
-            const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty);
+            const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty, pos.side || pos.direction);
             const grossPnl = pos.currentPnl;
             const charges = chg.totalCharges;
             const netPnl = parseFloat((grossPnl - charges).toFixed(2));
@@ -1445,7 +1464,7 @@ Trigger Condition:
             fullDate: group.date,
             dayPnl: `${group.day_pnl >= 0 ? '+' : ''}₹${group.day_pnl.toFixed(2)} (${group.day_r >= 0 ? '+' : ''}${group.day_r.toFixed(2)}R)`,
             trades: (group.trades || []).map(t => {
-              const chg = calculateIndianTradingCharges(t.entry_price, t.exit_price, t.quantity);
+              const chg = calculateIndianTradingCharges(t.entry_price, t.exit_price, t.quantity, t.direction || t.side);
               const grossPnl = parseFloat(((t.direction === 'BUY' ? (t.exit_price - t.entry_price) : (t.entry_price - t.exit_price)) * t.quantity).toFixed(2));
               const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
               const netPnl = t.realized_pnl !== undefined ? t.realized_pnl : parseFloat((grossPnl - charges).toFixed(2));
@@ -1878,7 +1897,7 @@ Trigger Condition:
           userState.ledger.unshift({ date: "TODAY", dayPnl: "+₹0.00", trades: [] });
         }
 
-        const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty);
+        const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty, pos.side || pos.direction);
         const grossPnl = pos.currentPnl;
         const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
@@ -1953,7 +1972,7 @@ Trigger Condition:
       }
 
       userState.positions.forEach(pos => {
-        const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty);
+        const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty, pos.side || pos.direction);
         const grossPnl = pos.currentPnl;
         const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
@@ -2054,7 +2073,7 @@ Trigger Condition:
           let dayCharges = 0;
 
           day.trades.forEach((t, tradeIdx) => {
-            const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+            const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty, t.side || t.direction);
             const grossPnl = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
             const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
             const netPnl = (t.netPnl !== undefined) ? t.netPnl : parseFloat((grossPnl - charges).toFixed(2));
@@ -2069,6 +2088,8 @@ Trigger Condition:
             t.brokerage = chg.brokerage;
             t.stt = chg.stt;
             t.exch = chg.exch;
+            t.sebi = chg.sebi;
+            t.stamp = chg.stamp;
             t.gst = chg.gst;
             t.sebiStamp = chg.sebiStamp;
 
@@ -2212,11 +2233,11 @@ Trigger Condition:
       safeSet('tdModalTP', `₹${Number(t.tp || (t.side === 'BUY' ? t.entry * 1.015 : t.entry * 0.985)).toFixed(2)}`);
       safeSet('tdModalQty', `${t.qty} Shares`);
 
-      // Dynamic calculation of exact Indian statutory charges (NSE Schedule)
-      const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+      // Dynamic calculation of exact Indian statutory charges (NSE Schedule - 100% Zerodha / Dhan)
+      const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty, t.side || t.direction);
       const turnoverVal = chg.turnover;
       const marginVal = chg.margin;
-      const chargesVal = chg.totalCharges;
+      const chargesVal = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
 
       safeSet('tdModalTurnover', `₹${turnoverVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
       safeSet('tdModalMargin', `₹${marginVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
@@ -2225,6 +2246,8 @@ Trigger Condition:
       safeSet('tdModalSTT', `₹${chg.stt.toFixed(2)}`);
       safeSet('tdModalExch', `₹${chg.exch.toFixed(2)}`);
       safeSet('tdModalGST', `₹${chg.gst.toFixed(2)}`);
+      safeSet('tdModalStamp', `₹${chg.stamp.toFixed(2)}`);
+      safeSet('tdModalSebi', `₹${chg.sebi.toFixed(2)}`);
       safeSet('tdModalSebiStamp', `₹${chg.sebiStamp.toFixed(2)}`);
 
       const grossPnl = (t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty;
@@ -2261,11 +2284,12 @@ Trigger Condition:
       let csvContent = "data:text/csv;charset=utf-8,TradeID,Date,Symbol,Side,Quantity,EntryPrice,ExitPrice,MarginUsed,StatutoryCharges,GrossPnL,NetPnL,RMultiple,ExitReason\n";
       userState.ledger.forEach(day => {
         day.trades.forEach(t => {
-          const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty);
+          const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty, t.side || t.direction);
           const gross = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
-          const net = parseFloat((gross - chg.totalCharges).toFixed(2));
+          const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
+          const net = parseFloat((gross - charges).toFixed(2));
           const r = `${net >= 0 ? '+' : ''}${(net / (userState.riskPerTrade || 200)).toFixed(2)}R`;
-          csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${t.entry},${t.exit},${chg.margin},${chg.totalCharges},${gross},${net},"${r}","${t.exitReason}"\n`;
+          csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${t.entry},${t.exit},${chg.margin},${charges},${gross},${net},"${r}","${t.exitReason}"\n`;
         });
       });
       const encodedUri = encodeURI(csvContent);

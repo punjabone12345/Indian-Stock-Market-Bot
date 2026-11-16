@@ -47,26 +47,51 @@ class PortfolioManager:
                 'created_at': p.get('created_at', now_ist_datetime_str())
             }
 
-    def calculate_statutory_charges(self, entry_price: float, exit_price: float, qty: int, direction: str) -> float:
+    def calculate_statutory_charges(self, entry_price: float, exit_price: float, qty: int, direction: str = 'BUY') -> float:
         """
-        Dhan / Zerodha standard trade execution charges:
-        - Brokerage: Flat ₹20 or 0.03% (whichever lower)
-        - Exchange Turnover Fee: 0.00297% (NSE)
-        - GST: 18% on (Brokerage + Exchange Fees + SEBI)
-        - Stamp Duty: 0.003%
-        - SEBI Turnover Fee: 0.0001%
-        Total is approx ₹28.10 for 50 shares of Reliance @ ₹1344.
+        100% Exact Zerodha & Dhan Equity Intraday (MIS) Charges Schedule on NSE:
+        1. Brokerage: min(₹20, 0.03% of turnover) per leg (separate on entry and exit leg)
+        2. STT (Securities Transaction Tax): 0.025% on SELL turnover only
+        3. Exchange Turnover Fee: 0.00297% (NSE) of total round-trip turnover
+        4. SEBI Turnover Fee: ₹10 per crore (0.0001% of total round-trip turnover)
+        5. Stamp Duty: 0.003% (₹300 per crore) on BUY turnover only
+        6. GST: 18% on (Brokerage + Exchange Turnover Fee + SEBI Fee)
         """
-        trade_val = entry_price * qty
-        brokerage = min(20.0, round(trade_val * 0.0003, 2))
-        exch_fees = round(trade_val * 0.0000297, 2)
-        sebi_fees = round(trade_val * 0.000001, 2)
-        stamp_duty = round(trade_val * 0.00003, 2)
+        entry_p = float(entry_price)
+        exit_p = float(exit_price)
+        q = int(qty)
+
+        if direction == 'BUY':
+            buy_val = round(entry_p * q, 2)
+            sell_val = round(exit_p * q, 2)
+        else:
+            buy_val = round(exit_p * q, 2)
+            sell_val = round(entry_p * q, 2)
+
+        turnover = round(buy_val + sell_val, 2)
+
+        # 1. Brokerage (charged on both Buy and Sell legs, max ₹20 per leg)
+        buy_brok = min(20.0, round(buy_val * 0.0003, 2))
+        sell_brok = min(20.0, round(sell_val * 0.0003, 2))
+        brokerage = round(buy_brok + sell_brok, 2)
+
+        # 2. STT (0.025% on sell side only)
+        stt = round(sell_val * 0.00025, 2)
+
+        # 3. NSE Exchange transaction fee (0.00297% of total turnover)
+        exch_fees = round(turnover * 0.0000297, 2)
+
+        # 4. SEBI turnover charge (₹10/cr = 0.0001% of total turnover)
+        sebi_fees = round(turnover * 0.000001, 2)
+
+        # 5. Stamp duty (0.003% on buy side only)
+        stamp_duty = round(buy_val * 0.00003, 2)
+
+        # 6. GST (18% on Brokerage + Exchange Fees + SEBI Fees)
         gst = round((brokerage + exch_fees + sebi_fees) * 0.18, 2)
-        total = round(brokerage + exch_fees + sebi_fees + stamp_duty + gst, 2)
-        if abs(total - 28.06) < 0.05:
-            total = 28.10
-        return round(total, 2)
+
+        total = round(brokerage + stt + exch_fees + sebi_fees + stamp_duty + gst, 2)
+        return total
 
     def get_used_margin(self) -> float:
         return sum(pos['margin_used'] for pos in self.positions.values())

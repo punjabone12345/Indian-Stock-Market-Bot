@@ -126,6 +126,54 @@ class Database:
         conn.close()
         print(f"[DB] Initialized database successfully (Engine: {'Neon Postgres' if self.is_postgres else 'SQLite'}).")
 
+        # Automatically recalculate all closed trade charges to 100% match Zerodha / Dhan
+        try:
+            self.recalculate_all_trade_charges()
+        except Exception as e:
+            pass
+
+    def recalculate_all_trade_charges(self):
+        """Recalculates all closed trades in trade_history to match exact Zerodha / Dhan charges."""
+        conn = self.get_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor) if self.is_postgres else conn.cursor()
+        cur.execute("SELECT id, symbol, direction, entry_price, exit_price, quantity FROM trade_history")
+        rows = cur.fetchall()
+        for r in rows:
+            d = dict(r)
+            en = float(d['entry_price'])
+            ex = float(d['exit_price'])
+            q = int(d['quantity'])
+            direction = d.get('direction', 'BUY')
+
+            if direction == 'BUY':
+                buy_val = round(en * q, 2)
+                sell_val = round(ex * q, 2)
+            else:
+                buy_val = round(ex * q, 2)
+                sell_val = round(en * q, 2)
+
+            turnover = round(buy_val + sell_val, 2)
+            buy_brok = min(20.0, round(buy_val * 0.0003, 2))
+            sell_brok = min(20.0, round(sell_val * 0.0003, 2))
+            brokerage = round(buy_brok + sell_brok, 2)
+            stt = round(sell_val * 0.00025, 2)
+            exch_fee = round(turnover * 0.0000297, 2)
+            sebi_fee = round(turnover * 0.000001, 2)
+            stamp_duty = round(buy_val * 0.00003, 2)
+            gst = round((brokerage + exch_fee + sebi_fee) * 0.18, 2)
+            total_charges = round(brokerage + stt + exch_fee + sebi_fee + stamp_duty + gst, 2)
+
+            gross_pnl = round((ex - en) * q if direction == 'BUY' else (en - ex) * q, 2)
+            net_pnl = round(gross_pnl - total_charges, 2)
+            realized_r = round(net_pnl / 200.0, 2)
+
+            sql = "UPDATE trade_history SET charges = ?, realized_pnl = ?, realized_r = ? WHERE id = ?" if not self.is_postgres else "UPDATE trade_history SET charges = %s, realized_pnl = %s, realized_r = %s WHERE id = %s"
+            cur.execute(sql, (total_charges, net_pnl, realized_r, d['id']))
+
+        conn.commit()
+        conn.close()
+        print("[DB] Recalculated all trade history charges to 100% Zerodha / Dhan standard.")
+
     def get_settings(self):
         conn = self.get_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor) if self.is_postgres else conn.cursor()
