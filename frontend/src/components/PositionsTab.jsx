@@ -139,7 +139,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
                     </div>
 
                     <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 pt-0.5">
-                      <span>Entry: ₹{pos.entry_price?.toFixed(2)}</span>
+                      <span>{pos.direction === 'BUY' ? 'Buy Price' : 'Sell Price'}: ₹{pos.entry_price?.toFixed(2)}</span>
                       <span>Margin: ₹{pos.margin_used?.toFixed(0)}</span>
                       <span>Target: 1:3 RRR</span>
                     </div>

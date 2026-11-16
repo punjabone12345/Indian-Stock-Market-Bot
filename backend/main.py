@@ -238,16 +238,18 @@ def export_trades_csv():
     
     headers = [
         "Trade ID", "Date", "Symbol", "Direction", "Quantity", 
-        "Entry Price", "Exit Price", "Stop Loss", "Take Profit",
+        "Buy Price", "Sell Price", "Stop Loss", "Take Profit",
         "Margin Used", "Realized PnL (INR)", "Realized R", 
         "Statutory Charges", "Exit Reason", "Entry Time", "Exit Time"
     ]
     writer.writerow(headers)
     
     for t in trades:
+        buy_p = t['entry_price'] if t.get('direction') == 'BUY' else t['exit_price']
+        sell_p = t['exit_price'] if t.get('direction') == 'BUY' else t['entry_price']
         writer.writerow([
             t['id'], t['trade_date'], t['symbol'], t['direction'], t['quantity'],
-            t['entry_price'], t['exit_price'], t.get('stop_loss', ''), t.get('take_profit', ''),
+            buy_p, sell_p, t.get('stop_loss', ''), t.get('take_profit', ''),
             t['margin_used'], t['realized_pnl'], t['realized_r'],
             t.get('charges', 0.0), t['exit_reason'], t['entry_time'], t['exit_time']
         ])

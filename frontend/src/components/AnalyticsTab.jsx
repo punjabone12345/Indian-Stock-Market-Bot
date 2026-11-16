@@ -205,11 +205,11 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
                               </span>
                             </div>
                             <div className="flex items-center gap-2 text-[10px] text-slate-400 flex-wrap">
-                              <span className="text-sky-400 font-semibold">Entry: {t.entry_time?.includes('IST') ? t.entry_time : `${t.entry_time} IST`}</span>
+                              <span className="text-sky-400 font-semibold">In: {t.entry_time?.includes('IST') ? t.entry_time : `${t.entry_time} IST`}</span>
                               <span>•</span>
-                              <span className="text-amber-400 font-semibold">Exit: {t.exit_time?.includes('IST') ? t.exit_time : `${t.exit_time} IST`}</span>
+                              <span className="text-amber-400 font-semibold">Out: {t.exit_time?.includes('IST') ? t.exit_time : `${t.exit_time} IST`}</span>
                               <span>•</span>
-                              <span>₹{t.entry_price?.toFixed(2)} → ₹{t.exit_price?.toFixed(2)}</span>
+                              <span>Buy: <strong className="text-slate-200">₹{(t.direction === 'BUY' ? t.entry_price : t.exit_price)?.toFixed(2)}</strong> • Sell: <strong className="text-slate-200">₹{(t.direction === 'BUY' ? t.exit_price : t.entry_price)?.toFixed(2)}</strong></span>
                             </div>
                           </div>
 

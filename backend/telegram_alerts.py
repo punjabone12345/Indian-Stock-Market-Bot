@@ -38,11 +38,12 @@ class TelegramService:
 
     def notify_order_entry(self, pos: dict):
         dir_icon = "🟢 BUY" if pos['direction'] == 'BUY' else "🔴 SELL"
+        price_label = "Buy Price" if pos['direction'] == 'BUY' else "Sell Price"
         text = (
             f"⚡ *NEW TRADE EXECUTED ({pos.get('mode', 'PAPER')})*\n\n"
             f"• *Symbol:* `{pos['symbol']}`\n"
             f"• *Action:* *{dir_icon}*\n"
-            f"• *Entry Price:* `₹{pos['entry_price']:,.2f}`\n"
+            f"• *{price_label}:* `₹{pos['entry_price']:,.2f}`\n"
             f"• *Stop Loss:* `₹{pos['stop_loss']:,.2f}` ({pos.get('sl_pct', 0.34):.2f}%)\n"
             f"• *Take Profit (1:3):* `₹{pos['take_profit']:,.2f}`\n"
             f"• *Quantity:* `{pos['quantity']} shares`\n"
@@ -57,11 +58,12 @@ class TelegramService:
         r = trade['realized_r']
         icon = "🎯 TARGET REACHED" if "TARGET" in trade['exit_reason'] else ("🛑 STOP LOSS HIT" if "STOP" in trade['exit_reason'] else "⚡ POSITION CLOSED")
         pnl_str = f"+₹{pnl:,.2f} (+{r:+.2f} R)" if pnl >= 0 else f"-₹{abs(pnl):,.2f} ({r:+.2f} R)"
+        price_label = "Sell Price" if trade.get('direction') == 'BUY' else "Buy Price"
         
         text = (
             f"*{icon}*\n\n"
             f"• *Symbol:* `{trade['symbol']}` ({trade['direction']})\n"
-            f"• *Exit Price:* `₹{trade['exit_price']:,.2f}`\n"
+            f"• *{price_label}:* `₹{trade['exit_price']:,.2f}`\n"
             f"• *Net Result:* *{pnl_str}*\n"
             f"• *Reason:* `{trade['exit_reason']}`\n"
             f"• *Statutory Charges:* `₹{trade.get('charges', 0):,.2f}`\n"
@@ -73,10 +75,11 @@ class TelegramService:
     def notify_manual_close(self, trade: dict):
         pnl = trade['realized_pnl']
         pnl_str = f"+₹{pnl:,.2f}" if pnl >= 0 else f"-₹{abs(pnl):,.2f}"
+        price_label = "Sell Price" if trade.get('direction') == 'BUY' else "Buy Price"
         text = (
             f"✋ *MANUAL EXIT CONFIRMED*\n\n"
             f"• *Symbol:* `{trade['symbol']}`\n"
-            f"• *Exit Price:* `₹{trade['exit_price']:,.2f}`\n"
+            f"• *{price_label}:* `₹{trade['exit_price']:,.2f}`\n"
             f"• *P&L:* *{pnl_str}*\n"
             f"• *Margin Released:* `₹{trade['margin_used']:,.2f}`\n"
             f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`"

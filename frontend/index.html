@@ -728,11 +728,11 @@ Trigger Condition:
     <!-- Execution Prices (4 Grid) -->
     <div class="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
       <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase font-bold">ENTRY PRICE</span>
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">BUY PRICE</span>
         <span class="text-white font-black text-xs" id="tdModalEntry">₹1,344.00</span>
       </div>
       <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
-        <span class="text-slate-400 block text-[8px] uppercase font-bold">EXIT PRICE</span>
+        <span class="text-slate-400 block text-[8px] uppercase font-bold">SELL PRICE</span>
         <span class="text-white font-black text-xs" id="tdModalExit">₹1,332.00</span>
       </div>
       <div class="bg-surfaceLow p-2.5 rounded-xl border border-white/5">
@@ -1726,7 +1726,7 @@ Trigger Condition:
             <!-- Price & Live P&L -->
             <div class="flex items-baseline justify-between font-mono">
               <div>
-                <span class="text-[9px] text-slate-400 block font-sans">ENTRY / CURRENT</span>
+                <span class="text-[9px] text-slate-400 block font-sans">${pos.side === 'BUY' ? 'BUY PRICE / CURRENT' : 'SELL PRICE / CURRENT'}</span>
                 <span class="text-xs text-slate-300 font-semibold">₹${pos.entry.toFixed(2)} → <span class="text-white font-bold">₹${pos.currentLtp.toFixed(2)}</span></span>
               </div>
               <div class="text-right">
@@ -1826,7 +1826,8 @@ Trigger Condition:
       recalculateMarginsAndPnl();
 
       // Trigger Telegram Alert
-      const teleMsg = `⚡ *NEW TRADE EXECUTED (PAPER)*\n\n• *Symbol:* \`${stock.symbol}\`\n• *Action:* *${side === 'BUY' ? '🟢 BUY' : '🔴 SELL'}*\n• *Entry Price:* \`₹${entry.toFixed(2)}\`\n• *Stop Loss:* \`₹${sl.toFixed(2)}\`\n• *Target (1:3 RRR):* \`₹${tp.toFixed(2)}\`\n• *Quantity:* \`${qty} shares\`\n• *Margin Deducted:* \`₹${marginLocked.toLocaleString('en-IN')}\` (5x MIS)\n• *Available Margin Left:* \`₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``;
+      const priceLabel = side === 'BUY' ? 'Buy Price' : 'Sell Price';
+      const teleMsg = `⚡ *NEW TRADE EXECUTED (PAPER)*\n\n• *Symbol:* \`${stock.symbol}\`\n• *Action:* *${side === 'BUY' ? '🟢 BUY' : '🔴 SELL'}*\n• *${priceLabel}:* \`₹${entry.toFixed(2)}\`\n• *Stop Loss:* \`₹${sl.toFixed(2)}\`\n• *Target (1:3 RRR):* \`₹${tp.toFixed(2)}\`\n• *Quantity:* \`${qty} shares\`\n• *Margin Deducted:* \`₹${marginLocked.toLocaleString('en-IN')}\` (5x MIS)\n• *Available Margin Left:* \`₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``;
       dispatchTelegramAlert(teleMsg);
 
       showToast(`⚡ Order Executed: ${stock.symbol} ${side} (${qty} Qty). Margin ₹${marginLocked.toLocaleString('en-IN')} locked.`);
@@ -1930,7 +1931,8 @@ Trigger Condition:
         renderPositions();
         renderLedger();
 
-        dispatchTelegramAlert(`🎯 *POSITION CLOSED AT MARKET*\n\n• *Symbol:* \`${pos.symbol}\` (${pos.side})\n• *Exit Price:* \`₹${pos.currentLtp.toFixed(2)}\`\n• *Net Result:* *${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)} (${rMultiple}R)*\n• *Margin Released:* \`₹${pos.marginLocked.toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``);
+        const closePriceLabel = pos.side === 'BUY' ? 'Sell Price' : 'Buy Price';
+        dispatchTelegramAlert(`🎯 *POSITION CLOSED AT MARKET*\n\n• *Symbol:* \`${pos.symbol}\` (${pos.side})\n• *${closePriceLabel}:* \`₹${pos.currentLtp.toFixed(2)}\`\n• *Net Result:* *${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)} (${rMultiple}R)*\n• *Margin Released:* \`₹${pos.marginLocked.toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``);
 
         showToast(`✅ Trade Closed: ${pos.symbol} for ${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`);
       }
@@ -2110,6 +2112,8 @@ Trigger Condition:
             }
 
             const isWin = netPnl >= 0;
+            const buyP = t.side === 'BUY' ? Number(t.entry) : Number(t.exit);
+            const sellP = t.side === 'BUY' ? Number(t.exit) : Number(t.entry);
             tradesHtml += `
               <div onclick="openTradeDetail(${dayIdx}, ${tradeIdx})" class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-[10px] cursor-pointer hover:border-cyanAccent/50 active:scale-[0.99] transition-all group shadow-sm">
                 <div class="flex items-center gap-2.5">
@@ -2126,7 +2130,7 @@ Trigger Condition:
                       <span class="text-slate-600">•</span>
                       <span class="text-amberTactical font-semibold">Out: ${formatToIST(t.exitTime || t.exit_time || t.time)}</span>
                       <span class="text-slate-600">•</span>
-                      <span class="text-slate-400">₹${Number(t.entry).toFixed(2)} → ₹${Number(t.exit).toFixed(2)}</span>
+                      <span class="text-slate-400">Buy: <span class="text-slate-200 font-bold">₹${buyP.toFixed(2)}</span> • Sell: <span class="text-slate-200 font-bold">₹${sellP.toFixed(2)}</span></span>
                     </div>
                   </div>
                 </div>
@@ -2227,8 +2231,11 @@ Trigger Condition:
       safeSet('tdModalExitTime', exitTimeFormatted);
       safeSet('tdModalTime', `${day.date} • Entry: ${entryTimeFormatted} | Exit: ${exitTimeFormatted}`);
       safeSet('tdModalReason', t.exitReason || "1:3 Pullback Target Executed (EMA9 / VWAP rule)");
-      safeSet('tdModalEntry', `₹${Number(t.entry).toFixed(2)}`);
-      safeSet('tdModalExit', `₹${Number(t.exit).toFixed(2)}`);
+      const isBuyTrade = t.side === 'BUY';
+      const buyPrice = isBuyTrade ? Number(t.entry) : Number(t.exit);
+      const sellPrice = isBuyTrade ? Number(t.exit) : Number(t.entry);
+      safeSet('tdModalEntry', `₹${buyPrice.toFixed(2)}`);
+      safeSet('tdModalExit', `₹${sellPrice.toFixed(2)}`);
       safeSet('tdModalSL', `₹${Number(t.sl || (t.side === 'BUY' ? t.entry * 0.995 : t.entry * 1.005)).toFixed(2)}`);
       safeSet('tdModalTP', `₹${Number(t.tp || (t.side === 'BUY' ? t.entry * 1.015 : t.entry * 0.985)).toFixed(2)}`);
       safeSet('tdModalQty', `${t.qty} Shares`);
@@ -2281,7 +2288,7 @@ Trigger Condition:
         showToast("ℹ️ No trades to export yet.");
         return;
       }
-      let csvContent = "data:text/csv;charset=utf-8,TradeID,Date,Symbol,Side,Quantity,EntryPrice,ExitPrice,MarginUsed,StatutoryCharges,GrossPnL,NetPnL,RMultiple,ExitReason\n";
+      let csvContent = "data:text/csv;charset=utf-8,TradeID,Date,Symbol,Side,Quantity,BuyPrice,SellPrice,MarginUsed,StatutoryCharges,GrossPnL,NetPnL,RMultiple,ExitReason\n";
       userState.ledger.forEach(day => {
         day.trades.forEach(t => {
           const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty, t.side || t.direction);
@@ -2289,7 +2296,9 @@ Trigger Condition:
           const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
           const net = parseFloat((gross - charges).toFixed(2));
           const r = `${net >= 0 ? '+' : ''}${(net / (userState.riskPerTrade || 200)).toFixed(2)}R`;
-          csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${t.entry},${t.exit},${chg.margin},${charges},${gross},${net},"${r}","${t.exitReason}"\n`;
+          const buyP = t.side === 'BUY' ? t.entry : t.exit;
+          const sellP = t.side === 'BUY' ? t.exit : t.entry;
+          csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${buyP},${sellP},${chg.margin},${charges},${gross},${net},"${r}","${t.exitReason}"\n`;
         });
       });
       const encodedUri = encodeURI(csvContent);
