@@ -133,8 +133,8 @@ export default function App() {
 
   // Core App State
   const [portfolio, setPortfolio] = useState({
-    capital: 100000,
-    available_margin: 100000,
+    capital: 125000,
+    available_margin: 125000,
     used_margin: 0,
     total_pnl: 0,
     total_r: 0,

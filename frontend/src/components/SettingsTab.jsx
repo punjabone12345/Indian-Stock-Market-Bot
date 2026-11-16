@@ -17,8 +17,8 @@ import {
 
 export default function SettingsTab({ settings, onSaveSettings, onResetDangerZone, onTestTelegram, onTestDhan }) {
   const [formData, setFormData] = useState({
-    capital: settings?.capital || 100000,
-    risk_per_trade: settings?.risk_per_trade || 200,
+    capital: settings?.capital || 125000,
+    risk_per_trade: settings?.risk_per_trade || 250,
     trading_mode: settings?.trading_mode || 'PAPER',
     dhan_client_id: settings?.dhan_client_id || '',
     dhan_access_token: settings?.dhan_access_token || '',

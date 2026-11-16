@@ -339,16 +339,16 @@ def test_dhan_connection(payload: dict = Body(...)):
 
 @app.post("/api/settings/reset-danger-zone")
 def reset_danger_zone():
-    """Danger Zone: Factory reset - clears all trades, open positions, resets capital to ₹1,00,000"""
+    """Danger Zone: Factory reset - clears all trades, open positions, resets capital to ₹1,25,000"""
     db.reset_database()
     portfolio.refresh_from_db()
     telegram_service.send_message(
         "⚠️ *FACTORY RESET EXECUTED*\n\n"
         "• All positions and trade history cleared.\n"
-        "• Account capital reset to default: *₹1,00,000*.\n"
+        "• Account capital reset to default: *₹1,25,000*.\n"
         "• Bot state initialized to 0 trades."
     )
-    return {'status': 'success', 'message': 'Factory reset complete. Account restored to default ₹1,00,000.'}
+    return {'status': 'success', 'message': 'Factory reset complete. Account restored to default ₹1,25,000.'}
 
 @app.post("/api/bot/toggle")
 def toggle_bot():

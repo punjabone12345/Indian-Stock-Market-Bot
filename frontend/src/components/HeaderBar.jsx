@@ -20,7 +20,7 @@ import {
 export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggleBot, onPanicSquareOff }) {
   const [showPanicModal, setShowPanicModal] = useState(false);
 
-  const capital = portfolio?.capital ?? 100000;
+  const capital = portfolio?.capital ?? 125000;
   const availMargin = portfolio?.available_margin ?? capital;
   const usedMargin = portfolio?.used_margin ?? 0;
   const totalPnl = portfolio?.total_pnl ?? 0;

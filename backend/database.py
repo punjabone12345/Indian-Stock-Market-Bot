@@ -44,8 +44,8 @@ class Database:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS settings (
                 id INTEGER PRIMARY KEY,
-                capital REAL DEFAULT 100000.0,
-                risk_per_trade REAL DEFAULT 200.0,
+                capital REAL DEFAULT 125000.0,
+                risk_per_trade REAL DEFAULT 250.0,
                 trading_mode TEXT DEFAULT 'PAPER',
                 dhan_client_id TEXT DEFAULT '',
                 dhan_access_token TEXT DEFAULT '',
@@ -105,10 +105,10 @@ class Database:
             now_str = now_ist_datetime_str()
             cur.execute("""
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 100000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, ?)
+                VALUES (1, 125000.0, 250.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, ?)
             """ if not self.is_postgres else """
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 100000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, %s)
+                VALUES (1, 125000.0, 250.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, %s)
             """, (now_str,))
 
         # One-time migration: Convert any UTC timestamps in positions table to IST
@@ -137,8 +137,8 @@ class Database:
             d['bot_active'] = bool(d.get('bot_active', 1))
             return d
         return {
-            'capital': 100000.0,
-            'risk_per_trade': 200.0,
+            'capital': 125000.0,
+            'risk_per_trade': 250.0,
             'trading_mode': 'PAPER',
             'dhan_client_id': '',
             'dhan_access_token': '',
@@ -281,7 +281,7 @@ class Database:
         conn.close()
 
     def reset_database(self):
-        """Danger Zone: Clears all positions & trade history, resets balance to default ₹1,00,000"""
+        """Danger Zone: Clears all positions & trade history, resets balance to default ₹1,25,000"""
         conn = self.get_connection()
         cur = conn.cursor()
         cur.execute("DELETE FROM positions")
@@ -289,14 +289,14 @@ class Database:
         now_str = now_ist_datetime_str()
         sql = """
             UPDATE settings SET
-                capital = 100000.0,
-                risk_per_trade = 200.0,
+                capital = 125000.0,
+                risk_per_trade = 250.0,
                 updated_at = ?
             WHERE id = 1
         """ if not self.is_postgres else """
             UPDATE settings SET
-                capital = 100000.0,
-                risk_per_trade = 200.0,
+                capital = 125000.0,
+                risk_per_trade = 250.0,
                 updated_at = %s
             WHERE id = 1
         """
