@@ -1,7 +1,7 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
-<title>Indian Stock Market Bot • Institutional Terminal</title>
+<title>Indian Stock Market Bot • Top 14 Champions VWAP Terminal</title>
 <!-- PWA Manifest & Android App Meta Tags -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080B11">
@@ -244,11 +244,15 @@
       <div class="flex flex-col min-w-0">
         <div class="flex items-center gap-1.5 min-w-0">
           <span class="font-extrabold text-xs sm:text-base tracking-tight text-white font-sans truncate">Indian Stock Market Bot</span>
+          <span class="px-1.5 py-0.5 rounded font-mono font-extrabold text-[7.5px] sm:text-[8px] bg-sky-500/20 text-sky-300 border border-sky-500/40 shrink-0 uppercase">TOP 14 VWAP</span>
+          <span id="govModeBadge" class="px-1.5 py-0.5 rounded font-mono font-black text-[7.5px] sm:text-[8px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
+            GOV: NORMAL (1.0R)
+          </span>
           <span id="marketStatusBadge" class="live-market-badge flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[7.5px] sm:text-[8px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0">
             🌙 NSE CLOSED
           </span>
         </div>
-        <span class="text-[8px] sm:text-[8.5px] font-mono text-slate-400 hidden sm:block truncate">QUANT HIGH-PROBABILITY INTRADAY TERMINAL</span>
+        <span class="text-[8px] sm:text-[8.5px] font-mono text-slate-400 hidden sm:block truncate">TOP 14 CHAMPIONS • VWAP INSTITUTIONAL PULLBACK • 3:00 PM SQUAREOFF</span>
       </div>
     </div>
 
@@ -351,8 +355,8 @@
 <!-- Watchlist Header -->
 <div class="flex items-center justify-between pt-0.5 px-1">
 <div class="flex items-center gap-1.5">
-<span class="text-xs font-black text-slate-200 font-mono tracking-wide">Indian Stock Market Bot</span>
-<span class="text-[8.5px] px-2 py-0.5 rounded-full bg-cyanAccent/10 text-cyanAccent font-mono border border-cyanAccent/20 font-semibold">5m MIS</span>
+<span class="text-xs font-black text-slate-200 font-mono tracking-wide">Top 14 Champion Marketwatch</span>
+<span class="text-[8.5px] px-2 py-0.5 rounded-full bg-cyanAccent/10 text-cyanAccent font-mono border border-cyanAccent/20 font-semibold">14 Champions • 5m MIS</span>
 </div>
 <span class="text-[9.5px] font-mono text-slate-400">NSE Intraday</span>
 </div>
@@ -383,7 +387,7 @@
             </div>
             <h4 class="text-xs font-bold text-white font-mono mb-1">NO ACTIVE POSITIONS</h4>
             <p class="text-[10px] text-slate-400 font-mono max-w-[240px] leading-relaxed">
-              Scanning 5m Crown setups. Auto 1:3 bracket executes on trigger.
+              Scanning 5m VWAP pullbacks across Top 14 Champions. Auto 1:2 bracket with 0.50% SL floor.
             </p>
           </div>
         </div>
@@ -409,7 +413,7 @@
 </div>
 <div class="glass-panel p-3.5 rounded-2xl relative overflow-hidden">
 <div class="absolute -right-4 -top-4 w-16 h-16 bg-cyanAccent/10 rounded-full blur-xl"></div>
-<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">WIN RATE (1:3 RRR)</span>
+<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">WIN RATE (1:2 RRR)</span>
 <div class="text-base font-black text-cyanAccent" id="analyticsWinRateDisplay">0.0%</div>
 <span class="text-[10px] text-slate-400 mt-0.5 block font-medium" id="analyticsWinLossSub">0 Wins / 0 Losses</span>
 </div>
@@ -534,6 +538,10 @@ Fast 1-tap Android install with offline caching and zero lag.
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" aria-hidden="true" class="lucide lucide-bell w-3.5 h-3.5 text-amberTactical"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
 <span>SEND TEST PUSH NOTIFICATION</span>
 </button>
+<button class="w-full py-2.5 rounded-xl bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30 font-bold hover:bg-cyanAccent/25 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 mt-2" onclick="testMorningReadinessAlert()">
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+<span>TEST 09:00 AM MARKET READINESS ALERT</span>
+</button>
 </div>
 </div>
 <!-- Danger Zone -->
@@ -612,11 +620,19 @@ FACTORY RESET ENGINE
 <!-- Quick Symbol Selector Chips -->
 <div class="flex items-center gap-1.5 px-3 py-2 overflow-x-auto bg-[#07090F] border-b border-white/5 text-[10px] font-mono no-scrollbar">
 <button class="stock-chip active px-3 py-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold shadow" onclick="selectChartStock('RELIANCE')">RELIANCE</button>
-<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('ITC')">ITC</button>
-<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('MARUTI')">MARUTI</button>
-<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('TATASTEEL')">TATASTEEL</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('INDUSINDBK')">INDUSINDBK</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('LT')">LT</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('ADANIENT')">ADANIENT</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('TATAMOTORS')">TATAMOTORS</button>
 <button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('SUNPHARMA')">SUNPHARMA</button>
-<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('INFY')">INFY</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('WIPRO')">WIPRO</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('JSWSTEEL')">JSWSTEEL</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('TATASTEEL')">TATASTEEL</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('BAJFINANCE')">BAJFINANCE</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('SBIN')">SBIN</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('ONGC')">ONGC</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('TCS')">TCS</button>
+<button class="stock-chip px-3 py-1 rounded-full bg-surfaceCard text-slate-400 hover:text-white border border-white/5" onclick="selectChartStock('MARUTI')">MARUTI</button>
 </div>
 <!-- Canvas Area for Pure HTML5 Canvas TradingView-like Candlesticks -->
 <div class="flex-1 relative bg-[#07090F] flex flex-col p-3">
@@ -697,8 +713,8 @@ Trigger Condition:
 
     <!-- Strategy Signal -->
     <div class="px-3 py-2 bg-black/40 rounded-xl border border-white/10">
-      <span class="text-[8.5px] font-bold text-amberTactical uppercase font-mono block mb-0.5">STRATEGY TRIGGER (1:3 ASYMMETRIC RRR)</span>
-      <p class="text-[11px] font-mono text-slate-200 font-medium" id="tdModalReason">Target 1:3 Hit (EMA9 breakdown pullback)</p>
+      <span class="text-[8.5px] font-bold text-amberTactical uppercase font-mono block mb-0.5">STRATEGY TRIGGER (1:2 ASYMMETRIC RRR)</span>
+      <p class="text-[11px] font-mono text-slate-200 font-medium" id="tdModalReason">Target 1:2 Hit (EMA9 breakdown pullback)</p>
     </div>
 
     <!-- Execution Timestamps in IST -->
@@ -844,53 +860,21 @@ Trigger Condition:
     // ==============================================
     // TRADINGVIEW-STYLE INSTRUMENT LOGOS
     // ==============================================
-    const STOCK_LOGOS = {
-      RELIANCE: `
-        <div class="w-8 h-8 rounded-full bg-[#002D62] border border-blue-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-          <svg class="w-4.5 h-4.5 text-white" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="16" fill="#002D62"/>
-            <path d="M10 8h7a5 5 0 015 5c0 2.2-1.4 4.1-3.4 4.7L23 24h-4.5l-3.8-5.8H13.5V24H10V8zm3.5 7.2h3.2a2 2 0 000-4H13.5v4z" fill="#38BDF8"/>
-            <path d="M22 8l2 2-2 2-2-2 2-2z" fill="#F59E0B"/>
-          </svg>
-        </div>
-      `,
-      ITC: `
-        <div class="w-8 h-8 rounded-full bg-[#001D4A] border border-amber-400/35 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-          <span class="font-serif font-black text-amber-400 text-[11px] tracking-tight">ITC</span>
-        </div>
-      `,
-      MARUTI: `
-        <div class="w-8 h-8 rounded-full bg-[#002B7F] border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-          <svg class="w-4.5 h-4.5" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="16" fill="#002B7F"/>
-            <path d="M23 10L10 15.5l5.5 2.2-6.5 5.5L22 17.5l-5.5-2.2L23 10z" fill="#EF4444"/>
-            <path d="M16 6l-8 7.5h16L16 26" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      `,
-      TATASTEEL: `
-        <div class="w-8 h-8 rounded-full bg-[#003B73] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-          <svg class="w-4.5 h-4.5" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="16" fill="#003B73"/>
-            <path d="M6 10h20M16 10v14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
-            <path d="M10 14c0-3 2.5-4.5 6-4.5s6 1.5 6 4.5" stroke="#38BDF8" stroke-width="1.8" fill="none"/>
-          </svg>
-        </div>
-      `,
-      SUNPHARMA: `
-        <div class="w-8 h-8 rounded-full bg-[#C2410C] border border-amber-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-          <svg class="w-4.5 h-4.5 text-amber-200" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="16" fill="#C2410C"/>
-            <circle cx="16" cy="16" r="5" fill="#FEF3C7"/>
-            <path d="M16 3v4M16 25v4M3 16h4M25 16h4M6.8 6.8l2.8 2.8M22.4 22.4l2.8 2.8M6.8 25.2l2.8-2.8M22.4 9.6l2.8-2.8" stroke="#FEF3C7" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-      `,
-      INFY: `
-        <div class="w-8 h-8 rounded-full bg-[#0284C7] border border-cyan-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-          <span class="font-sans font-black text-white text-[11px] tracking-tight lowercase">infy</span>
-        </div>
-      `
+        const STOCK_LOGOS = {
+      RELIANCE: `<div class="w-8 h-8 rounded-full bg-[#002D62] border border-blue-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[10px]">RIL</div>`,
+      INDUSINDBK: `<div class="w-8 h-8 rounded-full bg-[#800000] border border-red-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">IIB</div>`,
+      LT: `<div class="w-8 h-8 rounded-full bg-[#F59E0B] border border-amber-300/40 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-black text-[11px]">L&T</div>`,
+      ADANIENT: `<div class="w-8 h-8 rounded-full bg-[#1E293B] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[9px]">ADANI</div>`,
+      TATAMOTORS: `<div class="w-8 h-8 rounded-full bg-[#003B73] border border-blue-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TATA</div>`,
+      SUNPHARMA: `<div class="w-8 h-8 rounded-full bg-[#C2410C] border border-amber-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-amber-200 text-[9px]">SUN</div>`,
+      WIPRO: `<div class="w-8 h-8 rounded-full bg-[#047857] border border-emerald-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-emerald-300 text-[9px]">WIPRO</div>`,
+      JSWSTEEL: `<div class="w-8 h-8 rounded-full bg-[#B91C1C] border border-red-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">JSW</div>`,
+      TATASTEEL: `<div class="w-8 h-8 rounded-full bg-[#003B73] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TISCO</div>`,
+      BAJFINANCE: `<div class="w-8 h-8 rounded-full bg-[#0369A1] border border-cyan-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">BAJAJ</div>`,
+      SBIN: `<div class="w-8 h-8 rounded-full bg-[#0284C7] border border-sky-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[10px]">SBI</div>`,
+      ONGC: `<div class="w-8 h-8 rounded-full bg-[#991B1B] border border-amber-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-amber-300 text-[9px]">ONGC</div>`,
+      TCS: `<div class="w-8 h-8 rounded-full bg-[#0F172A] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[10px]">TCS</div>`,
+      MARUTI: `<div class="w-8 h-8 rounded-full bg-[#002B7F] border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">MSIL</div>`
     };
 
     // ==============================================
@@ -951,102 +935,230 @@ Trigger Condition:
       };
     }
 
-    const CROWN_6_DATA = [
+        const CROWN_6_DATA = [
       {
         symbol: "RELIANCE",
-        name: "Reliance Industries",
+        name: "Reliance Industries Ltd",
         sector: "Energy • Heavyweight",
-        ltp: 1339.70,
-        change: 0.00,
-        pChange: 0.00,
+        ltp: 1344.80,
+        change: 5.10,
+        pChange: 0.38,
+        probScore: 84,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Bounced off VWAP support. Monitoring for bullish pullback continuation above EMA9.",
+        ema9: 1341.20,
+        vwap: 1339.80,
+        atr14: 14.80,
+        margin5x: "₹268.96 / sh"
+      },
+      {
+        symbol: "INDUSINDBK",
+        name: "IndusInd Bank Ltd",
+        sector: "Banking & Finance",
+        ltp: 914.55,
+        change: 0.15,
+        pChange: 0.02,
         probScore: 78,
         probCategory: "Institutional Pullback",
         probColor: "emerald",
-        triggerNote: "Strong bullish trend above VWAP (₹1,338.20). Waiting for price to dip towards EMA9 near ₹1,339.04.",
-        ema9: 1339.04,
-        vwap: 1338.20,
-        atr14: 18.20,
-        margin5x: "₹267.94 / sh"
+        triggerNote: "Consolidating above EMA9 (₹912.40). Awaiting expansion volume bar.",
+        ema9: 912.40,
+        vwap: 911.80,
+        atr14: 11.20,
+        margin5x: "₹182.91 / sh"
       },
       {
-        symbol: "ITC",
-        name: "ITC Limited",
-        sector: "FMCG • Intraday Lead",
-        ltp: 285.00,
-        change: 0.95,
-        pChange: 0.33,
+        symbol: "LT",
+        name: "Larsen & Toubro Ltd",
+        sector: "Infrastructure • Heavyweight",
+        ltp: 4140.00,
+        change: -3.80,
+        pChange: -0.09,
         probScore: 82,
-        probCategory: "Breakout Pending",
+        probCategory: "Institutional Pullback",
         probColor: "emerald",
-        triggerNote: "Touching EMA9 support zone (₹284.52). Waiting for bullish green confirmation candle to close above ₹284.52.",
-        ema9: 284.52,
-        vwap: 283.67,
-        atr14: 4.80,
-        margin5x: "₹57.00 / sh"
+        triggerNote: "Testing EMA9 support zone (₹4,136.50). Watching for green candle confirmation.",
+        ema9: 4136.50,
+        vwap: 4132.00,
+        atr14: 38.50,
+        margin5x: "₹828.00 / sh"
       },
       {
-        symbol: "MARUTI",
-        name: "Maruti Suzuki",
-        sector: "Auto • High ATR Target",
-        ltp: 12854.00,
-        change: -170.00,
-        pChange: -1.31,
-        probScore: 72,
-        probCategory: "Bearish Pullback",
-        probColor: "emerald",
-        triggerNote: "Bearish momentum below VWAP (₹12,904.85). Waiting for pullback rally towards EMA9 near ₹12,877.64.",
-        ema9: 12877.64,
-        vwap: 12904.85,
-        atr14: 155.00,
-        margin5x: "₹2,570.80 / sh"
+        symbol: "ADANIENT",
+        name: "Adani Enterprises Ltd",
+        sector: "Diversified Conglomerate",
+        ltp: 2659.00,
+        change: -29.00,
+        pChange: -1.08,
+        probScore: 75,
+        probCategory: "Bearish Momentum",
+        probColor: "rose",
+        triggerNote: "Below VWAP (₹2,674.00). Waiting for pullback rally toward EMA9.",
+        ema9: 2668.00,
+        vwap: 2674.00,
+        atr14: 34.00,
+        margin5x: "₹531.80 / sh"
       },
       {
-        symbol: "TATASTEEL",
-        name: "Tata Steel Ltd",
-        sector: "Metals • High Volume",
-        ltp: 186.68,
-        change: -1.32,
-        pChange: -0.70,
-        probScore: 85,
-        probCategory: "Prime Short Setup",
+        symbol: "TATAMOTORS",
+        name: "Tata Motors Limited",
+        sector: "Automobiles",
+        ltp: 428.25,
+        change: -5.30,
+        pChange: -1.22,
+        probScore: 76,
+        probCategory: "Institutional Pullback",
         probColor: "emerald",
-        triggerNote: "Breakdown of morning support. EMA9 resistance at ₹187.10 confirmed by 5m institutional volume.",
-        ema9: 187.10,
-        vwap: 187.40,
-        atr14: 3.10,
-        margin5x: "₹37.34 / sh"
+        triggerNote: "Testing EMA9 support (₹427.10). Inversion FVG retest confirmed.",
+        ema9: 427.10,
+        vwap: 429.40,
+        atr14: 6.80,
+        margin5x: "₹85.65 / sh"
       },
       {
         symbol: "SUNPHARMA",
         name: "Sun Pharma Ind",
-        sector: "Pharma • Defensive Flow",
-        ltp: 1880.00,
-        change: -5.00,
-        pChange: -0.27,
-        probScore: 68,
-        probCategory: "Range Bound",
-        probColor: "slate",
-        triggerNote: "Respecting daily pivot. Watching 5m pullback to ₹1,875 for high probability institutional re-entry.",
-        ema9: 1878.00,
-        vwap: 1882.50,
-        atr14: 24.50,
-        margin5x: "₹376.00 / sh"
+        sector: "Pharma • Healthcare",
+        ltp: 1867.50,
+        change: -12.50,
+        pChange: -0.66,
+        probScore: 79,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Pullback into EMA9 support zone. Monitoring for bounce trigger.",
+        ema9: 1871.20,
+        vwap: 1874.50,
+        atr14: 21.40,
+        margin5x: "₹373.50 / sh"
       },
       {
-        symbol: "INFY",
-        name: "Infosys Ltd",
-        sector: "IT Tech • US Q3 Sync",
-        ltp: 1141.50,
-        change: -9.70,
-        pChange: -0.84,
-        probScore: 75,
-        probCategory: "Mean Reversion",
+        symbol: "WIPRO",
+        name: "Wipro Limited",
+        sector: "IT & Software",
+        ltp: 193.54,
+        change: -1.06,
+        pChange: -0.54,
+        probScore: 72,
+        probCategory: "Consolidating",
+        probColor: "slate",
+        triggerNote: "Consolidating between EMA9 and VWAP. Awaiting directional breakout.",
+        ema9: 194.10,
+        vwap: 194.50,
+        atr14: 2.40,
+        margin5x: "₹38.71 / sh"
+      },
+      {
+        symbol: "JSWSTEEL",
+        name: "JSW Steel Ltd",
+        sector: "Metals & Mining",
+        ltp: 1334.60,
+        change: -13.40,
+        pChange: -0.99,
+        probScore: 77,
+        probCategory: "Institutional Pullback",
         probColor: "emerald",
-        triggerNote: "Bearish EMA9 cross. Targeting 1:3 RRR with strict ₹200 risk per trade position sizing.",
-        ema9: 1144.20,
-        vwap: 1146.00,
-        atr14: 16.50,
-        margin5x: "₹228.30 / sh"
+        triggerNote: "Retesting VWAP anchor line (₹1,338.00). Watching for rejection wick.",
+        ema9: 1339.50,
+        vwap: 1338.00,
+        atr14: 16.20,
+        margin5x: "₹266.92 / sh"
+      },
+      {
+        symbol: "TATASTEEL",
+        name: "Tata Steel Ltd",
+        sector: "Metals & Mining",
+        ltp: 182.26,
+        change: -4.42,
+        pChange: -2.37,
+        probScore: 74,
+        probCategory: "Bearish Momentum",
+        probColor: "rose",
+        triggerNote: "Bearish momentum below VWAP (₹184.50). Waiting for pullback rally toward EMA9.",
+        ema9: 183.40,
+        vwap: 184.50,
+        atr14: 2.80,
+        margin5x: "₹36.45 / sh"
+      },
+      {
+        symbol: "BAJFINANCE",
+        name: "Bajaj Finance Ltd",
+        sector: "NBFC & Lending",
+        ltp: 1110.00,
+        change: -7.00,
+        pChange: -0.63,
+        probScore: 81,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Dip into EMA9 support zone. Waiting for bullish green candle confirmation.",
+        ema9: 1112.50,
+        vwap: 1114.00,
+        atr14: 15.00,
+        margin5x: "₹222.00 / sh"
+      },
+      {
+        symbol: "SBIN",
+        name: "State Bank of India",
+        sector: "PSU Banking",
+        ltp: 1090.50,
+        change: 10.50,
+        pChange: 0.97,
+        probScore: 86,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Strong bullish trend above VWAP (₹1,085.00). Retesting EMA9 support.",
+        ema9: 1088.00,
+        vwap: 1085.00,
+        atr14: 12.80,
+        margin5x: "₹218.10 / sh"
+      },
+      {
+        symbol: "ONGC",
+        name: "Oil & Natural Gas Corp",
+        sector: "Energy & Utilities",
+        ltp: 226.99,
+        change: 1.99,
+        pChange: 0.88,
+        probScore: 83,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Bounced off VWAP support. Monitoring for expansion break.",
+        ema9: 225.80,
+        vwap: 225.20,
+        atr14: 3.10,
+        margin5x: "₹45.40 / sh"
+      },
+      {
+        symbol: "TCS",
+        name: "Tata Consultancy Services",
+        sector: "IT Services",
+        ltp: 2405.00,
+        change: -2.50,
+        pChange: -0.10,
+        probScore: 80,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Bounced off EMA9 support (₹2,402.15). Waiting for expansion candle.",
+        ema9: 2402.15,
+        vwap: 2404.50,
+        atr14: 28.50,
+        margin5x: "₹481.00 / sh"
+      },
+      {
+        symbol: "MARUTI",
+        name: "Maruti Suzuki India",
+        sector: "Automobiles",
+        ltp: 12571.00,
+        change: -283.00,
+        pChange: -2.20,
+        probScore: 82,
+        probCategory: "Institutional Pullback",
+        probColor: "emerald",
+        triggerNote: "Testing EMA9 resistance zone (₹12,620.00). Monitoring for bearish rejection.",
+        ema9: 12620.00,
+        vwap: 12680.00,
+        atr14: 165.00,
+        margin5x: "₹2,514.20 / sh"
       }
     ];
 
@@ -1306,6 +1418,17 @@ Trigger Condition:
           }
         }
 
+        // 1.5 Update Governor Mode Badge
+        if (data.governor && data.governor.mode) {
+          const gBadge = document.getElementById('govModeBadge');
+          if (gBadge) {
+            const mode = data.governor.mode;
+            const mult = data.governor.multiplier || 1.0;
+            gBadge.innerText = `GOV: ${mode} (${mult}R)`;
+            gBadge.className = `px-1.5 py-0.5 rounded font-mono font-black text-[7.5px] sm:text-[8px] border shrink-0 ${mode === 'DEFENSIVE' ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'}`;
+          }
+        }
+
         // 2. Update Instruments with Real NSE quotes
         if (data.instruments && Array.isArray(data.instruments)) {
           data.instruments.forEach(inst => {
@@ -1470,9 +1593,9 @@ Trigger Condition:
               const netPnl = t.realized_pnl !== undefined ? t.realized_pnl : parseFloat((grossPnl - charges).toFixed(2));
               const rMultiple = `${t.realized_r !== undefined ? (t.realized_r >= 0 ? '+' : '') + t.realized_r.toFixed(2) : (netPnl >= 0 ? '+' : '') + (netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
               
-              let friendlyExit = t.exit_reason || "1:3 Pullback Target Executed";
+              let friendlyExit = t.exit_reason || "1:2 Pullback Target Executed";
               if (t.exit_reason === 'STOP_LOSS_HIT') friendlyExit = 'Stop Loss Hit (Bracket Protection)';
-              else if (t.exit_reason === 'TARGET_REACHED') friendlyExit = '1:3 Target Reached';
+              else if (t.exit_reason === 'TARGET_REACHED') friendlyExit = '1:2 Target Reached';
               else if (t.exit_reason === 'EOD_AUTO_SQUAREOFF_3PM') friendlyExit = '03:00 PM IST Auto Square-off';
               else if (t.exit_reason === 'MANUAL_USER_CLOSE') friendlyExit = 'Manual Market Close';
 
@@ -1677,7 +1800,7 @@ Trigger Condition:
             </div>
             <h4 class="text-sm font-bold text-white font-mono mb-1">NO ACTIVE POSITIONS</h4>
             <p class="text-xs text-slate-400 font-mono max-w-[260px] leading-relaxed mb-4">
-              Scanning 5m intraday setups. 1:3 bracket execution automatically activates on trigger.
+              Scanning 5m intraday setups. 1:2 bracket execution automatically activates on trigger.
             </p>
             <button onclick="demoSimulateTrade()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-mono font-bold text-xs active:scale-95 transition-all shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
               <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
@@ -1741,7 +1864,7 @@ Trigger Condition:
             <div class="space-y-1">
               <div class="flex justify-between text-[9px] font-mono text-slate-400">
                 <span class="text-roseBear font-semibold">SL: ₹${pos.sl.toFixed(2)}</span>
-                <span class="text-slate-400">1:3 RRR Bracket</span>
+                <span class="text-slate-400">1:2 RRR Bracket</span>
                 <span class="text-emeraldBull font-semibold">TP: ₹${pos.tp.toFixed(2)}</span>
               </div>
               <div class="w-full h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 relative">
@@ -1827,7 +1950,7 @@ Trigger Condition:
 
       // Trigger Telegram Alert
       const priceLabel = side === 'BUY' ? 'Buy Price' : 'Sell Price';
-      const teleMsg = `⚡ *NEW TRADE EXECUTED (PAPER)*\n\n• *Symbol:* \`${stock.symbol}\`\n• *Action:* *${side === 'BUY' ? '🟢 BUY' : '🔴 SELL'}*\n• *${priceLabel}:* \`₹${entry.toFixed(2)}\`\n• *Stop Loss:* \`₹${sl.toFixed(2)}\`\n• *Target (1:3 RRR):* \`₹${tp.toFixed(2)}\`\n• *Quantity:* \`${qty} shares\`\n• *Margin Deducted:* \`₹${marginLocked.toLocaleString('en-IN')}\` (5x MIS)\n• *Available Margin Left:* \`₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``;
+      const teleMsg = `⚡ *NEW TRADE EXECUTED (PAPER)*\n\n• *Symbol:* \`${stock.symbol}\`\n• *Action:* *${side === 'BUY' ? '🟢 BUY' : '🔴 SELL'}*\n• *${priceLabel}:* \`₹${entry.toFixed(2)}\`\n• *Stop Loss:* \`₹${sl.toFixed(2)}\`\n• *Target (1:2 RRR):* \`₹${tp.toFixed(2)}\`\n• *Quantity:* \`${qty} shares\`\n• *Margin Deducted:* \`₹${marginLocked.toLocaleString('en-IN')}\` (5x MIS)\n• *Available Margin Left:* \`₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``;
       dispatchTelegramAlert(teleMsg);
 
       showToast(`⚡ Order Executed: ${stock.symbol} ${side} (${qty} Qty). Margin ₹${marginLocked.toLocaleString('en-IN')} locked.`);
@@ -2230,7 +2353,7 @@ Trigger Condition:
       safeSet('tdModalEntryTime', entryTimeFormatted);
       safeSet('tdModalExitTime', exitTimeFormatted);
       safeSet('tdModalTime', `${day.date} • Entry: ${entryTimeFormatted} | Exit: ${exitTimeFormatted}`);
-      safeSet('tdModalReason', t.exitReason || "1:3 Pullback Target Executed (EMA9 / VWAP rule)");
+      safeSet('tdModalReason', t.exitReason || "1:2 Pullback Target Executed (EMA9 / VWAP rule)");
       const isBuyTrade = t.side === 'BUY';
       const buyPrice = isBuyTrade ? Number(t.entry) : Number(t.exit);
       const sellPrice = isBuyTrade ? Number(t.exit) : Number(t.entry);
@@ -2384,6 +2507,20 @@ Trigger Condition:
         btn.innerHTML = '<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emeraldBull"></i> <span class="text-emeraldBull">DHAN GATEWAY READY</span>';
         lucide.createIcons();
         showToast("✅ DhanHQ Gateway Configured");
+      }
+    }
+
+        async function testMorningReadinessAlert() {
+      showToast("🔔 Sending 09:00 AM Market Readiness alert...");
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/bot/send-morning-alert`, { method: 'POST' });
+        if (res.ok) {
+          showToast("✅ 09:00 AM Alert delivered to Telegram!");
+        } else {
+          showToast("⚠️ Failed to deliver morning alert.");
+        }
+      } catch (e) {
+        showToast("⚠️ Network error sending morning alert.");
       }
     }
 
