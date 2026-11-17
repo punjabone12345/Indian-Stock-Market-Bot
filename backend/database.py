@@ -51,7 +51,7 @@ class Database:
                 dhan_access_token TEXT DEFAULT '',
                 telegram_token TEXT DEFAULT '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc',
                 telegram_chat_id TEXT DEFAULT '5582938659',
-                max_open_positions INTEGER DEFAULT 6,
+                max_open_positions INTEGER DEFAULT 14,
                 target_rr REAL DEFAULT 2.0,
                 bot_active INTEGER DEFAULT 1,
                 updated_at TEXT
@@ -105,10 +105,10 @@ class Database:
             now_str = now_ist_datetime_str()
             cur.execute("""
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 2.0, 1, ?)
+                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 14, 2.0, 1, ?)
             """ if not self.is_postgres else """
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 2.0, 1, %s)
+                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 14, 2.0, 1, %s)
             """, (now_str,))
 
         # One-time migration: Convert any UTC timestamps in positions table to IST
@@ -120,6 +120,12 @@ class Database:
                 if ist_t and ist_t != row_dict.get('entry_time'):
                     cur.execute("UPDATE positions SET entry_time = ? WHERE id = ?" if not self.is_postgres else "UPDATE positions SET entry_time = %s WHERE id = %s", (ist_t, row_dict['id']))
         except Exception as e:
+            pass
+
+        # Ensure active strategy parameters: target_rr = 2.0, max_open_positions = 14
+        try:
+            cur.execute("UPDATE settings SET target_rr = 2.0, max_open_positions = 14 WHERE id = 1 AND (target_rr != 2.0 OR max_open_positions != 14)" if not self.is_postgres else "UPDATE settings SET target_rr = 2.0, max_open_positions = 14 WHERE id = 1 AND (target_rr != 2.0 OR max_open_positions != 14)")
+        except Exception:
             pass
 
         conn.commit()
@@ -192,7 +198,7 @@ class Database:
             'dhan_access_token': '',
             'telegram_token': '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc',
             'telegram_chat_id': '5582938659',
-            'max_open_positions': 6,
+            'max_open_positions': 14,
             'target_rr': 2.0,
             'bot_active': True
         }

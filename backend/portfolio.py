@@ -306,6 +306,11 @@ class PortfolioManager:
             qty = pos['quantity']
             direction = pos['direction']
             sl = pos['stop_loss']
+            # Dynamically ensure take_profit aligns with active target_rr (1:2 RRR)
+            sl_dist = abs(entry_p - sl)
+            expected_tp = round(entry_p + (sl_dist * self.target_rr), 2) if direction == 'BUY' else round(entry_p - (sl_dist * self.target_rr), 2)
+            if pos.get('take_profit') != expected_tp:
+                pos['take_profit'] = expected_tp
             tp = pos['take_profit']
 
             # Gross & Net Unrealized P&L
