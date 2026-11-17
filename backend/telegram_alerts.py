@@ -59,8 +59,8 @@ class TelegramService:
             f"• *Current Drawdown:* `{curr_dd:+.2f} R` (Max DD target: < 40 R)\n"
             f"• *Account Capital:* `₹{capital:,.2f}` (Avail Margin: `₹{avail:,.2f}`)\n"
             f"• *Target RRR:* `1:{target_rr}` (Floor SL: `0.50%`)\n"
-            f"• *Trading Window:* `09:15 AM - 03:00 PM IST`\n"
-            f"• *EOD Square-Off:* `03:10 PM IST` (Strict Intraday, 0 overnight risk)\n"
+            f"• *Trading Window:* `09:15 AM - 02:45 PM IST`\n"
+            f"• *EOD Square-Off:* `03:00 PM IST` (Strict Intraday, all trades closed at 3 PM)\n"
             f"• *System Health:* All quant indicators & NSE data feeds online."
         )
         return self.send_message(text)
@@ -88,7 +88,7 @@ class TelegramService:
     def notify_trade_exit(self, trade: dict):
         pnl = trade['realized_pnl']
         r = trade['realized_r']
-        icon = "🎯 TARGET REACHED" if "TARGET" in trade['exit_reason'] else ("🛑 STOP LOSS HIT" if "STOP" in trade['exit_reason'] else ("⏰ 03:10 PM EOD SQUARE-OFF" if "EOD" in trade['exit_reason'] else "⚡ POSITION CLOSED"))
+        icon = "🎯 TARGET REACHED" if "TARGET" in trade['exit_reason'] else ("🛑 STOP LOSS HIT" if "STOP" in trade['exit_reason'] else ("⏰ 03:00 PM EOD SQUARE-OFF" if "EOD" in trade['exit_reason'] else "⚡ POSITION CLOSED"))
         pnl_str = f"+₹{pnl:,.2f} (+{r:+.2f} R)" if pnl >= 0 else f"-₹{abs(pnl):,.2f} ({r:+.2f} R)"
         price_label = "Sell Price" if trade.get('direction') == 'BUY' else "Buy Price"
         

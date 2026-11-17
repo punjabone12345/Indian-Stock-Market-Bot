@@ -236,8 +236,8 @@ class TradeEngine:
         is_weekday = (0 <= now_ist_obj.weekday() <= 4)
         time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
         is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
-        is_entry_window = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60)  # Entries allowed 09:15 - 15:00 IST
-        is_past_cutoff = is_weekday and (time_mins >= 15 * 60 + 10)  # All open positions squared off by 3:10 PM IST
+        is_entry_window = is_weekday and (9 * 60 + 15 <= time_mins <= 14 * 60 + 45)  # Entries allowed 09:15 - 14:45 IST
+        is_past_cutoff = is_weekday and (time_mins >= 15 * 60)  # All open positions squared off by 3:00 PM IST
 
         # Evaluate each of the 14 Champion stocks
         scores = {}
@@ -250,10 +250,10 @@ class TradeEngine:
                 sc['next_step'] = f"NSE Closed (Recorded LTP: ₹{q['price']:,.2f}). Session starts 09:15 AM."
             elif is_past_cutoff:
                 sc['signal_ready'] = False
-                sc['next_step'] = "Past 03:10 PM IST: All intraday positions squared off. Session closing."
+                sc['next_step'] = "Past 03:00 PM IST: All intraday positions squared off. Session closing."
             elif not is_entry_window:
                 sc['signal_ready'] = False
-                sc['next_step'] = "Outside Entry Window (09:15 AM - 03:00 PM IST): Active position tracking only."
+                sc['next_step'] = "Outside Entry Window (09:15 AM - 02:45 PM IST): Active position tracking only."
             scores[sym] = sc
 
             # Auto Entry if signal confirms, within entry window, and bot is active

@@ -26,7 +26,7 @@ class PortfolioManager:
         self.capital = float(settings.get('capital', 125000.0))
         self.risk_per_trade = float(settings.get('risk_per_trade', 200.0))
         self.trading_mode = settings.get('trading_mode', 'PAPER')
-        self.max_open_positions = int(settings.get('max_open_positions', 6))
+        self.max_open_positions = int(settings.get('max_open_positions', 14))
         self.target_rr = float(settings.get('target_rr', 2.0))
         self.bot_active = bool(settings.get('bot_active', True))
         
@@ -313,16 +313,16 @@ class PortfolioManager:
             pos['unrealized_pnl'] = round(gross_pnl, 2)
             pos['unrealized_r'] = round(gross_pnl / self.risk_per_trade, 2)
 
-            # Check Stop Loss / Target Triggers or 3:10 PM IST EOD Square-off (Strictly before 3:15 PM)
+            # Check Stop Loss / Target Triggers or 3:00 PM IST EOD Square-off
             exit_reason = None
             exit_price = None
 
             now_ist_obj = now_ist()
             time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
-            is_eod_cutoff = (time_mins >= 15 * 60 + 10)  # 3:10 PM IST auto square-off
+            is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST auto square-off
 
             if is_eod_cutoff:
-                exit_reason = 'EOD_AUTO_SQUAREOFF_310PM'
+                exit_reason = 'EOD_AUTO_SQUAREOFF_3PM'
                 exit_price = ltp
             elif direction == 'BUY':
                 if ltp <= sl:
@@ -419,7 +419,7 @@ class PortfolioManager:
             'peak_realized_r': self.peak_realized_r,
             'effective_risk': self.get_effective_risk(),
             'instruments_count': 14,
-            'eod_squareoff_time': '15:10 IST'
+            'eod_squareoff_time': '15:00 IST'
         }
 
 portfolio = PortfolioManager()

@@ -339,12 +339,16 @@ class Database:
             UPDATE settings SET
                 capital = 125000.0,
                 risk_per_trade = 200.0,
+                target_rr = 2.0,
+                max_open_positions = 14,
                 updated_at = ?
             WHERE id = 1
         """ if not self.is_postgres else """
             UPDATE settings SET
                 capital = 125000.0,
                 risk_per_trade = 200.0,
+                target_rr = 2.0,
+                max_open_positions = 14,
                 updated_at = %s
             WHERE id = 1
         """

@@ -87,7 +87,7 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
                   <span className="hidden sm:inline">•</span>
                   <span className="hidden sm:flex items-center gap-1 text-slate-400 text-[10px]">
                     <ShieldCheck className="w-3 h-3 text-sky-400" />
-                    3:10 PM Squareoff Active
+                    3:00 PM Squareoff Active
                   </span>
                 </div>
               </div>

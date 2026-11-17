@@ -160,7 +160,7 @@ export default function SettingsTab({
           </div>
           <div className="bg-[#0A0E1A] p-2.5 rounded-xl border border-white/5">
             <div className="text-[10px] text-slate-400">Auto EOD Square-Off</div>
-            <div className="text-sm font-black text-sky-400 mt-1">15:10 IST</div>
+            <div className="text-sm font-black text-sky-400 mt-1">15:00 IST</div>
           </div>
         </div>
 

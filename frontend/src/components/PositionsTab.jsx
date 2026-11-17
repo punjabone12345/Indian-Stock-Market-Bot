@@ -24,7 +24,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
           <h2 className="text-xs sm:text-sm font-black tracking-tight text-white font-mono uppercase flex items-center gap-2">
             <span>Active Live Positions</span>
             <span className="px-2 py-0.5 text-[10px] font-mono font-extrabold bg-sky-500/20 text-sky-300 rounded-full border border-sky-500/30">
-              {positions.length} / 6 Max Open
+              {positions.length} / 14 Max Open
             </span>
           </h2>
         </div>
