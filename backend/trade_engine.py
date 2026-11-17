@@ -23,6 +23,8 @@ class TradeEngine:
         self.market_scores = {}
         self.last_scan_time = None
         self.last_entered_candle_time = {}  # {symbol: candle_timestamp}
+        self.daily_trade_date = None
+        self.symbol_daily_trade_counts = {}  # {symbol: int} - max 2 trades/day per backtest
 
     def calculate_stock_score_and_next_step(self, symbol: str, quote: dict, nifty_trend: int):
         cur_p = quote['price']
@@ -239,6 +241,22 @@ class TradeEngine:
         is_entry_window = is_weekday and (9 * 60 + 15 <= time_mins <= 14 * 60 + 45)  # Entries allowed 09:15 - 14:45 IST
         is_past_cutoff = is_weekday and (time_mins >= 15 * 60)  # All open positions squared off by 3:00 PM IST
 
+        # Sync daily trade counts per symbol (max 2 trades per day per backtested strategy)
+        today_date = now_ist_date_str()
+        if self.daily_trade_date != today_date:
+            self.daily_trade_date = today_date
+            self.symbol_daily_trade_counts = {}
+            try:
+                for t in db.get_trade_history():
+                    if t.get('trade_date') == today_date:
+                        s = t.get('symbol')
+                        self.symbol_daily_trade_counts[s] = self.symbol_daily_trade_counts.get(s, 0) + 1
+            except Exception:
+                pass
+            for p in portfolio.positions.values():
+                s = p.get('symbol')
+                self.symbol_daily_trade_counts[s] = self.symbol_daily_trade_counts.get(s, 0) + 1
+
         # Evaluate each of the 14 Champion stocks
         scores = {}
         for sym in TOP_14_SYMBOLS:
@@ -254,10 +272,13 @@ class TradeEngine:
             elif not is_entry_window:
                 sc['signal_ready'] = False
                 sc['next_step'] = "Outside Entry Window (09:15 AM - 02:45 PM IST): Active position tracking only."
+            elif self.symbol_daily_trade_counts.get(sym, 0) >= 2:
+                sc['signal_ready'] = False
+                sc['next_step'] = f"Daily trade limit reached for {sym} (2/2 completed). Sitting out."
             scores[sym] = sc
 
             # Auto Entry if signal confirms, within entry window, and bot is active
-            if is_entry_window and sc['signal_ready'] and portfolio.bot_active and len(portfolio.positions) < portfolio.max_open_positions:
+            if is_entry_window and sc['signal_ready'] and portfolio.bot_active and len(portfolio.positions) < portfolio.max_open_positions and self.symbol_daily_trade_counts.get(sym, 0) < 2:
                 # Prevent duplicate entries on the same 5-minute candle
                 last_entered = self.last_entered_candle_time.get(sym)
                 if last_entered != sc['bar_time']:
@@ -272,6 +293,7 @@ class TradeEngine:
                     res = portfolio.open_position(sig)
                     if res.get('status') == 'success':
                         self.last_entered_candle_time[sym] = sc['bar_time']
+                        self.symbol_daily_trade_counts[sym] = self.symbol_daily_trade_counts.get(sym, 0) + 1
                         sc['signal_ready'] = False
                         sc['trend'] = 'ACTIVE_IN_POSITION'
                         sc['next_step'] = f"Active {sc['direction']} trade live @ ₹{sc['cur_p']:,.2f}! (SL: ₹{sc['stop_loss']:,.2f}, TP: ₹{sc['take_profit']:,.2f})"
