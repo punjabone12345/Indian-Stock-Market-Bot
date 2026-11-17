@@ -29,7 +29,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
           </h2>
         </div>
         <span className="text-[10px] font-mono text-slate-400 bg-[#0D121F] px-2.5 py-1 rounded-lg border border-white/10">
-          Strict 1:3 RRR Protection
+          Strict 1:2 RRR & Dynamic Risk Governor
         </span>
       </div>
 
@@ -42,7 +42,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
           <div className="space-y-1.5 max-w-sm">
             <h3 className="text-base font-black text-white font-mono">No Running Positions</h3>
             <p className="text-xs text-slate-400 leading-relaxed font-sans">
-              Crown 6 Scanner is continuously monitoring 5m EMA 9 pullbacks with Nifty Macro Trend alignment. Positions trigger automatically with predefined Stop Loss and Target orders.
+              Top 14 VWAP Engine is continuously monitoring 5m pullbacks with Nifty Macro Trend alignment and 0.50% SL floor. Positions trigger automatically with predefined Stop Loss and Target orders.
             </p>
           </div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
@@ -141,7 +141,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
                     <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 pt-0.5">
                       <span>{pos.direction === 'BUY' ? 'Buy Price' : 'Sell Price'}: ₹{pos.entry_price?.toFixed(2)}</span>
                       <span>Margin: ₹{pos.margin_used?.toFixed(0)}</span>
-                      <span>Target: 1:3 RRR</span>
+                      <span>Target: 1:2 RRR</span>
                     </div>
                   </div>
                 </div>

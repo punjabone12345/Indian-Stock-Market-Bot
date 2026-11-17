@@ -12,13 +12,26 @@ import {
   Radio,
   Eye,
   EyeOff,
-  Cpu
+  Cpu,
+  Clock,
+  Activity,
+  Layers,
+  TrendingDown
 } from 'lucide-react';
 
-export default function SettingsTab({ settings, onSaveSettings, onResetDangerZone, onTestTelegram, onTestDhan }) {
+export default function SettingsTab({ 
+  settings, 
+  onSaveSettings, 
+  onResetDangerZone, 
+  onTestTelegram, 
+  onSendMorningAlert,
+  onTestDhan 
+}) {
   const [formData, setFormData] = useState({
     capital: settings?.capital || 125000,
     risk_per_trade: settings?.risk_per_trade || 200,
+    target_rr: settings?.target_rr || 2.0,
+    max_open_positions: settings?.max_open_positions || 6,
     trading_mode: settings?.trading_mode || 'PAPER',
     dhan_client_id: settings?.dhan_client_id || '',
     dhan_access_token: settings?.dhan_access_token || '',
@@ -30,8 +43,14 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
   const [showResetModal, setShowResetModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
   const [telegramStatus, setTelegramStatus] = useState('');
+  const [morningStatus, setMorningStatus] = useState('');
   const [dhanStatus, setDhanStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const govMode = settings?.governor_mode || 'NORMAL';
+  const govMult = settings?.governor_multiplier || 1.0;
+  const currDD = settings?.current_drawdown_r || 0.0;
+  const effRisk = settings?.effective_risk || formData.risk_per_trade;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +83,17 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
     }
   };
 
+  const handleTestMorningAlert = async () => {
+    setMorningStatus('Dispatching 09:00 AM Morning Market Readiness Alert...');
+    try {
+      const res = await onSendMorningAlert();
+      setMorningStatus(res?.message || '09:00 AM Alert delivered successfully to your Telegram!');
+      setTimeout(() => setMorningStatus(''), 6000);
+    } catch (err) {
+      setMorningStatus('Failed to send 09:00 AM morning readiness alert.');
+    }
+  };
+
   const handleTestDhan = async () => {
     setDhanStatus('Authenticating with Dhan API servers...');
     try {
@@ -86,7 +116,7 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
           </h2>
         </div>
         <span className="text-[10px] font-mono text-slate-400 bg-[#0D121F] px-2.5 py-1 rounded-lg border border-white/10">
-          Persistent Database Configuration
+          Top 14 VWAP Engine Config
         </span>
       </div>
 
@@ -97,6 +127,52 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
         </div>
       )}
 
+      {/* DYNAMIC RISK GOVERNOR LIVE DASHBOARD PILL */}
+      <div className="bento-card p-4 space-y-3 bg-gradient-to-r from-sky-500/[0.04] to-emerald-500/[0.04] border border-sky-500/20">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-black uppercase tracking-wider text-sky-400 flex items-center gap-2">
+            <Shield className="w-4 h-4 text-sky-400" />
+            <span>Dynamic Risk Governor (Max DD &lt; 40 R Protection)</span>
+          </h3>
+          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black border ${
+            govMode === 'DEFENSIVE' 
+              ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 animate-pulse' 
+              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
+          }`}>
+            {govMode} MODE ({govMult}x)
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-mono">
+          <div className="bg-[#0A0E1A] p-2.5 rounded-xl border border-white/5">
+            <div className="text-[10px] text-slate-400">Current Drawdown</div>
+            <div className={`text-sm font-black mt-1 ${currDD < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+              {currDD.toFixed(2)} R
+            </div>
+          </div>
+          <div className="bg-[#0A0E1A] p-2.5 rounded-xl border border-white/5">
+            <div className="text-[10px] text-slate-400">Base Risk (1.0R)</div>
+            <div className="text-sm font-black text-white mt-1">₹{formData.risk_per_trade}</div>
+          </div>
+          <div className="bg-[#0A0E1A] p-2.5 rounded-xl border border-white/5">
+            <div className="text-[10px] text-slate-400">Effective Active Risk</div>
+            <div className="text-sm font-black text-emerald-400 mt-1">₹{effRisk}</div>
+          </div>
+          <div className="bg-[#0A0E1A] p-2.5 rounded-xl border border-white/5">
+            <div className="text-[10px] text-slate-400">Auto EOD Square-Off</div>
+            <div className="text-sm font-black text-sky-400 mt-1">15:10 IST</div>
+          </div>
+        </div>
+
+        <div className="text-[10px] text-slate-400 font-sans leading-relaxed pt-1 border-t border-white/5">
+          <p>
+            • <strong>Drawdown Defense:</strong> If drawdown crosses <strong>-15 R</strong>, sizing automatically cuts in half to <strong>0.5R (₹{effRisk})</strong> until recovery to -5 R.
+            <br />
+            • <strong>Commission Protection:</strong> Enforces strict <strong>0.50% SL floor</strong> to cap broker turnover fees to ~₹42 or less per trade.
+          </p>
+        </div>
+      </div>
+
       <form onSubmit={handleSave} className="space-y-4 font-mono text-xs">
         
         {/* 1. CAPITAL & RISK PARAMETERS */}
@@ -106,7 +182,7 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
             <span>Capital Sizing & Fixed Fractional Risk</span>
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-[11px] text-slate-400 font-medium mb-1">
                 Account Starting Capital (₹)
@@ -135,7 +211,25 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
                 required
               />
               <span className="text-[9px] text-emerald-400 mt-1 block">
-                Strict 0.20% risk model = ₹{((formData.risk_per_trade / (formData.capital || 1)) * 100).toFixed(2)}% of capital
+                Standard 1.0R baseline = ₹{formData.risk_per_trade}
+              </span>
+            </div>
+
+            <div>
+              <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                Target Risk-Reward Ratio
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                name="target_rr"
+                value={formData.target_rr}
+                onChange={handleChange}
+                className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-bold text-sm focus:border-sky-500 focus:outline-none tabular-nums"
+                required
+              />
+              <span className="text-[9px] text-sky-400 mt-1 block">
+                1:{formData.target_rr} RRR (Champion model: 1:2.0)
               </span>
             </div>
           </div>
@@ -163,7 +257,7 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
                 <span className={`w-2 h-2 rounded-full ${formData.trading_mode === 'PAPER' ? 'bg-amber-400 animate-pulse' : 'bg-slate-700'}`} />
               </div>
               <p className="text-[10px] text-slate-400 font-sans leading-relaxed">
-                Executes orders in memory without risking real cash. Perfect for weekend testing and dry runs.
+                Executes orders in memory without risking real cash. Full mathematical simulator with exact Zerodha/Dhan charges.
               </p>
             </button>
 
@@ -200,7 +294,7 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
               onClick={handleTestDhan}
               className="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/40 text-sky-300 text-[10px] font-bold transition-all cursor-pointer"
             >
-              Verify API Connection
+              Test Dhan Link
             </button>
           </div>
 
@@ -210,17 +304,17 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
             </div>
           )}
 
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                Dhan Client ID (6 or 10 digits)
+                Dhan Client ID
               </label>
               <input
                 type="text"
                 name="dhan_client_id"
                 value={formData.dhan_client_id}
                 onChange={handleChange}
-                placeholder="e.g. 1100345678"
+                placeholder="e.g. 1000123456"
                 className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:border-sky-500 focus:outline-none"
               />
             </div>
@@ -250,26 +344,45 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
           </div>
         </div>
 
-        {/* 4. TELEGRAM ALERTS */}
+        {/* 4. TELEGRAM ALERTS & 09:00 AM MORNING READINESS */}
         <div className="bento-card p-4 space-y-3.5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
               <Send className="w-4 h-4 text-emerald-400" />
-              <span>Telegram Real-Time Dispatcher</span>
+              <span>Telegram Real-Time Dispatcher & 09:00 AM Alert</span>
             </h3>
 
-            <button
-              type="button"
-              onClick={handleTestTelegram}
-              className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold transition-all cursor-pointer"
-            >
-              Send Test Alert
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleTestMorningAlert}
+                className="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/40 text-sky-300 text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1"
+                title="Send the 09:00 AM morning market readiness message to Telegram now"
+              >
+                <Clock className="w-3 h-3 text-sky-400" />
+                <span>Test 9 AM Alert</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleTestTelegram}
+                className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold transition-all cursor-pointer"
+              >
+                Send Test Alert
+              </button>
+            </div>
           </div>
 
+          {morningStatus && (
+            <div className="p-2.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-300 text-[11px] flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-sky-400 flex-shrink-0" />
+              <span>{morningStatus}</span>
+            </div>
+          )}
+
           {telegramStatus && (
-            <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px]">
-              {telegramStatus}
+            <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <span>{telegramStatus}</span>
             </div>
           )}
 
@@ -299,6 +412,11 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
                 className="w-full bg-[#0A0E1A] border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:border-sky-500 focus:outline-none"
               />
             </div>
+          </div>
+
+          <div className="text-[10px] text-slate-400 bg-[#0A0E1A] p-2.5 rounded-xl border border-white/5 flex items-center gap-2">
+            <Clock className="w-3.5 h-3.5 text-sky-400 flex-shrink-0" />
+            <span>Automatic 09:00 AM IST Market Readiness alert is scheduled on every weekday trading morning!</span>
           </div>
         </div>
 
@@ -331,7 +449,7 @@ export default function SettingsTab({ settings, onSaveSettings, onResetDangerZon
             </button>
           </div>
           <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
-            Purges all closed trade records and active positions from SQLite database, resetting starting capital to ₹1,00,000.
+            Purges all closed trade records and active positions from database, restoring starting capital to ₹1,25,000.
           </p>
         </div>
 

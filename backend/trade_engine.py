@@ -6,17 +6,23 @@ try:
 except ImportError:
     from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, to_ist_time_str
 try:
-    from market_data import market_service, CROWN_6_INSTRUMENTS
+    from market_data import market_service, CHAMPION_14_INSTRUMENTS
     from portfolio import portfolio
 except ImportError:
-    from backend.market_data import market_service, CROWN_6_INSTRUMENTS
+    from backend.market_data import market_service, CHAMPION_14_INSTRUMENTS
     from backend.portfolio import portfolio
+
+TOP_14_SYMBOLS = [
+    'RELIANCE', 'INDUSINDBK', 'LT', 'ADANIENT', 'TATAMOTORS', 
+    'SUNPHARMA', 'WIPRO', 'JSWSTEEL', 'TATASTEEL', 'BAJFINANCE', 
+    'SBIN', 'ONGC', 'TCS', 'MARUTI'
+]
 
 class TradeEngine:
     def __init__(self):
         self.market_scores = {}
         self.last_scan_time = None
-        self.last_entered_candle_time = {}  # {symbol: candle_timestamp} to prevent multiple entries on the same bar
+        self.last_entered_candle_time = {}  # {symbol: candle_timestamp}
 
     def calculate_stock_score_and_next_step(self, symbol: str, quote: dict, nifty_trend: int):
         cur_p = quote['price']
@@ -30,7 +36,7 @@ class TradeEngine:
                 'ema9': cur_p,
                 'ema21': cur_p,
                 'vwap': cur_p,
-                'atr': 1.0,
+                'atr': round(cur_p * 0.005, 2),
                 'signal_ready': False,
                 'direction': None,
                 'cur_p': cur_p,
@@ -42,13 +48,12 @@ class TradeEngine:
         df = pd.DataFrame(candles)
 
         # In Yahoo Finance v8 chart, the last item is often an unclosed live candle stub with volume == 0
-        # For indicators and confirmation, we use completed 5m bars to avoid flat zero-volume distortion
         if len(df) >= 2 and df.iloc[-1]['volume'] == 0:
             completed_df = df.iloc[:-1].copy()
         else:
             completed_df = df.copy()
 
-        # Technical Indicators on Completed Bars
+        # Technical Indicators on Completed 5m Bars
         completed_df['EMA9'] = completed_df['close'].ewm(span=9, adjust=False).mean()
         completed_df['EMA21'] = completed_df['close'].ewm(span=21, adjust=False).mean()
         completed_df['Typ'] = (completed_df['high'] + completed_df['low'] + completed_df['close']) / 3.0
@@ -115,7 +120,7 @@ class TradeEngine:
         else:
             score -= 10
 
-        # Pullback Proximity to EMA9 (+15 pts)
+        # Pullback Proximity to EMA9 / VWAP Band (+15 pts)
         ema_dist_pct = abs(cur_p - ema9) / cur_p * 100.0
         if ema_dist_pct < 0.25:
             score += 15
@@ -129,7 +134,6 @@ class TradeEngine:
             touched_ema9 = (last_bar['low'] <= ema_pullback_zone) or (prev_bar['low'] <= prev_bar['EMA9'] * 1.0020) or (prev2_bar['low'] <= prev2_bar['EMA9'] * 1.0020)
             
             if touched_ema9:
-                # Completed bar closed green and above EMA9, OR live price is green and bouncing above EMA9
                 completed_confirmed = (last_bar['close'] > last_bar['open']) and (last_bar['close'] >= ema9 * 0.9990)
                 live_confirmed = (cur_p >= ema9 * 0.9990) and (cur_p >= last_bar['close'])
                 price_in_range = cur_p <= (ema9 + max(0.6 * atr, ema9 * 0.0060))
@@ -137,12 +141,14 @@ class TradeEngine:
                 if (completed_confirmed or live_confirmed) and price_in_range:
                     # Structural Stop Loss anchored below recent swing low wick
                     raw_sl = min(last_bar['low'], prev_bar['low']) - (0.2 * atr)
-                    sl_dist = max(cur_p - raw_sl, cur_p * 0.0020)
-                    sl_dist = min(sl_dist, cur_p * 0.0070)
+                    sl_dist = cur_p - raw_sl
+                    # Enforce strict 0.50% SL floor to cap turnover charges
+                    sl_dist = max(sl_dist, cur_p * 0.0050)
+                    sl_dist = min(sl_dist, cur_p * 0.0100)
                     sl = round(cur_p - sl_dist, 2)
                     tp = round(cur_p + (sl_dist * portfolio.target_rr), 2)
                     score = 94
-                    next_step = f"A+ Bullish Pullback confirmed above EMA9 (₹{ema9:,.2f})! Entry triggered @ ₹{cur_p:,.2f} (SL: ₹{sl:,.2f}, TP: ₹{tp:,.2f})."
+                    next_step = f"A+ Bullish VWAP Pullback confirmed above EMA9 (₹{ema9:,.2f})! Entry triggered @ ₹{cur_p:,.2f} (SL: ₹{sl:,.2f}, TP: ₹{tp:,.2f})."
                     signal_ready = True
                     direction = 'BUY'
                 else:
@@ -166,12 +172,14 @@ class TradeEngine:
                 if (completed_confirmed or live_confirmed) and price_in_range:
                     # Structural Stop Loss anchored above recent swing high wick
                     raw_sl = max(last_bar['high'], prev_bar['high']) + (0.2 * atr)
-                    sl_dist = max(raw_sl - cur_p, cur_p * 0.0020)
-                    sl_dist = min(sl_dist, cur_p * 0.0070)
+                    sl_dist = raw_sl - cur_p
+                    # Enforce strict 0.50% SL floor to cap turnover charges
+                    sl_dist = max(sl_dist, cur_p * 0.0050)
+                    sl_dist = min(sl_dist, cur_p * 0.0100)
                     sl = round(cur_p + sl_dist, 2)
                     tp = round(cur_p - (sl_dist * portfolio.target_rr), 2)
                     score = 94
-                    next_step = f"A+ Bearish Pullback confirmed below EMA9 (₹{ema9:,.2f})! Entry triggered @ ₹{cur_p:,.2f} (SL: ₹{sl:,.2f}, TP: ₹{tp:,.2f})."
+                    next_step = f"A+ Bearish VWAP Pullback confirmed below EMA9 (₹{ema9:,.2f})! Entry triggered @ ₹{cur_p:,.2f} (SL: ₹{sl:,.2f}, TP: ₹{tp:,.2f})."
                     signal_ready = True
                     direction = 'SELL'
                 else:
@@ -183,7 +191,7 @@ class TradeEngine:
                 next_step = f"Bearish momentum below VWAP (₹{vwap:,.2f}). Waiting for pullback rally towards EMA9 near ₹{pullback_price:,.2f}."
         else:
             score = max(score, 30)
-            next_step = f"Market structure consolidating between EMA9 (₹{ema9:,.2f}) and VWAP (₹{vwap:,.2f}). Waiting for clear trend breakout."
+            next_step = f"Consolidating between EMA9 (₹{ema9:,.2f}) and VWAP (₹{vwap:,.2f}). Waiting for trend alignment."
 
         return {
             'symbol': symbol,
@@ -206,44 +214,46 @@ class TradeEngine:
         quotes = market_service.fetch_live_quotes()
         self.last_scan_time = now_ist_str("%H:%M:%S IST")
 
-        # First, update active positions and trigger any SL/TP exits
+        # First, update active positions and trigger any SL/TP exits or 3:10 PM squareoff
         closed_trades = portfolio.update_live_prices_and_check_triggers(quotes)
 
         # Check Nifty Macro Trend on completed candles
-        nifty_quote = quotes.get('NIFTY50', {'price': 25260.0})
-        nifty_p = nifty_quote['price']
+        nifty_quote = quotes.get('NIFTY50', {'price': 25291.10})
         nifty_candles = market_service.get_candle_history('NIFTY50')
         df_n = pd.DataFrame(nifty_candles)
         if len(df_n) >= 2 and df_n.iloc[-1]['volume'] == 0:
             df_n = df_n.iloc[:-1].copy()
             
-        n_ema9 = float(df_n['close'].ewm(span=9, adjust=False).mean().iloc[-1])
-        n_ema21 = float(df_n['close'].ewm(span=21, adjust=False).mean().iloc[-1])
-        n_close = float(df_n['close'].iloc[-1])
-        nifty_trend = 1 if (n_ema9 > n_ema21 and n_close > n_ema21) else (-1 if (n_ema9 < n_ema21 and n_close < n_ema21) else 0)
+        if len(df_n) >= 5:
+            n_ema9 = float(df_n['close'].ewm(span=9, adjust=False).mean().iloc[-1])
+            n_ema21 = float(df_n['close'].ewm(span=21, adjust=False).mean().iloc[-1])
+            n_close = float(df_n['close'].iloc[-1])
+            nifty_trend = 1 if (n_ema9 > n_ema21 and n_close > n_ema21) else (-1 if (n_ema9 < n_ema21 and n_close < n_ema21) else 0)
+        else:
+            nifty_trend = 0
 
         now_ist_obj = now_ist()
         is_weekday = (0 <= now_ist_obj.weekday() <= 4)
         time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
         is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
-        is_entry_window = is_weekday and (9 * 60 + 30 <= time_mins <= 14 * 60 + 15)  # No new entries after 2:15 PM IST
-        is_past_3pm = is_weekday and (time_mins >= 15 * 60)  # All open positions squared off by 3:00 PM IST
+        is_entry_window = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60)  # Entries allowed 09:15 - 15:00 IST
+        is_past_cutoff = is_weekday and (time_mins >= 15 * 60 + 10)  # All open positions squared off by 3:10 PM IST
 
-        # Evaluate each of the Crown 6 stocks
+        # Evaluate each of the 14 Champion stocks
         scores = {}
-        for sym in ['RELIANCE', 'ITC', 'MARUTI', 'TATASTEEL', 'SUNPHARMA', 'INFY']:
+        for sym in TOP_14_SYMBOLS:
             if sym not in quotes: continue
             q = quotes[sym]
             sc = self.calculate_stock_score_and_next_step(sym, q, nifty_trend)
             if not is_market_open:
                 sc['signal_ready'] = False
                 sc['next_step'] = f"NSE Closed (Recorded LTP: ₹{q['price']:,.2f}). Session starts 09:15 AM."
-            elif is_past_3pm:
+            elif is_past_cutoff:
                 sc['signal_ready'] = False
-                sc['next_step'] = "Past 03:00 PM IST: All intraday positions squared off. Session closing."
+                sc['next_step'] = "Past 03:10 PM IST: All intraday positions squared off. Session closing."
             elif not is_entry_window:
                 sc['signal_ready'] = False
-                sc['next_step'] = "Outside Entry Window (09:30 AM - 02:15 PM IST): Active position tracking only."
+                sc['next_step'] = "Outside Entry Window (09:15 AM - 03:00 PM IST): Active position tracking only."
             scores[sym] = sc
 
             # Auto Entry if signal confirms, within entry window, and bot is active
@@ -257,7 +267,7 @@ class TradeEngine:
                         'entry_price': sc['cur_p'],
                         'stop_loss': sc['stop_loss'],
                         'take_profit': sc['take_profit'],
-                        'setup': 'Crown 6 Institutional EMA Pullback (1:3 RRR)'
+                        'setup': 'Top 14 VWAP Institutional Pullback'
                     }
                     res = portfolio.open_position(sig)
                     if res.get('status') == 'success':

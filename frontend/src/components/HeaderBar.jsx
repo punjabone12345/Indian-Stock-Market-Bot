@@ -28,6 +28,9 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
   const botActive = portfolio?.bot_active ?? true;
   const tradingMode = portfolio?.trading_mode ?? 'PAPER';
   const openPositionsCount = portfolio?.open_positions_count ?? Object.keys(portfolio?.positions || {}).length;
+  const govMode = portfolio?.governor_mode ?? 'NORMAL';
+  const govScale = portfolio?.governor_multiplier ?? 1.0;
+  const effRisk = portfolio?.effective_risk ?? 200;
 
   const isPositive = totalPnl >= 0;
   const niftyPrice = nifty?.price ?? 24350.00;
@@ -54,10 +57,10 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
               <div>
                 <div className="flex items-center gap-1.5 leading-none">
                   <span className="text-sm sm:text-base font-black tracking-tight text-white font-mono">
-                    ISMB CROWN 6
+                    ISMB TOP 14
                   </span>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-extrabold bg-sky-500/15 text-sky-300 border border-sky-500/30 uppercase tracking-wider">
-                    ALPHA PRO
+                    VWAP PRO
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 mt-1">
@@ -73,10 +76,18 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
                   }`}>
                     {tradingMode}
                   </span>
+                  <span>•</span>
+                  <span className={`px-1.5 py-0.2 rounded font-extrabold text-[9px] ${
+                    govMode === 'DEFENSIVE'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse'
+                      : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                  }`} title={`Dynamic Risk Governor: ${govMode} mode (Risk: ₹${effRisk})`}>
+                    GOV: {govMode} ({govScale}R)
+                  </span>
                   <span className="hidden sm:inline">•</span>
                   <span className="hidden sm:flex items-center gap-1 text-slate-400 text-[10px]">
                     <ShieldCheck className="w-3 h-3 text-sky-400" />
-                    3:00 PM Squareoff Active
+                    3:10 PM Squareoff Active
                   </span>
                 </div>
               </div>

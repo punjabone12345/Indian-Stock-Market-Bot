@@ -17,22 +17,43 @@ except ImportError:
     from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
 try:
     from database import db
-    from market_data import market_service, CROWN_6_INSTRUMENTS
+    from market_data import market_service, CHAMPION_14_INSTRUMENTS
     from portfolio import portfolio
-    from trade_engine import trade_engine
+    from trade_engine import trade_engine, TOP_14_SYMBOLS
     from telegram_alerts import telegram_service
 except ImportError:
     from backend.database import db
-    from backend.market_data import market_service, CROWN_6_INSTRUMENTS
+    from backend.market_data import market_service, CHAMPION_14_INSTRUMENTS
     from backend.portfolio import portfolio
-    from backend.trade_engine import trade_engine
+    from backend.trade_engine import trade_engine, TOP_14_SYMBOLS
     from backend.telegram_alerts import telegram_service
 
-# Background scanning loop
+# Daily 9:00 AM Alert Tracker
+last_morning_alert_date = None
+
 async def background_market_scanner():
-    print("[Engine] Crown 6 Background Scanner initialized.")
+    global last_morning_alert_date
+    print("[Engine] Top 14 VWAP Pullback Scanner & Dynamic Risk Governor initialized.")
     while True:
         try:
+            # 1. Check & send 9:00 AM IST Morning Market Readiness Alert on trading days
+            now_obj = now_ist()
+            is_weekday = (0 <= now_obj.weekday() <= 4)
+            today_date = now_obj.strftime("%Y-%m-%d")
+            time_mins = now_obj.hour * 60 + now_obj.minute
+
+            # If it's a weekday and time is on/after 09:00 AM IST (540 mins) and not yet sent today
+            if is_weekday and time_mins >= 9 * 60 and last_morning_alert_date != today_date:
+                try:
+                    summary = portfolio.get_summary()
+                    sent = telegram_service.notify_morning_readiness(summary)
+                    if sent:
+                        last_morning_alert_date = today_date
+                        print(f"[Telegram] 09:00 AM Morning Market Readiness alert delivered for {today_date}.")
+                except Exception as ex:
+                    print(f"[Telegram] Error sending 9:00 AM morning readiness alert: {ex}")
+
+            # 2. Run market scan for all 14 champions
             await asyncio.to_thread(trade_engine.run_market_scan)
         except Exception as e:
             print(f"[Engine] Background scan error: {e}")
@@ -44,7 +65,11 @@ async def lifespan(app: FastAPI):
     yield
     scanner_task.cancel()
 
-app = FastAPI(title="Indian Stock Market Bot - Crown 6 Alpha Engine", version="2.0.0", lifespan=lifespan)
+app = FastAPI(
+    title="Indian Stock Market Bot - Top 14 VWAP Alpha Engine",
+    version="3.0.0",
+    lifespan=lifespan
+)
 
 # Allow CORS for Vercel, Render, and Localhost
 app.add_middleware(
@@ -76,28 +101,31 @@ def get_dashboard_data():
     scores = trade_engine.market_scores
 
     instruments_data = []
-    for sym in ['RELIANCE', 'ITC', 'MARUTI', 'TATASTEEL', 'SUNPHARMA', 'INFY']:
+    for sym in TOP_14_SYMBOLS:
         q = quotes.get(sym, {})
         sc = scores.get(sym, {
             'score': 65,
             'trend': 'NEUTRAL',
-            'next_step': 'Initializing institutional pullback scanner...'
+            'next_step': 'Initializing VWAP institutional pullback scanner...'
         })
-        info = CROWN_6_INSTRUMENTS.get(sym, {})
+        info = CHAMPION_14_INSTRUMENTS.get(sym, {})
         instruments_data.append({
             'symbol': sym,
             'name': info.get('name', sym),
             'sector': info.get('sector', ''),
-            'price': q.get('price', 0.0),
-            'prev_close': q.get('prev_close', 0.0),
+            'price': q.get('price', info.get('baseline', 1000.0)),
+            'prev_close': q.get('prev_close', info.get('baseline', 1000.0)),
             'change': q.get('change', 0.0),
             'change_pct': q.get('change_pct', 0.0),
-            'day_high': q.get('day_high', 0.0),
-            'day_low': q.get('day_low', 0.0),
+            'day_high': q.get('day_high', info.get('baseline', 1000.0)),
+            'day_low': q.get('day_low', info.get('baseline', 1000.0)),
             'volume': q.get('volume', 0),
             'score': sc.get('score', 60),
             'trend': sc.get('trend', 'NEUTRAL'),
-            'next_step': sc.get('next_step', 'Analyzing micro-structure...'),
+            'next_step': sc.get('next_step', 'Analyzing VWAP micro-structure...'),
+            'ema9': sc.get('ema9', q.get('price', 0.0)),
+            'vwap': sc.get('vwap', q.get('price', 0.0)),
+            'atr': sc.get('atr', 1.0),
             'updated_at': q.get('updated_at', now_ist_str())
         })
 
@@ -113,8 +141,16 @@ def get_dashboard_data():
         'ist_time': now_ist_obj.strftime("%H:%M:%S IST"),
         'server_time': now_ist_obj.strftime("%Y-%m-%d %H:%M:%S IST"),
         'last_scan_time': trade_engine.last_scan_time or now_ist_obj.strftime("%H:%M:%S IST"),
+        'strategy': 'Nifty-Aligned VWAP Institutional Pullback + Risk Governor',
+        'governor': {
+            'mode': portfolio.governor_mode,
+            'multiplier': portfolio.governor_multiplier,
+            'current_drawdown_r': portfolio.current_drawdown_r,
+            'peak_realized_r': portfolio.peak_realized_r,
+            'effective_risk': portfolio.get_effective_risk()
+        },
         'nifty50': {
-            'price': nifty.get('price', 24350.0),
+            'price': nifty.get('price', 25291.10),
             'change': nifty.get('change', 0.0),
             'change_pct': nifty.get('change_pct', 0.0)
         },
@@ -132,7 +168,9 @@ def get_open_positions():
         'count': len(portfolio.positions),
         'positions': list(portfolio.positions.values()),
         'used_margin': portfolio.get_used_margin(),
-        'available_margin': portfolio.get_available_margin()
+        'available_margin': portfolio.get_available_margin(),
+        'governor_mode': portfolio.governor_mode,
+        'effective_risk': portfolio.get_effective_risk()
     }
 
 @app.delete("/api/positions/{pos_id}")
@@ -145,7 +183,7 @@ def delete_position(pos_id: str):
 
 @app.post("/api/positions/{pos_id}/close")
 def close_position_manually(pos_id: str):
-    """Close position manually at market price: Releases margin, records P&L and charges."""
+    """Close position manually at market price: Releases margin, records P&L and exact charges."""
     quotes = market_service.fetch_live_quotes()
     pos = portfolio.positions.get(pos_id)
     cur_p = quotes.get(pos['symbol'], {}).get('price') if pos else None
@@ -167,12 +205,23 @@ def panic_square_off_all():
             closed.append(res['trade'])
     return {'status': 'success', 'closed_count': len(closed), 'trades': closed}
 
+# ----------------- MORNING 9:00 AM READINESS NOTIFICATION -----------------
+@app.post("/api/bot/send-morning-alert")
+def send_morning_alert_now():
+    """Trigger the 9:00 AM Market Readiness Alert immediately for verification."""
+    global last_morning_alert_date
+    summary = portfolio.get_summary()
+    sent = telegram_service.notify_morning_readiness(summary)
+    if sent:
+        last_morning_alert_date = now_ist_date_str()
+        return {'status': 'success', 'message': '09:00 AM Morning Market Readiness alert sent to Telegram successfully!'}
+    raise HTTPException(status_code=500, detail='Failed to deliver Telegram alert. Verify credentials.')
+
 # ----------------- TAB 3: ANALYTICS & LEDGER -----------------
 @app.get("/api/analytics")
 def get_analytics():
     trades = db.get_trade_history()
     
-    # Group date-wise from newest to oldest
     grouped = {}
     for t in trades:
         d = t.get('trade_date', 'Unknown')
@@ -194,7 +243,6 @@ def get_analytics():
             'trades': group_trades
         })
 
-    # Summary Stats
     tot = len(trades)
     wins = sum(1 for t in trades if t['realized_pnl'] > 0)
     losses = sum(1 for t in trades if t['realized_pnl'] < 0)
@@ -221,6 +269,13 @@ def get_analytics():
         'total_charges': tot_charges,
         'best_trade': best_trade,
         'worst_trade': worst_trade,
+        'governor': {
+            'mode': portfolio.governor_mode,
+            'multiplier': portfolio.governor_multiplier,
+            'current_drawdown_r': portfolio.current_drawdown_r,
+            'peak_realized_r': portfolio.peak_realized_r,
+            'effective_risk': portfolio.get_effective_risk()
+        },
         'date_groups': date_groups
     }
 
@@ -283,12 +338,15 @@ def get_chart_data(symbol: str):
 @app.get("/api/settings")
 def get_settings():
     s = db.get_settings()
-    # Mask token for security
     masked_token = s.get('dhan_access_token', '')
     if masked_token and len(masked_token) > 8:
         s['dhan_access_token_masked'] = masked_token[:4] + "..." + masked_token[-4:]
     else:
         s['dhan_access_token_masked'] = ""
+    s['governor_mode'] = portfolio.governor_mode
+    s['governor_multiplier'] = portfolio.governor_multiplier
+    s['current_drawdown_r'] = portfolio.current_drawdown_r
+    s['effective_risk'] = portfolio.get_effective_risk()
     return s
 
 @app.post("/api/settings")
@@ -354,7 +412,8 @@ def reset_danger_zone():
         "⚠️ *FACTORY RESET EXECUTED*\n\n"
         "• All positions and trade history cleared.\n"
         "• Account capital reset to default: *₹1,25,000*.\n"
-        "• Bot state initialized to 0 trades."
+        "• Strategy: Top 14 VWAP Institutional Pullback.\n"
+        "• Risk Governor initialized to NORMAL (1.0R)."
     )
     return {'status': 'success', 'message': 'Factory reset complete. Account restored to default ₹1,25,000.'}
 
@@ -364,12 +423,12 @@ def toggle_bot():
     db.update_settings({'bot_active': new_state})
     portfolio.refresh_from_db()
     status_str = "RESUMED" if new_state else "PAUSED"
-    telegram_service.send_message(f"🤖 *BOT STATE CHANGED*\n\nCrown 6 Engine is now *{status_str}*.")
+    telegram_service.send_message(f"🤖 *BOT STATE CHANGED*\n\nTop 14 VWAP Engine is now *{status_str}*.")
     return {'status': 'success', 'bot_active': new_state}
 
-
-# ----------------- COMPATIBILITY & SIMULATION ALIASES -----------------
+# ----------------- SIMULATION & COMPATIBILITY ALIASES -----------------
 @app.post("/api/panic-close")
+@app.post("/api/portfolio/panic_close")
 def panic_close_alias():
     return panic_square_off_all()
 
@@ -383,6 +442,7 @@ def test_telegram_alias(payload: dict = Body(None)):
     return test_telegram()
 
 @app.post("/api/reset")
+@app.post("/api/settings/reset")
 def reset_alias():
     return reset_danger_zone()
 
@@ -396,22 +456,22 @@ def close_position_post_alias(pos_id: str):
 
 @app.post("/api/positions/simulate")
 def simulate_paper_position(payload: dict = Body(None)):
-    """Simulate a realistic 1:3 Crown 6 trade with exact 5x MIS margin & Telegram push alert"""
+    """Simulate a realistic Top 14 VWAP trade with 0.50% SL floor, 5x MIS margin & Dynamic Risk Governor"""
     import random
     quotes = market_service.fetch_live_quotes()
-    available_symbols = [s for s in ['RELIANCE', 'ITC', 'MARUTI', 'TATASTEEL', 'SUNPHARMA', 'INFY'] if s not in [p['symbol'] for p in portfolio.positions.values()]]
+    available_symbols = [s for s in TOP_14_SYMBOLS if s not in [p['symbol'] for p in portfolio.positions.values()]]
     if not available_symbols:
         available_symbols = ['RELIANCE']
     
     sym = random.choice(available_symbols)
     q = quotes.get(sym, {})
-    cur_p = q.get('price', 1339.7)
+    cur_p = q.get('price', 1344.80)
     direction = random.choice(['BUY', 'SELL'])
-    sl_dist = round(cur_p * 0.005, 2)
-    if sl_dist <= 0: sl_dist = 1.0
+    # Strict 0.50% SL floor
+    sl_dist = round(max(cur_p * 0.0050, 1.0), 2)
 
     sl_price = round(cur_p - sl_dist, 2) if direction == 'BUY' else round(cur_p + sl_dist, 2)
-    tp_price = round(cur_p + (sl_dist * 3.0), 2) if direction == 'BUY' else round(cur_p - (sl_dist * 3.0), 2)
+    tp_price = round(cur_p + (sl_dist * portfolio.target_rr), 2) if direction == 'BUY' else round(cur_p - (sl_dist * portfolio.target_rr), 2)
 
     signal = {
         'symbol': sym,
@@ -419,7 +479,7 @@ def simulate_paper_position(payload: dict = Body(None)):
         'entry_price': cur_p,
         'stop_loss': sl_price,
         'take_profit': tp_price,
-        'setup': 'Crown 6 Micro Pullback 1:3 RRR'
+        'setup': 'Top 14 VWAP Institutional Pullback'
     }
 
     res = portfolio.open_position(signal)
@@ -427,4 +487,8 @@ def simulate_paper_position(payload: dict = Body(None)):
 
 @app.get("/health")
 def health_check():
-    return {'status': 'healthy', 'timestamp': now_ist().isoformat()}
+    return {
+        'status': 'healthy', 
+        'strategy': 'Top 14 VWAP Pullback + Dynamic Risk Governor',
+        'timestamp': now_ist().isoformat()
+    }

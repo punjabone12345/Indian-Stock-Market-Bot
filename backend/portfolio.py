@@ -14,6 +14,11 @@ except ImportError:
 
 class PortfolioManager:
     def __init__(self):
+        self.governor_mode = "NORMAL"
+        self.governor_multiplier = 1.0
+        self.peak_realized_r = 0.0
+        self.cumulative_realized_r = 0.0
+        self.current_drawdown_r = 0.0
         self.refresh_from_db()
 
     def refresh_from_db(self):
@@ -22,7 +27,7 @@ class PortfolioManager:
         self.risk_per_trade = float(settings.get('risk_per_trade', 200.0))
         self.trading_mode = settings.get('trading_mode', 'PAPER')
         self.max_open_positions = int(settings.get('max_open_positions', 6))
-        self.target_rr = float(settings.get('target_rr', 3.0))
+        self.target_rr = float(settings.get('target_rr', 2.0))
         self.bot_active = bool(settings.get('bot_active', True))
         
         # Load positions from DB
@@ -39,13 +44,60 @@ class PortfolioManager:
                 'quantity': int(p['quantity']),
                 'margin_used': float(p['margin_used']),
                 'entry_time': to_ist_time_str(p['entry_time']),
-                'setup': p.get('setup', 'Crown 6 EMA Pullback'),
+                'setup': p.get('setup', 'Top 14 VWAP Pullback'),
                 'sl_dist': float(p['sl_dist']),
                 'current_price': float(p['entry_price']),
                 'unrealized_pnl': 0.0,
                 'unrealized_r': 0.0,
-                'created_at': p.get('created_at', now_ist_datetime_str())
+                'created_at': p.get('created_at', now_ist_datetime_str()),
+                'governor_mode': p.get('governor_mode', self.governor_mode)
             }
+
+        # Calculate Dynamic Risk Governor state from trade history
+        self._recalculate_governor_state()
+
+    def _recalculate_governor_state(self):
+        """
+        Recomputes peak realized R and current drawdown in R.
+        Governor Rule:
+          - If current_drawdown_r <= -15.0 R: DEFENSIVE MODE (multiplier = 0.5)
+          - If current_drawdown_r >= -5.0 R: NORMAL MODE (multiplier = 1.0)
+        """
+        history = db.get_trade_history()
+        # Sort chronologically by entry_time / created_at
+        cum_r = 0.0
+        peak_r = 0.0
+        curr_mode = "NORMAL"
+        curr_mult = 1.0
+
+        for t in history:
+            r = float(t.get('realized_r', 0.0))
+            cum_r += r
+            if cum_r > peak_r:
+                peak_r = cum_r
+            dd = cum_r - peak_r
+            if curr_mode == "NORMAL" and dd <= -15.0:
+                curr_mode = "DEFENSIVE"
+                curr_mult = 0.5
+            elif curr_mode == "DEFENSIVE" and dd >= -5.0:
+                curr_mode = "NORMAL"
+                curr_mult = 1.0
+
+        prev_mode = self.governor_mode
+        self.cumulative_realized_r = round(cum_r, 2)
+        self.peak_realized_r = round(peak_r, 2)
+        self.current_drawdown_r = round(cum_r - peak_r, 2)
+        self.governor_mode = curr_mode
+        self.governor_multiplier = curr_mult
+
+        # If state transitioned during execution, notify via Telegram
+        if prev_mode != curr_mode and len(history) > 0:
+            eff = self.get_effective_risk()
+            telegram_service.notify_governor_switch(curr_mode, self.current_drawdown_r, curr_mult, eff)
+
+    def get_effective_risk(self) -> float:
+        """Returns the current trade risk in ₹ scaled by the Dynamic Risk Governor."""
+        return round(self.risk_per_trade * self.governor_multiplier, 2)
 
     def calculate_statutory_charges(self, entry_price: float, exit_price: float, qty: int, direction: str = 'BUY') -> float:
         """
@@ -119,11 +171,20 @@ class PortfolioManager:
         direction = signal['direction']
         sl_dist = abs(entry_price - stop_loss)
 
+        # Enforce strict 0.50% SL floor to prevent micro-SL turnover charge blowout
+        min_sl_dist = round(entry_price * 0.0050, 2)
+        if sl_dist < min_sl_dist:
+            sl_dist = min_sl_dist
+            stop_loss = round(entry_price - sl_dist, 2) if direction == 'BUY' else round(entry_price + sl_dist, 2)
+            take_profit = round(entry_price + (sl_dist * self.target_rr), 2) if direction == 'BUY' else round(entry_price - (sl_dist * self.target_rr), 2)
+
         if sl_dist <= 0:
             return {'status': 'error', 'message': 'Invalid Stop Loss price.'}
 
-        # Position Sizing: 1R Risk amount
-        quantity = int(self.risk_per_trade / sl_dist)
+        # Dynamic Risk Governor Position Sizing:
+        # Normal Mode: 1.0R (₹200) | Defensive Mode: 0.5R (₹100)
+        eff_risk = self.get_effective_risk()
+        quantity = int(eff_risk / sl_dist)
         if quantity <= 0:
             quantity = 1
 
@@ -151,12 +212,15 @@ class PortfolioManager:
             'quantity': quantity,
             'margin_used': margin_used,
             'entry_time': entry_time_str,
-            'setup': signal.get('setup', 'Crown 6 EMA Pullback 1:3'),
+            'setup': signal.get('setup', 'Top 14 VWAP Pullback'),
             'sl_dist': round(sl_dist, 2),
             'current_price': round(entry_price, 2),
             'unrealized_pnl': 0.0,
             'unrealized_r': 0.0,
-            'created_at': now_ist_datetime_str()
+            'created_at': now_ist_datetime_str(),
+            'governor_mode': self.governor_mode,
+            'risk_amount': eff_risk,
+            'target_rr': self.target_rr
         }
 
         # Save to DB & memory
@@ -198,6 +262,7 @@ class PortfolioManager:
         gross_pnl = (exit_p - entry_p) * qty if direction == 'BUY' else (entry_p - exit_p) * qty
         charges = self.calculate_statutory_charges(entry_p, exit_p, qty, direction)
         net_pnl = round(gross_pnl - charges, 2)
+        # R accounting relative to base risk (₹200)
         realized_r = round(net_pnl / self.risk_per_trade, 2)
 
         # Update capital
@@ -224,10 +289,11 @@ class PortfolioManager:
 
         db.save_closed_trade(trade_record)
         telegram_service.notify_manual_close(trade_record)
+        self._recalculate_governor_state()
         return {'status': 'success', 'trade': trade_record}
 
     def update_live_prices_and_check_triggers(self, quotes: dict):
-        """Updates open positions with live quotes, checks Target / Stop Loss triggers."""
+        """Updates open positions with live quotes, checks Target / Stop Loss triggers, or 3:10 PM EOD squareoff."""
         closed_trades = []
 
         for pos_id, pos in list(self.positions.items()):
@@ -247,16 +313,16 @@ class PortfolioManager:
             pos['unrealized_pnl'] = round(gross_pnl, 2)
             pos['unrealized_r'] = round(gross_pnl / self.risk_per_trade, 2)
 
-            # Check Stop Loss / Target Triggers or 3:00 PM IST EOD Square-off
+            # Check Stop Loss / Target Triggers or 3:10 PM IST EOD Square-off (Strictly before 3:15 PM)
             exit_reason = None
             exit_price = None
 
             now_ist_obj = now_ist()
             time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
-            is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST
+            is_eod_cutoff = (time_mins >= 15 * 60 + 10)  # 3:10 PM IST auto square-off
 
             if is_eod_cutoff:
-                exit_reason = 'EOD_AUTO_SQUAREOFF_3PM'
+                exit_reason = 'EOD_AUTO_SQUAREOFF_310PM'
                 exit_price = ltp
             elif direction == 'BUY':
                 if ltp <= sl:
@@ -306,6 +372,7 @@ class PortfolioManager:
                 db.save_closed_trade(trade_record)
                 telegram_service.notify_trade_exit(trade_record)
                 closed_trades.append(trade_record)
+                self._recalculate_governor_state()
 
         return closed_trades
 
@@ -334,6 +401,7 @@ class PortfolioManager:
             'trading_mode': self.trading_mode,
             'bot_active': self.bot_active,
             'max_open_positions': self.max_open_positions,
+            'target_rr': self.target_rr,
             'open_positions_count': len(self.positions),
             'positions': list(self.positions.values()),
             'unrealized_pnl': round(unrealized_pnl, 2),
@@ -343,7 +411,15 @@ class PortfolioManager:
             'total_pnl': total_pnl,
             'total_r': total_r,
             'total_trades': total_trades,
-            'win_rate': win_rate
+            'win_rate': win_rate,
+            'strategy_name': 'Nifty-Aligned VWAP Pullback + Risk Governor',
+            'governor_mode': self.governor_mode,
+            'governor_multiplier': self.governor_multiplier,
+            'current_drawdown_r': self.current_drawdown_r,
+            'peak_realized_r': self.peak_realized_r,
+            'effective_risk': self.get_effective_risk(),
+            'instruments_count': 14,
+            'eod_squareoff_time': '15:10 IST'
         }
 
 portfolio = PortfolioManager()

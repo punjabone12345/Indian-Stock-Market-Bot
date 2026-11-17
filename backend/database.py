@@ -52,7 +52,7 @@ class Database:
                 telegram_token TEXT DEFAULT '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc',
                 telegram_chat_id TEXT DEFAULT '5582938659',
                 max_open_positions INTEGER DEFAULT 6,
-                target_rr REAL DEFAULT 3.0,
+                target_rr REAL DEFAULT 2.0,
                 bot_active INTEGER DEFAULT 1,
                 updated_at TEXT
             )
@@ -70,7 +70,7 @@ class Database:
                 quantity INTEGER NOT NULL,
                 margin_used REAL NOT NULL,
                 entry_time TEXT NOT NULL,
-                setup TEXT DEFAULT 'EMA Pullback 1:3',
+                setup TEXT DEFAULT 'Top 14 VWAP Pullback',
                 sl_dist REAL NOT NULL,
                 created_at TEXT NOT NULL
             )
@@ -105,10 +105,10 @@ class Database:
             now_str = now_ist_datetime_str()
             cur.execute("""
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, ?)
+                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 2.0, 1, ?)
             """ if not self.is_postgres else """
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 3.0, 1, %s)
+                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 6, 2.0, 1, %s)
             """, (now_str,))
 
         # One-time migration: Convert any UTC timestamps in positions table to IST
@@ -193,7 +193,7 @@ class Database:
             'telegram_token': '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc',
             'telegram_chat_id': '5582938659',
             'max_open_positions': 6,
-            'target_rr': 3.0,
+            'target_rr': 2.0,
             'bot_active': True
         }
 
