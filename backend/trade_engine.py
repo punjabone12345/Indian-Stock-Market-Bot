@@ -2,13 +2,13 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timezone, timedelta
 try:
-    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, to_ist_time_str
-except ImportError:
-    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, to_ist_time_str
-try:
+    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+    from database import db
     from market_data import market_service, CHAMPION_14_INSTRUMENTS
     from portfolio import portfolio
 except ImportError:
+    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+    from backend.database import db
     from backend.market_data import market_service, CHAMPION_14_INSTRUMENTS
     from backend.portfolio import portfolio
 
