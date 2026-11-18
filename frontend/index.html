@@ -1290,9 +1290,11 @@ Trigger Condition:
       // 3. Compute Lifetime Net Realized P&L and Today's Net Realized P&L dynamically using exact NSE charges
       let lifetimeRealizedNet = 0;
       let todayRealizedNet = 0;
+      const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
 
       if (userState.ledger && Array.isArray(userState.ledger)) {
-        userState.ledger.forEach((day, dayIdx) => {
+        userState.ledger.forEach((day) => {
+          const isToday = (day.date === 'TODAY' || day.fullDate === todayIso);
           if (day.trades && Array.isArray(day.trades)) {
             day.trades.forEach(t => {
               const chg = calculateIndianTradingCharges(t.entry, t.exit, t.qty, t.side || t.direction);
@@ -1300,7 +1302,7 @@ Trigger Condition:
               const net = (t.netPnl !== undefined) ? t.netPnl : parseFloat((gross - (t.charges || chg.totalCharges)).toFixed(2));
               
               lifetimeRealizedNet += net;
-              if (dayIdx === 0 || day.date === 'TODAY' || day.fullDate === new Date().toISOString().slice(0, 10)) {
+              if (isToday) {
                 todayRealizedNet += net;
               }
             });
@@ -1313,8 +1315,9 @@ Trigger Condition:
       userState.netDayR = parseFloat((userState.netDayPnl / (userState.riskPerTrade || 200)).toFixed(2));
 
       // 5. Update Available Margin like a real Demat account:
-      // Base Capital (₹1,25,000) + Lifetime Net Realized Profit + Running Unrealized P&L - Margin Locked
-      userState.availableMargin = Math.max(0, parseFloat((userState.capital + lifetimeRealizedNet + totalUnrealized - totalUsed).toFixed(2)));
+      // Note: userState.capital returned from the backend is current account equity (already net of closed trade P&L).
+      // Available Margin = Account Capital + Running Unrealized P&L - Used Margin Locked
+      userState.availableMargin = Math.max(0, parseFloat((userState.capital + totalUnrealized - totalUsed).toFixed(2)));
 
       // 6. Update HUD Telemetry DOM
       const availElem = document.getElementById('availMarginDisplay');
@@ -1488,6 +1491,9 @@ Trigger Condition:
           if (data.summary.capital !== undefined && data.summary.capital > 0) {
             userState.capital = data.summary.capital;
           }
+          if (data.summary.available_margin !== undefined && (!userState.positions || userState.positions.length === 0)) {
+            userState.availableMargin = data.summary.available_margin;
+          }
           if (data.summary.risk_per_trade !== undefined && data.summary.risk_per_trade > 0) {
             userState.riskPerTrade = data.summary.risk_per_trade;
           }
@@ -1535,8 +1541,9 @@ Trigger Condition:
             const netPnl = parseFloat((grossPnl - charges).toFixed(2));
             const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
 
-            if (!userState.ledger[0]) {
-              userState.ledger.unshift({ date: "TODAY", dayPnl: "+₹0.00", trades: [] });
+            const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+            if (!userState.ledger[0] || (userState.ledger[0].date !== "TODAY" && userState.ledger[0].fullDate !== todayIso)) {
+              userState.ledger.unshift({ date: "TODAY", fullDate: todayIso, dayPnl: "+₹0.00", trades: [] });
             }
 
             userState.ledger[0].trades.unshift({
@@ -1581,7 +1588,7 @@ Trigger Condition:
         if (!res.ok) return;
         const data = await res.json();
         if (data && Array.isArray(data.date_groups)) {
-          const todayIso = new Date().toISOString().slice(0, 10);
+          const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
           userState.ledger = data.date_groups.map(group => ({
             date: group.date === todayIso ? "TODAY" : group.date,
             fullDate: group.date,
@@ -2017,8 +2024,9 @@ Trigger Condition:
       } else if (pendingAction.type === 'CLOSE') {
         fetch(`${BACKEND_URL}/api/positions/close/${posId}`, { method: 'POST' }).catch(e => console.log(e));
         
-        if (!userState.ledger[0]) {
-          userState.ledger.unshift({ date: "TODAY", dayPnl: "+₹0.00", trades: [] });
+        const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+        if (!userState.ledger[0] || (userState.ledger[0].date !== "TODAY" && userState.ledger[0].fullDate !== todayIso)) {
+          userState.ledger.unshift({ date: "TODAY", fullDate: todayIso, dayPnl: "+₹0.00", trades: [] });
         }
 
         const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty, pos.side || pos.direction);
@@ -2049,6 +2057,7 @@ Trigger Condition:
 
         userState.ledger[0].trades.unshift(closedTrade);
         userState.positions.splice(pendingAction.index, 1);
+        userState.capital = parseFloat((userState.capital + netPnl).toFixed(2));
 
         recalculateMarginsAndPnl();
         renderPositions();
@@ -2092,8 +2101,9 @@ Trigger Condition:
       const count = userState.positions.length;
       fetch(`${BACKEND_URL}/api/panic-close`, { method: 'POST' }).catch(e => console.log(e));
       
-      if (!userState.ledger[0]) {
-        userState.ledger.unshift({ date: "TODAY", dayPnl: "+₹0.00", trades: [] });
+      const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+      if (!userState.ledger[0] || (userState.ledger[0].date !== "TODAY" && userState.ledger[0].fullDate !== todayIso)) {
+        userState.ledger.unshift({ date: "TODAY", fullDate: todayIso, dayPnl: "+₹0.00", trades: [] });
       }
 
       userState.positions.forEach(pos => {
@@ -2102,6 +2112,7 @@ Trigger Condition:
         const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
         const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
+        userState.capital = parseFloat((userState.capital + netPnl).toFixed(2));
 
         userState.ledger[0].trades.unshift({
           id: "tr_" + Date.now() + Math.random(),
