@@ -56,11 +56,23 @@ async def background_market_scanner():
             # 2. Run market scan for all 14 champions
             await asyncio.to_thread(trade_engine.run_market_scan)
         except Exception as e:
+            import traceback
             print(f"[Engine] Background scan error: {e}")
+            traceback.print_exc()
         await asyncio.sleep(2)  # Update market scores and scan every 2 seconds
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Startup validation self-test
+    try:
+        print("[Startup] Performing engine and scanner validation...")
+        trade_engine.run_market_scan()
+        print("[Startup] Scanner self-test PASSED. Ready for market operations.")
+    except Exception as e:
+        import traceback
+        print(f"[Startup] CRITICAL Engine validation error: {e}")
+        traceback.print_exc()
+
     scanner_task = asyncio.create_task(background_market_scanner())
     yield
     scanner_task.cancel()
