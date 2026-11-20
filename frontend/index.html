@@ -440,7 +440,7 @@
 </div>
 </div>
 </section>
-<!-- TAB 4: ADVANCED QUANT STATS & RISK GOVERNOR (FULL-SCREEN HORIZONTAL DUAL CURVES) -->
+<!-- TAB 4: ADVANCED QUANT STATS & RISK GOVERNOR (FULL-SCREEN HORIZONTAL DUAL TERMINALS) -->
 <section class="space-y-4 hidden w-full max-w-full" id="tab-stats">
   <!-- Stats Header Bar -->
   <div class="flex items-center justify-between pb-2 border-b border-white/5 flex-wrap gap-2 px-1">
@@ -453,7 +453,7 @@
           <h2 class="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Quant Telemetry &amp; Risk Governor Stats</h2>
           <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30">Horizontal Full-Width</span>
         </div>
-        <span class="text-[9.5px] text-slate-400 font-mono block mt-0.5">Dual interactive terminal covering complete screen width: capital equity compounding &amp; peak drawdown recovery</span>
+        <span class="text-[9.5px] text-slate-400 font-mono block mt-0.5">Dual institutional terminal: Demat capital compounding curve &amp; peak drawdown recovery</span>
       </div>
     </div>
     <div class="flex items-center gap-2 font-mono">
@@ -464,114 +464,358 @@
     </div>
   </div>
 
-  <!-- Dual Curves Container: Horizontally side-by-side across the screen -->
-  <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 w-full" id="analyticsCurvesSection">
-<!-- DUAL VISUAL CURVES: CAPITAL EQUITY & DYNAMIC RISK GOVERNOR DRAWDOWN -->
-<div class="contents" >
-  
-  <!-- Curve 1: Capital Equity Growth Curve Card -->
-  <div class="glass-panel p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-surfaceCard via-surfaceCard to-surfaceLow">
-    <div class="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-emeraldBull/15 border border-emeraldBull/30 flex items-center justify-center text-emeraldBull shadow-[0_0_12px_rgba(16,185,129,0.25)] flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
-        </div>
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</span>
-            <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30" id="equityTradeCountBadge">0 Executions</span>
+  <!-- DUAL TERMINALS GRID: SIDE-BY-SIDE ON DESKTOP, STACKED ON MOBILE -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 w-full" id="analyticsCurvesSection">
+    
+    <!-- ============================================== -->
+    <!-- TERMINAL 1: CAPITAL EQUITY GROWTH (IMAGE 1) -->
+    <!-- ============================================== -->
+    <div class="space-y-3.5 flex flex-col justify-between">
+      
+      <!-- 4 Circular-Icon KPI Cards (2x2 Grid) -->
+      <div class="grid grid-cols-2 gap-2.5 font-mono">
+        <!-- Card 1: Total Return -->
+        <div class="p-3 sm:p-3.5 rounded-2xl border border-emeraldBull/25 bg-[#080C16] flex items-center gap-3 shadow-lg">
+          <div class="w-10 sm:w-11 h-10 sm:h-11 rounded-full bg-emeraldBull/10 border border-emeraldBull/25 flex items-center justify-center text-emeraldBull shadow-[0_0_12px_rgba(16,185,129,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17"></path><path d="M16 7h6v6"></path></svg>
           </div>
-          <span class="text-[9.5px] text-slate-400 font-mono block mt-0.5">Realized Demat capital (₹1,25,000 base) &amp; cumulative R trajectory</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3-Column Bento Metric Summary Bar -->
-    <div class="grid grid-cols-3 gap-2 mt-2.5 font-mono text-center">
-      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
-        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Initial Base</span>
-        <span class="text-xs sm:text-sm font-black text-slate-300">₹1,25,000</span>
-      </div>
-      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
-        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Current Equity</span>
-        <span class="text-xs sm:text-sm font-black text-white" id="equityCurrentCapitalDisplay">₹1,25,000.00</span>
-      </div>
-      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
-        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">All-Time Peak</span>
-        <span class="text-xs sm:text-sm font-black text-emeraldBull" id="equityPeakCapitalDisplay">₹1,25,000.00</span>
-      </div>
-    </div>
-
-    <!-- Equity Canvas Wrapper with HTML Overlay Labels & Tooltip -->
-    <div class="relative w-full mt-3 select-none" id="equityChartWrapper">
-      <div class="w-full h-56 sm:h-64 relative rounded-xl bg-surfaceLow/40 border border-white/5 overflow-hidden" id="equitySvgContainer"></div>
-      <!-- Floating Interactive Tooltip -->
-      <div id="equityTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-40 bg-surfaceCard/95 backdrop-blur-md border border-cyanAccent/40 rounded-xl p-2.5 shadow-2xl text-[10px] font-mono space-y-1"></div>
-    </div>
-  </div>
-
-  <!-- Curve 2: Dynamic Risk Governor & Drawdown Recovery Curve Card -->
-  <div class="glass-panel p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-surfaceCard via-surfaceCard to-surfaceLow">
-    <div class="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-amberTactical/15 border border-amberTactical/30 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.25)] flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>
-        </div>
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Dynamic Risk Governor &amp; Drawdown</span>
+          <div class="min-w-0">
+            <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">Total Return</span>
+            <span class="text-xs sm:text-sm font-black text-emeraldBull truncate block" id="kpiTotalReturnVal">₹1,25,000</span>
+            <span class="text-[8.5px] font-bold text-emeraldBull flex items-center gap-0.5" id="kpiTotalReturnPct">▲ +5.12%</span>
           </div>
-          <span class="text-[9.5px] text-slate-400 font-mono block mt-0.5">Peak-to-trough R-drawdown, Normal mode (&gt; -5.0R) recovery &amp; Defensive circuit breaker (&lt; -15.0R)</span>
+        </div>
+
+        <!-- Card 2: Current Equity -->
+        <div class="p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-[#080C16] flex items-center gap-3 shadow-lg">
+          <div class="w-10 sm:w-11 h-10 sm:h-11 rounded-full bg-amberTactical/10 border border-amberTactical/25 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">Current Equity</span>
+            <span class="text-xs sm:text-sm font-black text-white truncate block" id="kpiCurrentEquityVal">₹1,22,793.16</span>
+            <span class="text-[8.5px] text-slate-400 truncate block">vs ₹1,25,000 initial</span>
+          </div>
+        </div>
+
+        <!-- Card 3: All-Time Peak -->
+        <div class="p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-[#080C16] flex items-center gap-3 shadow-lg">
+          <div class="w-10 sm:w-11 h-10 sm:h-11 rounded-full bg-teal-500/10 border border-teal-500/25 flex items-center justify-center text-teal-400 shadow-[0_0_12px_rgba(20,184,166,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">All-Time Peak</span>
+            <span class="text-xs sm:text-sm font-black text-emeraldBull truncate block" id="kpiAllTimePeakVal">₹1,25,000</span>
+            <span class="text-[8.5px] font-bold text-emeraldBull flex items-center gap-0.5" id="kpiAllTimePeakPct">▲ +0.00%</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Max Drawdown -->
+        <div class="p-3 sm:p-3.5 rounded-2xl border border-roseBear/25 bg-[#080C16] flex items-center gap-3 shadow-lg">
+          <div class="w-10 sm:w-11 h-10 sm:h-11 rounded-full bg-roseBear/10 border border-roseBear/25 flex items-center justify-center text-roseBear shadow-[0_0_12px_rgba(255,51,102,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-4"></path></svg>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">Max Drawdown</span>
+            <span class="text-xs sm:text-sm font-black text-roseBear truncate block" id="kpiMaxDrawdownVal">₹8,750</span>
+            <span class="text-[8.5px] font-bold text-roseBear flex items-center gap-0.5" id="kpiMaxDrawdownPct">▼ -0.35%</span>
+          </div>
         </div>
       </div>
-      <span id="governorModeBadge" class="px-2.5 py-1 rounded-full text-[9px] font-mono font-extrabold bg-amberTactical/20 text-amberTactical border border-amberTactical/40 animate-pulse flex-shrink-0">DEFENSIVE (0.5R Risk)</span>
+
+      <!-- Curve 1 Card: Capital Equity Growth Curve -->
+      <div class="p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-2xl bg-[#080C16]">
+        <!-- Card Header with Timeframe Pills -->
+        <div class="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <div class="text-cyanAccent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="8" x="2" y="13" rx="1"></rect><rect width="4" height="14" x="8" y="7" rx="1"></rect><rect width="4" height="19" x="14" y="2" rx="1"></rect></svg>
+            </div>
+            <h3 class="text-xs font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</h3>
+          </div>
+          <!-- Timeframe Pills (1W 1M 3M 6M 1Y ALL) -->
+          <div class="flex items-center bg-[#0B101E] p-0.5 rounded-lg border border-white/5 font-mono text-[10px]">
+            <button onclick="setEquityTimeframe('1W')" id="eqTf-1W" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">1W</button>
+            <button onclick="setEquityTimeframe('1M')" id="eqTf-1M" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">1M</button>
+            <button onclick="setEquityTimeframe('3M')" id="eqTf-3M" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">3M</button>
+            <button onclick="setEquityTimeframe('6M')" id="eqTf-6M" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">6M</button>
+            <button onclick="setEquityTimeframe('1Y')" id="eqTf-1Y" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">1Y</button>
+            <button onclick="setEquityTimeframe('ALL')" id="eqTf-ALL" class="px-2 py-0.5 rounded-md bg-emeraldBull text-black font-black transition-all">ALL</button>
+          </div>
+        </div>
+
+        <!-- SVG Container -->
+        <div class="relative w-full mt-2.5 select-none" id="equityChartWrapper">
+          <div class="w-full h-60 sm:h-64 relative rounded-xl bg-[#060912] border border-white/5 overflow-hidden" id="equitySvgContainer"></div>
+          <div id="equityTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-40 bg-[#0B1120]/95 backdrop-blur-md border border-cyanAccent/40 rounded-xl p-2.5 shadow-2xl text-[10px] font-mono space-y-1"></div>
+        </div>
+
+        <!-- Legend Below Chart -->
+        <div class="flex items-center justify-center gap-6 mt-2.5 font-mono text-[9.5px] text-slate-400 border-t border-white/5 pt-2">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emeraldBull"></span>
+            <span class="text-slate-300 font-bold">Equity Curve</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-4 border-t-2 border-dashed border-cyanAccent/70 inline-block"></span>
+            <span class="text-slate-300">Initial Capital (<span id="eqLegendInitialCap">₹1,25,000.00</span>)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Sub-Grid: Left Key Stats, Right Trade Distribution Donut -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        
+        <!-- Left: Key Stats Table Card -->
+        <div class="p-3.5 rounded-2xl border border-white/10 bg-[#080C16] font-mono shadow-lg flex flex-col justify-between">
+          <div class="flex items-center gap-2 pb-2 border-b border-white/5">
+            <div class="text-cyanAccent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="8" x="2" y="13" rx="1"></rect><rect width="4" height="14" x="8" y="7" rx="1"></rect><rect width="4" height="19" x="14" y="2" rx="1"></rect></svg>
+            </div>
+            <h4 class="text-xs font-black text-white uppercase tracking-wider">Key Stats</h4>
+          </div>
+          <div class="space-y-1 mt-2 text-[9.5px]">
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Initial Capital</span>
+              <span class="font-bold text-white" id="statInitialCap">₹1,25,000.00</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Current Equity</span>
+              <span class="font-bold text-white" id="statCurrentEquity">₹1,22,793.16</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Total Return</span>
+              <span class="font-bold text-emeraldBull" id="statTotalReturn">+5.12%</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Absolute Profit</span>
+              <span class="font-bold text-emeraldBull" id="statAbsoluteProfit">₹1,25,000</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Max Drawdown</span>
+              <span class="font-bold text-roseBear" id="statMaxDrawdown">-0.35% (₹8,750)</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Sharpe Ratio</span>
+              <span class="font-bold text-white" id="statSharpe">1.82</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
+              <span class="text-slate-400">Profit Factor</span>
+              <span class="font-bold text-white" id="statProfitFactor">2.14</span>
+            </div>
+            <div class="flex items-center justify-between py-0.5">
+              <span class="text-slate-400">Win Rate</span>
+              <span class="font-bold text-white" id="statWinRate">68.4%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Trade Distribution Donut Card -->
+        <div class="p-3.5 rounded-2xl border border-white/10 bg-[#080C16] font-mono shadow-lg flex flex-col justify-between">
+          <div class="flex items-center gap-2 pb-2 border-b border-white/5">
+            <div class="text-cyanAccent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            </div>
+            <h4 class="text-xs font-black text-white uppercase tracking-wider">Trade Distribution</h4>
+          </div>
+          
+          <!-- Donut SVG with center text -->
+          <div class="flex items-center justify-center my-1 relative">
+            <div id="donutContainer" class="w-28 h-28 relative flex items-center justify-center">
+              <!-- Dynamically populated SVG -->
+            </div>
+          </div>
+
+          <!-- Donut Legend -->
+          <div class="space-y-1 text-[9px] border-t border-white/5 pt-2">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emeraldBull"></span>
+                <span class="text-slate-300">Winning Trades</span>
+              </span>
+              <span class="font-bold text-emeraldBull" id="donutWinningPct">(68.4%)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                <span class="text-slate-300">Losing Trades</span>
+              </span>
+              <span class="font-bold text-sky-400" id="donutLosingPct">(31.6%)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- 3-Column Bento Metric Summary Bar -->
-    <div class="grid grid-cols-3 gap-2 mt-2.5 font-mono text-center">
-      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
-        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Current DD</span>
-        <span class="text-xs sm:text-sm font-black text-roseBear" id="govCurrentDdDisplay">-0.00 R</span>
+    <!-- ============================================== -->
+    <!-- TERMINAL 2: DYNAMIC RISK GOVERNOR (IMAGE 2) -->
+    <!-- ============================================== -->
+    <div class="space-y-3.5 flex flex-col justify-between">
+      
+      <!-- 3 Top Circular KPI Cards (1x3 Grid) -->
+      <div class="grid grid-cols-3 gap-2 font-mono">
+        <!-- Card 1: Current Drawdown -->
+        <div class="p-2.5 sm:p-3 rounded-2xl border border-amberTactical/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
+          <div class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-amberTactical/10 border border-amberTactical/25 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 17-8.5-8.5-5 5L2 7"></path><path d="M16 17h6v-6"></path></svg>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Current DD</span>
+            <span class="text-xs sm:text-sm font-black text-amberTactical truncate block" id="govKpiCurrentDd">-11.04 R</span>
+            <span class="text-[8px] text-slate-400 truncate block" id="govKpiCurrentDdSub">(-0.35%)</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Peak Drawdown -->
+        <div class="p-2.5 sm:p-3 rounded-2xl border border-roseBear/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
+          <div class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-roseBear/10 border border-roseBear/25 flex items-center justify-center text-roseBear shadow-[0_0_12px_rgba(255,51,102,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"></path></svg>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Peak DD</span>
+            <span class="text-xs sm:text-sm font-black text-roseBear truncate block" id="govKpiPeakDd">-19.13 R</span>
+            <span class="text-[8px] text-slate-400 truncate block" id="govKpiPeakDdSub">(-0.61%)</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Normal Target -->
+        <div class="p-2.5 sm:p-3 rounded-2xl border border-cyanAccent/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
+          <div class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-cyanAccent/10 border border-cyanAccent/25 flex items-center justify-center text-cyanAccent shadow-[0_0_12px_rgba(56,189,248,0.15)] flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Normal Target</span>
+            <span class="text-xs sm:text-sm font-black text-cyanAccent truncate block">-5.00 R</span>
+            <span class="text-[8px] text-slate-400 truncate block" id="govKpiNormalTargetSub">(-0.18%)</span>
+          </div>
+        </div>
       </div>
-      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
-        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Peak Trough</span>
-        <span class="text-xs sm:text-sm font-black text-rose-500" id="govPeakDdDisplay">-0.00 R</span>
+
+      <!-- Governor Recovery Progress Banner Card -->
+      <div class="p-3 sm:p-3.5 rounded-2xl border border-white/10 bg-[#080C16] font-mono space-y-2 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="text-amberTactical">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </div>
+            <h4 class="text-xs font-black text-white uppercase tracking-wider">Governor Recovery</h4>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[8.5px] font-extrabold bg-sky-500/15 text-cyanAccent border border-cyanAccent/30 flex items-center gap-1">
+            <span>Cap to Normal Mode</span>
+            <strong id="govCapPctBadge">57.3%</strong>
+          </span>
+        </div>
+
+        <div class="flex items-center justify-between text-[9.5px]">
+          <span class="text-slate-400 font-bold">Progress to Normal Mode</span>
+          <div class="text-right">
+            <span class="text-xs sm:text-sm font-black text-emeraldBull" id="govRecoveryPctBig">57.3%</span>
+            <span class="text-[8.5px] text-slate-400 ml-1" id="govRecoveryRatioSub">(3.06 R / ~120%)</span>
+          </div>
+        </div>
+
+        <!-- Rounded Gradient Progress Bar -->
+        <div class="w-full bg-[#0B101E] rounded-full h-2 overflow-hidden border border-white/10">
+          <div id="govRecoveryBar" class="h-full rounded-full bg-gradient-to-r from-amberTactical via-cyanAccent to-emeraldBull transition-all duration-500" style="width: 57.3%;"></div>
+        </div>
+
+        <!-- 4-Item Legend Strip -->
+        <div class="grid grid-cols-4 gap-1 text-[8px] text-slate-400 pt-1 border-t border-white/5">
+          <div class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emeraldBull"></span>
+            <span>Trough: <strong class="text-slate-200" id="govTroughLegend">-19.13 R</strong></span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyanAccent"></span>
+            <span>Normal: <strong class="text-slate-200">-5.00 R</strong></span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emeraldBull"></span>
+            <span>Peak: <strong class="text-slate-200" id="govPeakLegend">0.00 R</strong></span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+            <span>MMR: <strong class="text-slate-200" id="govMmrLegend">-0.08 R</strong></span>
+          </div>
+        </div>
       </div>
-      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
-        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Normal Target</span>
-        <span class="text-xs sm:text-sm font-black text-cyanAccent">-5.00 R</span>
+
+      <!-- Curve 2 Card: Dynamic Risk Governor & Drawdown Recovery Curve -->
+      <div class="p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-2xl bg-[#080C16]">
+        <!-- Card Header with Timeframe Pills -->
+        <div class="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <div class="text-cyanAccent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="8" x="2" y="13" rx="1"></rect><rect width="4" height="14" x="8" y="7" rx="1"></rect><rect width="4" height="19" x="14" y="2" rx="1"></rect></svg>
+            </div>
+            <h3 class="text-xs font-black text-white font-mono uppercase tracking-wider">Equity &amp; Risk Chart</h3>
+          </div>
+          <!-- Timeframe Pills (1W 1M 3M 6M ALL) -->
+          <div class="flex items-center bg-[#0B101E] p-0.5 rounded-lg border border-white/5 font-mono text-[10px]">
+            <button onclick="setDdTimeframe('1W')" id="ddTf-1W" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">1W</button>
+            <button onclick="setDdTimeframe('1M')" id="ddTf-1M" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">1M</button>
+            <button onclick="setDdTimeframe('3M')" id="ddTf-3M" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">3M</button>
+            <button onclick="setDdTimeframe('6M')" id="ddTf-6M" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all">6M</button>
+            <button onclick="setDdTimeframe('ALL')" id="ddTf-ALL" class="px-2 py-0.5 rounded-md bg-cyanAccent text-black font-black transition-all">ALL</button>
+          </div>
+        </div>
+
+        <!-- SVG Container -->
+        <div class="relative w-full mt-2.5 select-none" id="drawdownChartWrapper">
+          <div class="w-full h-60 sm:h-64 relative rounded-xl bg-[#060912] border border-white/5 overflow-hidden" id="drawdownSvgContainer"></div>
+          <div id="drawdownTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-40 bg-[#0B1120]/95 backdrop-blur-md border border-amberTactical/40 rounded-xl p-2.5 shadow-2xl text-[10px] font-mono space-y-1"></div>
+        </div>
       </div>
+
+      <!-- Bottom 4-Card Metric Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono">
+        <!-- Metric 1: Normal Mode -->
+        <div class="p-2 rounded-xl border border-white/5 bg-[#080C16] text-center shadow-md">
+          <div class="flex items-center justify-center gap-1 text-cyanAccent mb-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="8" x="2" y="13" rx="1"></rect><rect width="4" height="14" x="8" y="7" rx="1"></rect><rect width="4" height="19" x="14" y="2" rx="1"></rect></svg>
+            <span class="text-[8px] text-slate-400 uppercase tracking-wider font-bold">Normal Mode</span>
+          </div>
+          <span class="text-xs font-black text-amberTactical block" id="stripNormalModePct">57.3%</span>
+          <span class="text-[7.5px] text-slate-400 block" id="stripNormalModeGap">(3.06 R)</span>
+        </div>
+
+        <!-- Metric 2: Max Drawdown -->
+        <div class="p-2 rounded-xl border border-white/5 bg-[#080C16] text-center shadow-md">
+          <div class="flex items-center justify-center gap-1 text-roseBear mb-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg>
+            <span class="text-[8px] text-slate-400 uppercase tracking-wider font-bold">Max Drawdown</span>
+          </div>
+          <span class="text-xs font-black text-roseBear block" id="stripMaxDdVal">-19.13 R</span>
+          <span class="text-[7.5px] text-slate-400 block" id="stripMaxDdSub">(-0.61%)</span>
+        </div>
+
+        <!-- Metric 3: Target -->
+        <div class="p-2 rounded-xl border border-white/5 bg-[#080C16] text-center shadow-md">
+          <div class="flex items-center justify-center gap-1 text-cyanAccent mb-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle></svg>
+            <span class="text-[8px] text-slate-400 uppercase tracking-wider font-bold">Target</span>
+          </div>
+          <span class="text-xs font-black text-cyanAccent block">-5.00 R</span>
+          <span class="text-[7.5px] text-slate-400 block" id="stripTargetSub">(-0.18%)</span>
+        </div>
+
+        <!-- Metric 4: Recovery Progress -->
+        <div class="p-2 rounded-xl border border-white/5 bg-[#080C16] text-center shadow-md">
+          <div class="flex items-center justify-center gap-1 text-emeraldBull mb-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            <span class="text-[8px] text-slate-400 uppercase tracking-wider font-bold">Recovery</span>
+          </div>
+          <span class="text-xs font-black text-emeraldBull block" id="stripRecoveryPct">68.2%</span>
+          <div class="w-full bg-[#0B101E] rounded-full h-1 overflow-hidden mt-1 border border-white/10">
+            <div id="stripRecoveryBar" class="h-full rounded-full bg-emeraldBull" style="width: 68.2%;"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Recovery Progress Telemetry Bar -->
-    <div class="mt-2.5 p-2.5 rounded-xl bg-surfaceHigh/40 border border-white/5 space-y-1.5 font-mono">
-      <div class="flex items-center justify-between text-[9.5px]">
-        <span class="text-slate-300 font-bold flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-cyanAccent animate-ping"></span>
-          <span>Governor Recovery Progress to Normal Mode (1.0R):</span>
-          <span class="text-cyanAccent font-black" id="govRecoveryPctText">0.0%</span>
-        </span>
-        <span class="text-slate-400" id="govDistanceText">Gap: 0.00 R</span>
-      </div>
-      <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden p-0.5 border border-white/10">
-        <div id="govRecoveryBar" class="h-full rounded-full bg-gradient-to-r from-amberTactical via-cyanAccent to-emeraldBull transition-all duration-500 shadow-[0_0_8px_rgba(56,189,248,0.5)]" style="width: 0%;"></div>
-      </div>
-      <div class="flex items-center justify-between text-[8.5px] text-slate-400">
-        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-roseBear"></span> Trough: <strong id="govTroughSubText">-19.13 R</strong></span>
-        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-cyanAccent"></span> Normal Threshold: <strong>-5.00 R</strong></span>
-        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emeraldBull"></span> Peak HWM: <strong>0.00 R</strong></span>
-      </div>
-    </div>
-
-    <!-- Drawdown Canvas Wrapper with HTML Overlay Labels & Tooltip -->
-    <div class="relative w-full mt-3 select-none" id="drawdownChartWrapper">
-      <div class="w-full h-60 sm:h-68 relative rounded-xl bg-surfaceLow/40 border border-white/5 overflow-hidden" id="drawdownSvgContainer"></div>
-      <!-- Floating Interactive Tooltip -->
-      <div id="drawdownTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-40 bg-surfaceCard/95 backdrop-blur-md border border-amberTactical/40 rounded-xl p-2.5 shadow-2xl text-[10px] font-mono space-y-1"></div>
-    </div>
-  </div>
-
-</div>
   </div>
 </section>
 
@@ -2480,8 +2724,84 @@ Trigger Condition:
     }
 
     // ==============================================
-    // DUAL VISUAL CURVES: CAPITAL EQUITY & DRAWDOWN
+    // DUAL VISUAL TERMINALS: CAPITAL EQUITY & RISK GOVERNOR (NO GLOW, CRISP VECTOR DESIGN)
     // ==============================================
+    let currentEquityTf = 'ALL';
+    let currentDdTf = 'ALL';
+
+    function setEquityTimeframe(tf) {
+      currentEquityTf = tf;
+      ['1W', '1M', '3M', '6M', '1Y', 'ALL'].forEach(t => {
+        const el = document.getElementById(`eqTf-${t}`);
+        if (el) {
+          if (t === tf) {
+            el.className = 'px-2 py-0.5 rounded-md bg-emeraldBull text-black font-black transition-all';
+          } else {
+            el.className = 'px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all';
+          }
+        }
+      });
+      renderAnalyticsCurves();
+    }
+
+    function setDdTimeframe(tf) {
+      currentDdTf = tf;
+      ['1W', '1M', '3M', '6M', 'ALL'].forEach(t => {
+        const el = document.getElementById(`ddTf-${t}`);
+        if (el) {
+          if (t === tf) {
+            el.className = 'px-2 py-0.5 rounded-md bg-cyanAccent text-black font-black transition-all';
+          } else {
+            el.className = 'px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition-all';
+          }
+        }
+      });
+      renderAnalyticsCurves();
+    }
+
+    function filterPointsByTimeframe(pts, tf) {
+      if (!pts || pts.length <= 2 || tf === 'ALL') return pts;
+      let count = pts.length;
+      if (tf === '1W') count = Math.min(pts.length, 8);
+      else if (tf === '1M') count = Math.min(pts.length, 25);
+      else if (tf === '3M') count = Math.min(pts.length, 60);
+      else if (tf === '6M') count = Math.min(pts.length, 120);
+      else if (tf === '1Y') count = Math.min(pts.length, 250);
+      
+      const slice = pts.slice(-count);
+      return slice.length >= 2 ? slice : pts;
+    }
+
+    function renderTradeDistributionDonut(winRate) {
+      const container = document.getElementById('donutContainer');
+      if (!container) return;
+      const rate = Math.max(0, Math.min(100, Number(winRate) || 0));
+      const losingRate = (100 - rate);
+      const circum = 2 * Math.PI * 38; // approx 238.76
+      const winStroke = (rate / 100) * circum;
+      const loseStroke = (losingRate / 100) * circum;
+      const loseOffset = -winStroke;
+
+      container.innerHTML = `
+        <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-90">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#0F172A" stroke-width="12" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#0284C7" stroke-width="12" 
+            stroke-dasharray="${circum} ${circum}" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#10B981" stroke-width="12" 
+            stroke-dasharray="${winStroke} ${circum}" />
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center font-mono select-none pointer-events-none">
+          <span class="text-sm font-black text-white">${rate.toFixed(1)}%</span>
+          <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Win Rate</span>
+        </div>
+      `;
+
+      const winLbl = document.getElementById('donutWinningPct');
+      if (winLbl) winLbl.innerText = `(${rate.toFixed(1)}%)`;
+      const loseLbl = document.getElementById('donutLosingPct');
+      if (loseLbl) loseLbl.innerText = `(${losingRate.toFixed(1)}%)`;
+    }
+
     function renderAnalyticsCurves() {
       let points = userState.equityCurve;
       let stats = userState.governorStats;
@@ -2573,72 +2893,153 @@ Trigger Condition:
         }
       }
 
-      // Update Header Badges & Telemetry
+      // Calculations for KPI Cards & Badges
       const latestPoint = points[points.length - 1];
       const allCapitals = points.map(p => p.capital);
+      const minCapital = Math.min(...allCapitals);
       const peakCapital = Math.max(...allCapitals);
+      const initialCapital = 125000.0;
+      const netGain = latestPoint.capital - initialCapital;
+      const returnPct = (netGain / initialCapital) * 100;
+      const peakReturnPct = ((peakCapital - initialCapital) / initialCapital) * 100;
+      const maxDrawdownAmount = peakCapital - minCapital;
+      const maxDrawdownPct = peakCapital > 0 ? (maxDrawdownAmount / peakCapital) * 100 : 0;
 
-      const countBadge = document.getElementById('equityTradeCountBadge');
-      if (countBadge) countBadge.innerText = `${points.length - 1} Executions`;
+      // Extract Win Rate & Analytics metrics
+      const winRate = userState.winRate !== undefined ? userState.winRate : (stats && stats.win_rate !== undefined ? stats.win_rate : 40.2);
+      const pf = userState.profitFactor || "0.67";
+      const sharpe = userState.sharpeRatio || "1.82";
 
-      const curCapDisp = document.getElementById('equityCurrentCapitalDisplay');
-      if (curCapDisp) {
-        curCapDisp.innerText = `₹${latestPoint.capital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        curCapDisp.className = `text-[11px] font-black ${latestPoint.capital >= 125000 ? 'text-emeraldBull' : 'text-amberTactical'}`;
+      // 1. Update 4 Top KPI Cards (Terminal 1 - Image 1)
+      const kpiTotRet = document.getElementById('kpiTotalReturnVal');
+      if (kpiTotRet) {
+        kpiTotRet.innerText = `${netGain >= 0 ? '+' : '-'}₹${Math.abs(netGain).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        kpiTotRet.className = `text-xs sm:text-sm font-black truncate block ${netGain >= 0 ? 'text-emeraldBull' : 'text-amberTactical'}`;
+      }
+      const kpiTotPct = document.getElementById('kpiTotalReturnPct');
+      if (kpiTotPct) {
+        kpiTotPct.innerText = `${netGain >= 0 ? '▲ +' : '▼ '}${returnPct.toFixed(2)}%`;
+        kpiTotPct.className = `text-[8.5px] font-bold flex items-center gap-0.5 ${netGain >= 0 ? 'text-emeraldBull' : 'text-amberTactical'}`;
       }
 
-      const peakCapDisp = document.getElementById('equityPeakCapitalDisplay');
-      if (peakCapDisp) peakCapDisp.innerText = `₹${peakCapital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      const kpiCurEq = document.getElementById('kpiCurrentEquityVal');
+      if (kpiCurEq) kpiCurEq.innerText = `₹${latestPoint.capital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
-      const govBadge = document.getElementById('governorModeBadge');
-      if (govBadge) {
-        if (stats.mode === 'DEFENSIVE') {
-          govBadge.className = "px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-amberTactical/20 text-amberTactical border border-amberTactical/40 animate-pulse";
-          govBadge.innerText = "DEFENSIVE (0.5R Risk)";
-        } else {
-          govBadge.className = "px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-emeraldBull/20 text-emeraldBull border border-emeraldBull/40";
-          govBadge.innerText = "NORMAL (1.0R Risk)";
-        }
+      const kpiPeak = document.getElementById('kpiAllTimePeakVal');
+      if (kpiPeak) kpiPeak.innerText = `₹${peakCapital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      const kpiPeakPct = document.getElementById('kpiAllTimePeakPct');
+      if (kpiPeakPct) kpiPeakPct.innerText = `▲ +${peakReturnPct.toFixed(2)}%`;
+
+      const kpiMaxDd = document.getElementById('kpiMaxDrawdownVal');
+      if (kpiMaxDd) kpiMaxDd.innerText = `₹${maxDrawdownAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      const kpiMaxDdPct = document.getElementById('kpiMaxDrawdownPct');
+      if (kpiMaxDdPct) kpiMaxDdPct.innerText = `▼ -${maxDrawdownPct.toFixed(2)}%`;
+
+      // 2. Update Key Stats (Bottom Left Card)
+      const sInit = document.getElementById('statInitialCap');
+      if (sInit) sInit.innerText = `₹${initialCapital.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      const sCurr = document.getElementById('statCurrentEquity');
+      if (sCurr) sCurr.innerText = `₹${latestPoint.capital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      const sTot = document.getElementById('statTotalReturn');
+      if (sTot) {
+        sTot.innerText = `${returnPct >= 0 ? '+' : ''}${returnPct.toFixed(2)}%`;
+        sTot.className = `font-bold ${returnPct >= 0 ? 'text-emeraldBull' : 'text-amberTactical'}`;
+      }
+      const sAbs = document.getElementById('statAbsoluteProfit');
+      if (sAbs) {
+        sAbs.innerText = `${netGain >= 0 ? '+' : '-'}₹${Math.abs(netGain).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        sAbs.className = `font-bold ${netGain >= 0 ? 'text-emeraldBull' : 'text-amberTactical'}`;
+      }
+      const sDd = document.getElementById('statMaxDrawdown');
+      if (sDd) sDd.innerText = `-${maxDrawdownPct.toFixed(2)}% (₹${maxDrawdownAmount.toFixed(0)})`;
+      const sSh = document.getElementById('statSharpe');
+      if (sSh) sSh.innerText = sharpe;
+      const sPf = document.getElementById('statProfitFactor');
+      if (sPf) sPf.innerText = pf;
+      const sWr = document.getElementById('statWinRate');
+      if (sWr) sWr.innerText = `${Number(winRate).toFixed(1)}%`;
+
+      // 3. Update Trade Distribution Donut
+      renderTradeDistributionDonut(winRate);
+
+      // 4. Update Terminal 2 Top 3 KPI Cards (Image 2)
+      const govCurDd = document.getElementById('govKpiCurrentDd');
+      if (govCurDd) {
+        govCurDd.innerText = `${stats.current_drawdown_r >= 0 ? '+' : ''}${stats.current_drawdown_r.toFixed(2)} R`;
+        govCurDd.className = `text-xs sm:text-sm font-black truncate block ${stats.current_drawdown_r >= -5.0 ? 'text-emeraldBull' : (stats.current_drawdown_r <= -15.0 ? 'text-roseBear' : 'text-amberTactical')}`;
+      }
+      const govCurSub = document.getElementById('govKpiCurrentDdSub');
+      if (govCurSub) govCurSub.innerText = `(-${Math.abs((stats.current_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
+
+      const govPkDd = document.getElementById('govKpiPeakDd');
+      if (govPkDd) govPkDd.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+      const govPkSub = document.getElementById('govKpiPeakDdSub');
+      if (govPkSub) govPkSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
+
+      const govNormSub = document.getElementById('govKpiNormalTargetSub');
+      if (govNormSub) {
+        govNormSub.innerText = stats.distance_to_normal_r > 0 
+          ? `(Need +${stats.distance_to_normal_r.toFixed(2)} R)` 
+          : '(Normal Active)';
       }
 
-      const curDdDisp = document.getElementById('govCurrentDdDisplay');
-      if (curDdDisp) {
-        curDdDisp.innerText = `${stats.current_drawdown_r >= 0 ? '+' : ''}${stats.current_drawdown_r.toFixed(2)} R`;
-        curDdDisp.className = `text-[11px] font-black ${stats.current_drawdown_r >= -5.0 ? 'text-emeraldBull' : (stats.current_drawdown_r <= -15.0 ? 'text-roseBear' : 'text-amberTactical')}`;
+      // 5. Update Governor Recovery Progress Card
+      const recPct = stats.recovery_pct || 0;
+      const govCapBadge = document.getElementById('govCapPctBadge');
+      if (govCapBadge) govCapBadge.innerText = `${recPct}%`;
+      const govBig = document.getElementById('govRecoveryPctBig');
+      if (govBig) govBig.innerText = `${recPct}%`;
+      const govRatioSub = document.getElementById('govRecoveryRatioSub');
+      if (govRatioSub) {
+        govRatioSub.innerText = stats.distance_to_normal_r > 0 
+          ? `(${stats.distance_to_normal_r.toFixed(2)} R gap / ~120%)` 
+          : '(Target Reached)';
       }
+      const govBar = document.getElementById('govRecoveryBar');
+      if (govBar) govBar.style.width = `${Math.min(100, Math.max(0, recPct))}%`;
 
-      const peakDdDisp = document.getElementById('govPeakDdDisplay');
-      if (peakDdDisp) peakDdDisp.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+      const gTrough = document.getElementById('govTroughLegend');
+      if (gTrough) gTrough.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+      const gPeak = document.getElementById('govPeakLegend');
+      if (gPeak) gPeak.innerText = `${(stats.peak_realized_r || 0).toFixed(2)} R`;
+      const gMmr = document.getElementById('govMmrLegend');
+      if (gMmr) gMmr.innerText = `${(stats.current_drawdown_r + 5.0).toFixed(2)} R`;
 
-      const recPctText = document.getElementById('govRecoveryPctText');
-      if (recPctText) recPctText.innerText = `${stats.recovery_pct || 0}%`;
+      // 6. Update Bottom 4-Card Metric Strip
+      const sNormPct = document.getElementById('stripNormalModePct');
+      if (sNormPct) sNormPct.innerText = `${recPct}%`;
+      const sNormGap = document.getElementById('stripNormalModeGap');
+      if (sNormGap) sNormGap.innerText = stats.distance_to_normal_r > 0 ? `(${stats.distance_to_normal_r.toFixed(2)} R)` : '(0.00 R)';
 
-      const distText = document.getElementById('govDistanceText');
-      if (distText) {
-        distText.innerText = stats.distance_to_normal_r > 0 
-          ? `Gap to Normal: ${stats.distance_to_normal_r.toFixed(2)} R (~₹${Math.round(stats.distance_to_normal_r * (userState.riskPerTrade || 200))})`
-          : `Fully in Normal 1.0R Mode`;
-      }
+      const sMaxDdVal = document.getElementById('stripMaxDdVal');
+      if (sMaxDdVal) sMaxDdVal.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+      const sMaxDdSub = document.getElementById('stripMaxDdSub');
+      if (sMaxDdSub) sMaxDdSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
 
-      const recBar = document.getElementById('govRecoveryBar');
-      if (recBar) recBar.style.width = `${Math.min(100, Math.max(0, stats.recovery_pct || 0))}%`;
+      const sRecPct = document.getElementById('stripRecoveryPct');
+      if (sRecPct) sRecPct.innerText = `${recPct}%`;
+      const sRecBar = document.getElementById('stripRecoveryBar');
+      if (sRecBar) sRecBar.style.width = `${Math.min(100, Math.max(0, recPct))}%`;
 
-      const troughSub = document.getElementById('govTroughSubText');
-      if (troughSub) troughSub.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+      // Filter and render SVGs
+      const filteredEqPoints = filterPointsByTimeframe(points, currentEquityTf);
+      const filteredDdPoints = filterPointsByTimeframe(points, currentDdTf);
 
-      // Render the SVGs
-      renderEquityCurveSvg(points);
-      renderDrawdownCurveSvg(points, stats);
+      renderEquityCurveSvg(filteredEqPoints);
+      renderDrawdownCurveSvg(filteredDdPoints, stats);
     }
 
+    // ==============================================
+    // CURVE 1: CRISP SOLID CAPITAL EQUITY SVG (NO BLUR GLOW)
+    // ==============================================
     function renderEquityCurveSvg(points) {
       const container = document.getElementById('equitySvgContainer');
       const tooltip = document.getElementById('equityTooltip');
       if (!container) return;
 
       const W = 1000;
-      const H = 220;
-      const pad = { top: 25, right: 30, bottom: 30, left: 65 };
+      const H = 240;
+      const pad = { top: 30, right: 35, bottom: 35, left: 75 };
       const plotW = W - pad.left - pad.right;
       const plotH = H - pad.top - pad.bottom;
 
@@ -2668,14 +3069,12 @@ Trigger Condition:
         const val = minCap + (g / gridCount) * (maxCap - minCap);
         const yPos = getY(val);
         const pctY = (yPos / H) * 100;
-        gridLinesSvg += `<line x1="${pad.left}" y1="${yPos}" x2="${W - pad.right}" y2="${yPos}" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="4,4" />`;
-        yAxisLabelsHtml += `<span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctY}%; transform: translateY(-50%);">₹${Math.round(val).toLocaleString('en-IN')}</span>`;
+        gridLinesSvg += `<line x1="${pad.left}" y1="${yPos}" x2="${W - pad.right}" y2="${yPos}" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="3,3" />`;
+        yAxisLabelsHtml += `<span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctY}%; transform: translateY(-50%);">₹${Math.round(val).toLocaleString('en-IN')}</span>`;
       }
 
-      // Starting Baseline ₹125,000 Line & Badge
-      const baselineSvg = `<line x1="${pad.left}" y1="${yBase}" x2="${W - pad.right}" y2="${yBase}" stroke="rgba(0, 240, 255, 0.45)" stroke-width="1.5" stroke-dasharray="5,4" />`;
-      const pctBase = (yBase / H) * 100;
-      const baselineBadgeHtml = `<span class="absolute text-[9.5px] font-mono font-black text-cyanAccent bg-surfaceCard/95 px-2 py-0.5 rounded-md border border-cyanAccent/50 shadow-[0_0_8px_rgba(0,240,255,0.25)] pointer-events-none flex items-center gap-1" style="right: 8px; top: ${pctBase}%; transform: translateY(-50%);">Start Baseline ₹1,25,000 (0.0R)</span>`;
+      // Starting Baseline ₹125,000 Line
+      const baselineSvg = `<line x1="${pad.left}" y1="${yBase}" x2="${W - pad.right}" y2="${yBase}" stroke="rgba(56, 189, 248, 0.35)" stroke-width="1.2" stroke-dasharray="4,4" />`;
 
       // Build Path & Area
       let pathD = `M ${getX(0)},${getY(points[0].capital)}`;
@@ -2684,45 +3083,76 @@ Trigger Condition:
       }
       const areaD = `${pathD} L ${getX(points.length - 1)},${pad.top + plotH} L ${getX(0)},${pad.top + plotH} Z`;
 
-      // Peak Capital Point
+      // Peak & Low Points
       let peakIdx = 0;
       let peakVal = points[0].capital;
+      let lowIdx = 0;
+      let lowVal = points[0].capital;
+
       points.forEach((p, idx) => {
         if (p.capital > peakVal) {
           peakVal = p.capital;
           peakIdx = idx;
+        }
+        if (p.capital < lowVal) {
+          lowVal = p.capital;
+          lowIdx = idx;
         }
       });
 
       const lastIdx = points.length - 1;
       const peakX = getX(peakIdx);
       const peakY = getY(peakVal);
+      const lowX = getX(lowIdx);
+      const lowY = getY(lowVal);
       const lastX = getX(lastIdx);
       const lastY = getY(points[lastIdx].capital);
 
-      const isCurrentProfitable = points[lastIdx].capital >= 125000;
-      const strokeColor = isCurrentProfitable ? '#10B981' : '#00F0FF';
-      const gradientStart = isCurrentProfitable ? 'rgba(16, 185, 129, 0.35)' : 'rgba(0, 240, 255, 0.30)';
-
       const pctPeakX = (peakX / W) * 100;
       const pctPeakY = (peakY / H) * 100;
+      const pctLowX = (lowX / W) * 100;
+      const pctLowY = (lowY / H) * 100;
       const pctLastX = (lastX / W) * 100;
       const pctLastY = (lastY / H) * 100;
 
-      const peakBadgeHtml = `<span class="absolute text-[8.5px] font-mono font-bold text-emeraldBull bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-emeraldBull/40 shadow-sm pointer-events-none whitespace-nowrap" style="left: ${pctPeakX}%; top: ${pctPeakY}%; transform: translate(-50%, -20px);">Peak: ₹${peakVal.toLocaleString('en-IN')}</span>`;
-      const lastBadgeHtml = `<span class="absolute text-[8.5px] font-mono font-bold ${isCurrentProfitable ? 'text-emeraldBull border-emeraldBull/40' : 'text-cyanAccent border-cyanAccent/40'} bg-surfaceCard/90 px-1.5 py-0.5 rounded border shadow-sm pointer-events-none whitespace-nowrap" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-50%, 12px);">Now: ₹${points[lastIdx].capital.toLocaleString('en-IN')}</span>`;
+      // Pinned Badges Matching Reference Image 1
+      const peakBadgeHtml = `
+        <div class="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#10B981] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center" style="left: ${pctPeakX}%; top: ${pctPeakY}%; transform: translate(-50%, -115%);">
+          <span class="text-[8px] text-slate-400 uppercase font-bold leading-tight">Peak</span>
+          <span class="text-[10px] font-black text-emeraldBull leading-tight">₹${peakVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+      `;
+
+      const lowBadgeHtml = `
+        <div class="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#EF4444] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center" style="left: ${pctLowX}%; top: ${pctLowY}%; transform: translate(-50%, 15%);">
+          <span class="text-[8px] text-slate-400 uppercase font-bold leading-tight">Low</span>
+          <span class="text-[10px] font-black text-roseBear leading-tight">₹${lowVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+      `;
+
+      const lastBadgeHtml = `
+        <div class="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#10B981] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-85%, -115%);">
+          <span class="text-[8px] text-slate-400 uppercase font-bold leading-tight">Now</span>
+          <span class="text-[10px] font-black text-emeraldBull leading-tight">₹${points[lastIdx].capital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+      `;
+
+      // Bottom X-Axis Date Labels
+      let dateLabelsHtml = '';
+      const dateStep = Math.max(1, Math.floor((points.length - 1) / 4));
+      for (let s = 0; s < points.length; s += dateStep) {
+        const pt = points[s];
+        const pctX = (getX(s) / W) * 100;
+        dateLabelsHtml += `<span class="absolute text-[8.5px] font-mono text-slate-400 pointer-events-none transform -translate-x-1/2 bottom-1" style="left: ${pctX}%;">${pt.trade_date || ''}</span>`;
+      }
 
       container.innerHTML = `
         <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none" id="equitySvgEl">
           <defs>
             <linearGradient id="equityGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="${gradientStart}" />
-              <stop offset="100%" stop-color="rgba(14, 20, 38, 0)" />
+              <stop offset="0%" stop-color="rgba(16, 185, 129, 0.22)" />
+              <stop offset="100%" stop-color="rgba(6, 9, 18, 0)" />
             </linearGradient>
-            <filter id="equityGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
 
           <!-- Grid Lines -->
@@ -2734,28 +3164,30 @@ Trigger Condition:
           <!-- Gradient Area Fill -->
           <path d="${areaD}" fill="url(#equityGradient)" />
 
-          <!-- Equity Line Curve -->
-          <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#equityGlow)" />
+          <!-- Solid Crisp Vector Curve (NO BLUR GLOW) -->
+          <path d="${pathD}" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 
           <!-- Peak Circle Marker -->
-          <circle cx="${peakX}" cy="${peakY}" r="4.5" fill="#10B981" stroke="#FFFFFF" stroke-width="1.5" />
-          <circle cx="${peakX}" cy="${peakY}" r="8" fill="none" stroke="#10B981" stroke-width="1" opacity="0.6" />
+          <circle cx="${peakX}" cy="${peakY}" r="4" fill="#FFFFFF" stroke="#10B981" stroke-width="2.5" />
+
+          <!-- Low Circle Marker -->
+          <circle cx="${lowX}" cy="${lowY}" r="4" fill="#FFFFFF" stroke="#EF4444" stroke-width="2.5" />
 
           <!-- Current Circle Marker -->
-          <circle cx="${lastX}" cy="${lastY}" r="5" fill="${strokeColor}" stroke="#FFFFFF" stroke-width="2" />
-          <circle cx="${lastX}" cy="${lastY}" r="9" fill="none" stroke="${strokeColor}" stroke-width="1.5" class="animate-ping" opacity="0.75" />
+          <circle cx="${lastX}" cy="${lastY}" r="4.5" fill="#FFFFFF" stroke="#10B981" stroke-width="2.5" />
 
           <!-- Dynamic Crosshair Line -->
-          <line id="equityCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(0, 240, 255, 0.7)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0" />
-          <circle id="equityCrosshairDot" cx="0" cy="0" r="5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" opacity="0" />
+          <line id="equityCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(0, 240, 255, 0.7)" stroke-width="1.2" stroke-dasharray="3,3" opacity="0" />
+          <circle id="equityCrosshairDot" cx="0" cy="0" r="4.5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" opacity="0" />
         </svg>
 
         <!-- Crisp HTML Overlays (Zero-squeeze typography) -->
         <div class="absolute inset-0 pointer-events-none select-none">
           ${yAxisLabelsHtml}
-          ${baselineBadgeHtml}
           ${peakBadgeHtml}
+          ${lowBadgeHtml}
           ${lastBadgeHtml}
+          ${dateLabelsHtml}
         </div>
       `;
 
@@ -2835,6 +3267,9 @@ Trigger Condition:
       container.ontouchend = handleLeave;
     }
 
+    // ==============================================
+    // CURVE 2: CRISP SOLID DRAWDOWN & RISK SVG (NO BLUR GLOW)
+    // ==============================================
     function renderDrawdownCurveSvg(points, stats) {
       const container = document.getElementById('drawdownSvgContainer');
       const tooltip = document.getElementById('drawdownTooltip');
@@ -2842,7 +3277,7 @@ Trigger Condition:
 
       const W = 1000;
       const H = 260;
-      const pad = { top: 25, right: 30, bottom: 30, left: 65 };
+      const pad = { top: 30, right: 35, bottom: 35, left: 65 };
       const plotW = W - pad.left - pad.right;
       const plotH = H - pad.top - pad.bottom;
 
@@ -2851,8 +3286,8 @@ Trigger Condition:
         return;
       }
 
-      const minDrawdown = Math.min(...points.map(p => p.drawdown_r), stats ? stats.max_drawdown_r : -16.0);
-      const yMin = Math.min(minDrawdown, -17.0) - 2.5;
+      const minDrawdown = Math.min(...points.map(p => p.drawdown_r), stats ? stats.max_drawdown_r : -19.13);
+      const yMin = Math.min(minDrawdown, -19.5) - 2.0;
       const yMax = 1.0;
 
       const getX = (i) => pad.left + (points.length === 1 ? plotW / 2 : (i / (points.length - 1)) * plotW);
@@ -2864,17 +3299,17 @@ Trigger Condition:
       const yBottom = pad.top + plotH;
 
       // Shaded Zones SVG
-      const normalZoneSvg = `<rect x="${pad.left}" y="${yZero}" width="${plotW}" height="${Math.max(0, yNormal - yZero)}" fill="rgba(16, 185, 129, 0.07)" />`;
-      const defensiveZoneSvg = `<rect x="${pad.left}" y="${yNormal}" width="${plotW}" height="${Math.max(0, yDefensive - yNormal)}" fill="rgba(245, 158, 11, 0.07)" />`;
-      const criticalZoneSvg = `<rect x="${pad.left}" y="${yDefensive}" width="${plotW}" height="${Math.max(0, yBottom - yDefensive)}" fill="rgba(255, 51, 102, 0.08)" />`;
+      const normalZoneSvg = `<rect x="${pad.left}" y="${yZero}" width="${plotW}" height="${Math.max(0, yNormal - yZero)}" fill="rgba(16, 185, 129, 0.08)" />`;
+      const defensiveZoneSvg = `<rect x="${pad.left}" y="${yNormal}" width="${plotW}" height="${Math.max(0, yDefensive - yNormal)}" fill="rgba(245, 158, 11, 0.08)" />`;
+      const criticalZoneSvg = `<rect x="${pad.left}" y="${yDefensive}" width="${plotW}" height="${Math.max(0, yBottom - yDefensive)}" fill="rgba(244, 63, 94, 0.08)" />`;
 
       // Threshold lines SVG
       const thresholdLinesSvg = `
-        <line x1="${pad.left}" y1="${yZero}" x2="${W - pad.right}" y2="${yZero}" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1.2" stroke-dasharray="4,4" />
-        <line x1="${pad.left}" y1="${yNormal}" x2="${W - pad.right}" y2="${yNormal}" stroke="#00F0FF" stroke-width="1.8" stroke-dasharray="5,4" />
-        <line x1="${pad.left}" y1="${yDefensive}" x2="${W - pad.right}" y2="${yDefensive}" stroke="#FF3366" stroke-width="1.8" stroke-dasharray="5,4" />
-        <line x1="${pad.left}" y1="${getY(-10.0)}" x2="${W - pad.right}" y2="${getY(-10.0)}" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" stroke-dasharray="3,3" />
-        <line x1="${pad.left}" y1="${getY(-20.0)}" x2="${W - pad.right}" y2="${getY(-20.0)}" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="${pad.left}" y1="${yZero}" x2="${W - pad.right}" y2="${yZero}" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.2" stroke-dasharray="4,4" />
+        <line x1="${pad.left}" y1="${yNormal}" x2="${W - pad.right}" y2="${yNormal}" stroke="#00F0FF" stroke-width="1.5" stroke-dasharray="5,4" />
+        <line x1="${pad.left}" y1="${getY(-10.0)}" x2="${W - pad.right}" y2="${getY(-10.0)}" stroke="rgba(245, 158, 11, 0.4)" stroke-width="1" stroke-dasharray="4,4" />
+        <line x1="${pad.left}" y1="${yDefensive}" x2="${W - pad.right}" y2="${yDefensive}" stroke="#FF3366" stroke-width="1.5" stroke-dasharray="5,4" />
+        <line x1="${pad.left}" y1="${getY(-20.0)}" x2="${W - pad.right}" y2="${getY(-20.0)}" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" stroke-dasharray="3,3" />
       `;
 
       // Drawdown Line Path & Area
@@ -2913,30 +3348,33 @@ Trigger Condition:
       const pctLastX = (lastX / W) * 100;
       const pctLastY = (lastY / H) * 100;
 
-      // Crisp HTML Overlays
+      // Crisp HTML Axis Labels
       const yAxisLabelsHtml = `
-        <span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctZero}%; transform: translateY(-50%);">0.0 R</span>
-        <span class="absolute text-[9px] font-mono font-bold text-cyanAccent bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-cyanAccent/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctNormal}%; transform: translateY(-50%);">-5.0 R</span>
-        <span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus10}%; transform: translateY(-50%);">-10.0 R</span>
-        <span class="absolute text-[9px] font-mono font-bold text-roseBear bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-roseBear/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctDefensive}%; transform: translateY(-50%);">-15.0 R</span>
-        <span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus20}%; transform: translateY(-50%);">-20.0 R</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctZero}%; transform: translateY(-50%);">0.0 R</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-cyanAccent bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-cyanAccent/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctNormal}%; transform: translateY(-50%);">-5.0 R</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus10}%; transform: translateY(-50%);">-10.0 R</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-roseBear bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-roseBear/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctDefensive}%; transform: translateY(-50%);">-15.0 R</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus20}%; transform: translateY(-50%);">-20.0 R</span>
       `;
 
-      const zoneTagsHtml = `
-        <span class="absolute text-[8.5px] font-mono font-bold text-emeraldBull bg-surfaceCard/90 border border-emeraldBull/30 px-2 py-0.5 rounded shadow-sm pointer-events-none" style="left: 60px; top: ${((yZero + 6) / H) * 100}%;">NORMAL 1.0R ZONE</span>
-        <span class="absolute text-[8.5px] font-mono font-bold text-amberTactical bg-surfaceCard/90 border border-amberTactical/30 px-2 py-0.5 rounded shadow-sm pointer-events-none" style="left: 60px; top: ${((yNormal + 6) / H) * 100}%;">DEFENSIVE 0.5R ZONE</span>
-        <span class="absolute text-[8.5px] font-mono font-bold text-roseBear bg-surfaceCard/90 border border-roseBear/30 px-2 py-0.5 rounded shadow-sm pointer-events-none" style="left: 60px; top: ${((yDefensive + 6) / H) * 100}%;">CRITICAL ZONE (&lt; -15.0R)</span>
+      // Zone Badges Matching Reference Image 2
+      const zoneBadgesHtml = `
+        <!-- Normal Zone Badge -->
+        <span class="absolute text-[8px] font-mono font-bold text-emeraldBull bg-[#080C16] border border-emeraldBull/60 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="left: 55px; top: ${((yZero + 5) / H) * 100}%;">Normal 1.00 Zone</span>
+        <!-- Normal Target Badge -->
+        <span class="absolute text-[8px] font-mono font-bold text-cyanAccent bg-[#080C16] border border-cyanAccent/60 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="right: 12px; top: ${pctNormal}%; transform: translateY(-50%);">-5.00 R — Normal Target (~ -0.18 R)</span>
+        <!-- Defensive 0.5R Zone Badge -->
+        <span class="absolute text-[8px] font-mono font-bold text-amberTactical bg-[#080C16] border border-amberTactical/60 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="left: 55px; top: ${pctMinus10}%; transform: translateY(-50%);">Defensive 0.5R Zone</span>
+        <!-- -15.0 R badge -->
+        <span class="absolute text-[8px] font-mono font-bold text-roseBear bg-[#080C16] border border-roseBear/60 px-1.5 py-0.5 rounded pointer-events-none shadow-md" style="left: 55px; top: ${pctDefensive}%; transform: translateY(-50%);">-15.0 R</span>
+        <!-- Critical Zone Badge -->
+        <span class="absolute text-[8px] font-mono font-bold text-purple-300 bg-[#080C16] border border-purple-500/50 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="left: 110px; top: ${((yDefensive + 6) / H) * 100}%;">Critical Zone (-15.00 R to -20.00 R)</span>
       `;
 
-      const thresholdBadgesHtml = `
-        <span class="absolute text-[9px] font-mono font-bold text-slate-300 bg-surfaceCard/90 border border-white/10 px-2 py-0.5 rounded-md pointer-events-none" style="right: 8px; top: ${pctZero}%; transform: translateY(-50%);">0.00 R Peak HWM</span>
-        <span class="absolute text-[9.5px] font-mono font-black text-cyanAccent bg-surfaceCard/95 border border-cyanAccent/50 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(0,240,255,0.25)] pointer-events-none flex items-center gap-1" style="right: 8px; top: ${pctNormal}%; transform: translateY(-50%);"><span>▲</span> Normal Target (-5.00 R)</span>
-        <span class="absolute text-[9.5px] font-mono font-black text-roseBear bg-surfaceCard/95 border border-roseBear/50 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(255,51,102,0.25)] pointer-events-none flex items-center gap-1" style="right: 8px; top: ${pctDefensive}%; transform: translateY(-50%);"><span>▼</span> Defensive Trigger (-15.00 R)</span>
-      `;
-
+      // Marker Pinned Badges Matching Reference Image 2
       const markerBadgesHtml = `
-        <span class="absolute text-[9px] font-mono font-black text-rose-400 bg-surfaceCard/95 border border-rose-500/50 px-1.5 py-0.5 rounded shadow-md pointer-events-none whitespace-nowrap" style="left: ${pctTroughX}%; top: ${pctTroughY}%; transform: translate(-50%, 8px);">Trough: ${minDdVal.toFixed(2)} R</span>
-        <span class="absolute text-[9px] font-mono font-black text-cyanAccent bg-surfaceCard/95 border border-cyanAccent/50 px-1.5 py-0.5 rounded shadow-md pointer-events-none whitespace-nowrap" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-50%, -24px);">Current: ${points[lastIdx].drawdown_r.toFixed(2)} R</span>
+        <span class="absolute text-[9px] font-mono font-black text-pink-400 bg-[#080C16] border border-pink-500/60 px-2 py-0.5 rounded-lg shadow-lg pointer-events-none whitespace-nowrap" style="left: ${pctTroughX}%; top: ${pctTroughY}%; transform: translate(-50%, 12px);">Trough: ${minDdVal.toFixed(2)} R</span>
+        <span class="absolute text-[9px] font-mono font-black text-amberTactical bg-[#080C16] border border-amberTactical/60 px-2 py-0.5 rounded-lg shadow-lg pointer-events-none whitespace-nowrap" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-50%, -125%);">Current: ${points[lastIdx].drawdown_r.toFixed(2)} R</span>
       `;
 
       container.innerHTML = `
@@ -2944,12 +3382,8 @@ Trigger Condition:
           <defs>
             <linearGradient id="ddAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="rgba(245, 158, 11, 0.02)" />
-              <stop offset="100%" stop-color="rgba(245, 158, 11, 0.25)" />
+              <stop offset="100%" stop-color="rgba(245, 158, 11, 0.18)" />
             </linearGradient>
-            <filter id="ddGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
 
           <!-- Zone Shading -->
@@ -2963,27 +3397,24 @@ Trigger Condition:
           <!-- Drawdown Fill Area -->
           <path d="${ddAreaD}" fill="url(#ddAreaGrad)" />
 
-          <!-- Drawdown Main Line -->
-          <path d="${ddPathD}" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#ddGlow)" />
+          <!-- Solid Crisp Golden Drawdown Curve (NO BLUR GLOW) -->
+          <path d="${ddPathD}" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 
           <!-- Peak Trough Marker -->
-          <circle cx="${troughX}" cy="${troughY}" r="5" fill="#FF3366" stroke="#FFFFFF" stroke-width="2" />
-          <circle cx="${troughX}" cy="${troughY}" r="9" fill="none" stroke="#FF3366" stroke-width="1.5" opacity="0.8" />
+          <circle cx="${troughX}" cy="${troughY}" r="4" fill="#FFFFFF" stroke="#EC4899" stroke-width="2.5" />
 
           <!-- Current Point Marker -->
-          <circle cx="${lastX}" cy="${lastY}" r="5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" />
-          <circle cx="${lastX}" cy="${lastY}" r="9" fill="none" stroke="#00F0FF" stroke-width="1.5" class="animate-ping" opacity="0.85" />
+          <circle cx="${lastX}" cy="${lastY}" r="4.5" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2.5" />
 
           <!-- Dynamic Crosshair Line -->
-          <line id="ddCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(245, 158, 11, 0.8)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0" />
-          <circle id="ddCrosshairDot" cx="0" cy="0" r="5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2" opacity="0" />
+          <line id="ddCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(245, 158, 11, 0.8)" stroke-width="1.2" stroke-dasharray="3,3" opacity="0" />
+          <circle id="ddCrosshairDot" cx="0" cy="0" r="4.5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2" opacity="0" />
         </svg>
 
         <!-- Crisp HTML Overlays (Zero-squeeze typography) -->
         <div class="absolute inset-0 pointer-events-none select-none">
           ${yAxisLabelsHtml}
-          ${zoneTagsHtml}
-          ${thresholdBadgesHtml}
+          ${zoneBadgesHtml}
           ${markerBadgesHtml}
         </div>
       `;
