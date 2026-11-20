@@ -3,7 +3,8 @@ import {
   LayoutDashboard, 
   Layers, 
   BarChart3, 
-  Sliders 
+  Sliders,
+  Activity
 } from 'lucide-react';
 
 export default function BottomNav({ activeTab, onSelectTab, positionsCount = 0 }) {
@@ -11,6 +12,7 @@ export default function BottomNav({ activeTab, onSelectTab, positionsCount = 0 }
     { id: 'dashboard', label: 'Watchlist', icon: LayoutDashboard },
     { id: 'positions', label: 'Positions', icon: Layers, badge: positionsCount },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'stats', label: 'Stats', icon: Activity },
     { id: 'settings', label: 'Settings', icon: Sliders }
   ];
 
@@ -33,7 +35,7 @@ export default function BottomNav({ activeTab, onSelectTab, positionsCount = 0 }
                 }`}
               >
                 {/* ACTIVE PILL INDICATOR */}
-                <div className={`relative px-3.5 py-1 rounded-xl flex items-center justify-center transition-all ${
+                <div className={`relative px-3 py-1 rounded-xl flex items-center justify-center transition-all ${
                   isActive 
                     ? 'bg-sky-500/20 text-sky-300 border border-sky-400/30 shadow-md shadow-sky-500/20' 
                     : 'bg-transparent text-slate-400'

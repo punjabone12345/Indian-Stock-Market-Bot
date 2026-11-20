@@ -5,13 +5,15 @@ import BottomNav from './components/BottomNav';
 import DashboardTab from './components/DashboardTab';
 import PositionsTab from './components/PositionsTab';
 import AnalyticsTab from './components/AnalyticsTab';
+import StatsTab from './components/StatsTab';
 import SettingsTab from './components/SettingsTab';
 import TradingChart from './components/TradingChart';
 import { 
   LayoutDashboard, 
   Layers, 
   BarChart3, 
-  Sliders 
+  Sliders,
+  Activity 
 } from 'lucide-react';
 
 // Auto-detects Render backend when on Vercel, or localhost when running locally
@@ -382,7 +384,7 @@ export default function App() {
 
   // Tab switch effect: refresh data
   useEffect(() => {
-    if (activeTab === 'analytics') fetchAnalytics();
+    if (activeTab === 'analytics' || activeTab === 'stats') fetchAnalytics();
     if (activeTab === 'settings') fetchSettings();
   }, [activeTab, fetchAnalytics, fetchSettings]);
 
@@ -494,6 +496,7 @@ export default function App() {
     { id: 'dashboard', label: 'Watchlist', icon: LayoutDashboard },
     { id: 'positions', label: 'Positions', icon: Layers, badge: positions.length },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'stats', label: 'Stats', icon: Activity },
     { id: 'settings', label: 'Settings', icon: Sliders }
   ];
 
@@ -573,6 +576,13 @@ export default function App() {
           <AnalyticsTab
             analyticsData={analyticsData}
             onExportCSV={handleExportCSV}
+          />
+        )}
+
+        {activeTab === 'stats' && (
+          <StatsTab
+            analyticsData={analyticsData}
+            onRefresh={fetchAnalytics}
           />
         )}
 
