@@ -657,38 +657,44 @@
       <!-- 3 Top Circular KPI Cards (1x3 Grid) -->
       <div class="grid grid-cols-3 gap-2 font-mono">
         <!-- Card 1: Current Drawdown -->
-        <div class="p-2.5 sm:p-3 rounded-2xl border border-amberTactical/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
-          <div class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-amberTactical/10 border border-amberTactical/25 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.15)] flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 17-8.5-8.5-5 5L2 7"></path><path d="M16 17h6v-6"></path></svg>
+        <div class="p-2 sm:p-2.5 md:p-3 rounded-2xl border border-amberTactical/25 bg-[#080C16] flex flex-col justify-between shadow-lg min-w-0">
+          <div class="flex items-center gap-1.5 mb-1.5">
+            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amberTactical/15 border border-amberTactical/30 flex items-center justify-center text-amberTactical flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 17-8.5-8.5-5 5L2 7"></path><path d="M16 17h6v-6"></path></svg>
+            </div>
+            <span class="text-[8.5px] sm:text-[9.5px] text-slate-400 uppercase tracking-wider font-bold truncate">Current DD</span>
           </div>
-          <div class="min-w-0">
-            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Current DD</span>
-            <span class="text-xs sm:text-sm font-black text-amberTactical truncate block" id="govKpiCurrentDd">-11.04 R</span>
-            <span class="text-[8px] text-slate-400 truncate block" id="govKpiCurrentDdSub">(-0.35%)</span>
+          <div>
+            <span class="text-xs sm:text-sm md:text-base font-black text-amberTactical block whitespace-nowrap leading-tight" id="govKpiCurrentDd">-11.04 R</span>
+            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block whitespace-nowrap leading-tight mt-0.5" id="govKpiCurrentDdSub">(-0.35%)</span>
           </div>
         </div>
 
         <!-- Card 2: Peak Drawdown -->
-        <div class="p-2.5 sm:p-3 rounded-2xl border border-roseBear/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
-          <div class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-roseBear/10 border border-roseBear/25 flex items-center justify-center text-roseBear shadow-[0_0_12px_rgba(255,51,102,0.15)] flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"></path></svg>
+        <div class="p-2 sm:p-2.5 md:p-3 rounded-2xl border border-roseBear/25 bg-[#080C16] flex flex-col justify-between shadow-lg min-w-0">
+          <div class="flex items-center gap-1.5 mb-1.5">
+            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-roseBear/10 border border-roseBear/25 flex items-center justify-center text-roseBear flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"></path></svg>
+            </div>
+            <span class="text-[8.5px] sm:text-[9.5px] text-slate-400 uppercase tracking-wider font-bold truncate">Peak DD</span>
           </div>
-          <div class="min-w-0">
-            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Peak DD</span>
-            <span class="text-xs sm:text-sm font-black text-roseBear truncate block" id="govKpiPeakDd">-19.13 R</span>
-            <span class="text-[8px] text-slate-400 truncate block" id="govKpiPeakDdSub">(-0.61%)</span>
+          <div>
+            <span class="text-xs sm:text-sm md:text-base font-black text-roseBear block whitespace-nowrap leading-tight" id="govKpiPeakDd">-19.13 R</span>
+            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block whitespace-nowrap leading-tight mt-0.5" id="govKpiPeakDdSub">(-0.61%)</span>
           </div>
         </div>
 
         <!-- Card 3: Normal Target -->
-        <div class="p-2.5 sm:p-3 rounded-2xl border border-cyanAccent/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
-          <div class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-cyanAccent/10 border border-cyanAccent/25 flex items-center justify-center text-cyanAccent shadow-[0_0_12px_rgba(56,189,248,0.15)] flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        <div class="p-2 sm:p-2.5 md:p-3 rounded-2xl border border-cyanAccent/25 bg-[#080C16] flex flex-col justify-between shadow-lg min-w-0">
+          <div class="flex items-center gap-1.5 mb-1.5">
+            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-cyanAccent/10 border border-cyanAccent/25 flex items-center justify-center text-cyanAccent flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+            </div>
+            <span class="text-[8.5px] sm:text-[9.5px] text-slate-400 uppercase tracking-wider font-bold truncate">Normal Target</span>
           </div>
-          <div class="min-w-0">
-            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Normal Target</span>
-            <span class="text-xs sm:text-sm font-black text-cyanAccent truncate block">-5.00 R</span>
-            <span class="text-[8px] text-slate-400 truncate block" id="govKpiNormalTargetSub">(-0.18%)</span>
+          <div>
+            <span class="text-xs sm:text-sm md:text-base font-black text-cyanAccent block whitespace-nowrap leading-tight" id="govKpiNormalTargetVal">-5.00 R</span>
+            <span class="text-[8px] sm:text-[8.5px] text-slate-400 block whitespace-nowrap leading-tight mt-0.5" id="govKpiNormalTargetSub">(-0.80%)</span>
           </div>
         </div>
       </div>
@@ -2976,11 +2982,15 @@ Trigger Condition:
       const govPkSub = document.getElementById('govKpiPeakDdSub');
       if (govPkSub) govPkSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
 
+      const govNormVal = document.getElementById('govKpiNormalTargetVal');
+      if (govNormVal) {
+        const normVal = stats.recovery_threshold_r !== undefined ? stats.recovery_threshold_r : -5.0;
+        govNormVal.innerText = `${normVal.toFixed(2)} R`;
+      }
       const govNormSub = document.getElementById('govKpiNormalTargetSub');
       if (govNormSub) {
-        govNormSub.innerText = stats.distance_to_normal_r > 0 
-          ? `(Need +${stats.distance_to_normal_r.toFixed(2)} R)` 
-          : '(Normal Active)';
+        const normVal = stats.recovery_threshold_r !== undefined ? stats.recovery_threshold_r : -5.0;
+        govNormSub.innerText = `(-${Math.abs((normVal * 200 / initialCapital) * 100).toFixed(2)}%)`;
       }
 
       // 5. Update Governor Recovery Progress Card
@@ -3064,13 +3074,11 @@ Trigger Condition:
       // Grid levels & HTML labels
       const gridCount = 4;
       let gridLinesSvg = '';
-      let yAxisLabelsHtml = '';
       for (let g = 0; g <= gridCount; g++) {
         const val = minCap + (g / gridCount) * (maxCap - minCap);
         const yPos = getY(val);
         const pctY = (yPos / H) * 100;
         gridLinesSvg += `<line x1="${pad.left}" y1="${yPos}" x2="${W - pad.right}" y2="${yPos}" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="3,3" />`;
-        yAxisLabelsHtml += `<span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctY}%; transform: translateY(-50%);">₹${Math.round(val).toLocaleString('en-IN')}</span>`;
       }
 
       // Starting Baseline ₹125,000 Line
@@ -3115,37 +3123,6 @@ Trigger Condition:
       const pctLastX = (lastX / W) * 100;
       const pctLastY = (lastY / H) * 100;
 
-      // Pinned Badges Matching Reference Image 1
-      const peakBadgeHtml = `
-        <div class="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#10B981] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center" style="left: ${pctPeakX}%; top: ${pctPeakY}%; transform: translate(-50%, -115%);">
-          <span class="text-[8px] text-slate-400 uppercase font-bold leading-tight">Peak</span>
-          <span class="text-[10px] font-black text-emeraldBull leading-tight">₹${peakVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-      `;
-
-      const lowBadgeHtml = `
-        <div class="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#EF4444] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center" style="left: ${pctLowX}%; top: ${pctLowY}%; transform: translate(-50%, 15%);">
-          <span class="text-[8px] text-slate-400 uppercase font-bold leading-tight">Low</span>
-          <span class="text-[10px] font-black text-roseBear leading-tight">₹${lowVal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-      `;
-
-      const lastBadgeHtml = `
-        <div class="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#10B981] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-85%, -115%);">
-          <span class="text-[8px] text-slate-400 uppercase font-bold leading-tight">Now</span>
-          <span class="text-[10px] font-black text-emeraldBull leading-tight">₹${points[lastIdx].capital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-        </div>
-      `;
-
-      // Bottom X-Axis Date Labels
-      let dateLabelsHtml = '';
-      const dateStep = Math.max(1, Math.floor((points.length - 1) / 4));
-      for (let s = 0; s < points.length; s += dateStep) {
-        const pt = points[s];
-        const pctX = (getX(s) / W) * 100;
-        dateLabelsHtml += `<span class="absolute text-[8.5px] font-mono text-slate-400 pointer-events-none transform -translate-x-1/2 bottom-1" style="left: ${pctX}%;">${pt.trade_date || ''}</span>`;
-      }
-
       container.innerHTML = `
         <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none" id="equitySvgEl">
           <defs>
@@ -3180,15 +3157,6 @@ Trigger Condition:
           <line id="equityCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(0, 240, 255, 0.7)" stroke-width="1.2" stroke-dasharray="3,3" opacity="0" />
           <circle id="equityCrosshairDot" cx="0" cy="0" r="4.5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" opacity="0" />
         </svg>
-
-        <!-- Crisp HTML Overlays (Zero-squeeze typography) -->
-        <div class="absolute inset-0 pointer-events-none select-none">
-          ${yAxisLabelsHtml}
-          ${peakBadgeHtml}
-          ${lowBadgeHtml}
-          ${lastBadgeHtml}
-          ${dateLabelsHtml}
-        </div>
       `;
 
       // Mousemove / Touchmove Interactive Crosshair & Tooltip
@@ -3348,35 +3316,6 @@ Trigger Condition:
       const pctLastX = (lastX / W) * 100;
       const pctLastY = (lastY / H) * 100;
 
-      // Crisp HTML Axis Labels
-      const yAxisLabelsHtml = `
-        <span class="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctZero}%; transform: translateY(-50%);">0.0 R</span>
-        <span class="absolute text-[8.5px] font-mono font-bold text-cyanAccent bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-cyanAccent/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctNormal}%; transform: translateY(-50%);">-5.0 R</span>
-        <span class="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus10}%; transform: translateY(-50%);">-10.0 R</span>
-        <span class="absolute text-[8.5px] font-mono font-bold text-roseBear bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-roseBear/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctDefensive}%; transform: translateY(-50%);">-15.0 R</span>
-        <span class="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus20}%; transform: translateY(-50%);">-20.0 R</span>
-      `;
-
-      // Zone Badges Matching Reference Image 2
-      const zoneBadgesHtml = `
-        <!-- Normal Zone Badge -->
-        <span class="absolute text-[8px] font-mono font-bold text-emeraldBull bg-[#080C16] border border-emeraldBull/60 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="left: 55px; top: ${((yZero + 5) / H) * 100}%;">Normal 1.00 Zone</span>
-        <!-- Normal Target Badge -->
-        <span class="absolute text-[8px] font-mono font-bold text-cyanAccent bg-[#080C16] border border-cyanAccent/60 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="right: 12px; top: ${pctNormal}%; transform: translateY(-50%);">-5.00 R — Normal Target (~ -0.18 R)</span>
-        <!-- Defensive 0.5R Zone Badge -->
-        <span class="absolute text-[8px] font-mono font-bold text-amberTactical bg-[#080C16] border border-amberTactical/60 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="left: 55px; top: ${pctMinus10}%; transform: translateY(-50%);">Defensive 0.5R Zone</span>
-        <!-- -15.0 R badge -->
-        <span class="absolute text-[8px] font-mono font-bold text-roseBear bg-[#080C16] border border-roseBear/60 px-1.5 py-0.5 rounded pointer-events-none shadow-md" style="left: 55px; top: ${pctDefensive}%; transform: translateY(-50%);">-15.0 R</span>
-        <!-- Critical Zone Badge -->
-        <span class="absolute text-[8px] font-mono font-bold text-purple-300 bg-[#080C16] border border-purple-500/50 px-2 py-0.5 rounded-full pointer-events-none shadow-md" style="left: 110px; top: ${((yDefensive + 6) / H) * 100}%;">Critical Zone (-15.00 R to -20.00 R)</span>
-      `;
-
-      // Marker Pinned Badges Matching Reference Image 2
-      const markerBadgesHtml = `
-        <span class="absolute text-[9px] font-mono font-black text-pink-400 bg-[#080C16] border border-pink-500/60 px-2 py-0.5 rounded-lg shadow-lg pointer-events-none whitespace-nowrap" style="left: ${pctTroughX}%; top: ${pctTroughY}%; transform: translate(-50%, 12px);">Trough: ${minDdVal.toFixed(2)} R</span>
-        <span class="absolute text-[9px] font-mono font-black text-amberTactical bg-[#080C16] border border-amberTactical/60 px-2 py-0.5 rounded-lg shadow-lg pointer-events-none whitespace-nowrap" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-50%, -125%);">Current: ${points[lastIdx].drawdown_r.toFixed(2)} R</span>
-      `;
-
       container.innerHTML = `
         <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none" id="drawdownSvgEl">
           <defs>
@@ -3410,13 +3349,6 @@ Trigger Condition:
           <line id="ddCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(245, 158, 11, 0.8)" stroke-width="1.2" stroke-dasharray="3,3" opacity="0" />
           <circle id="ddCrosshairDot" cx="0" cy="0" r="4.5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2" opacity="0" />
         </svg>
-
-        <!-- Crisp HTML Overlays (Zero-squeeze typography) -->
-        <div class="absolute inset-0 pointer-events-none select-none">
-          ${yAxisLabelsHtml}
-          ${zoneBadgesHtml}
-          ${markerBadgesHtml}
-        </div>
       `;
 
       // Mousemove / Touchmove Interactive Crosshair & Tooltip

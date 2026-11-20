@@ -459,80 +459,6 @@ export default function StatsTab({ analyticsData, onRefresh }) {
                 )}
               </svg>
 
-              {/* Crisp HTML Overlays */}
-              <div className="absolute inset-0 pointer-events-none select-none">
-                {/* Y-Axis Labels */}
-                {[0, 1, 2, 3, 4].map(g => {
-                  const val = minEqCap + (g / 4) * (maxEqCap - minEqCap);
-                  const pctY = (getEqY(val) / H_EQ) * 100;
-                  return (
-                    <span 
-                      key={g} 
-                      className="absolute text-[9px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm"
-                      style={{ left: '8px', top: `${pctY}%`, transform: 'translateY(-50%)' }}
-                    >
-                      ₹{Math.round(val).toLocaleString('en-IN')}
-                    </span>
-                  );
-                })}
-
-                {/* Peak Badge */}
-                <div 
-                  className="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#10B981] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center"
-                  style={{
-                    left: `${(getEqX(fPeakIdx) / W) * 100}%`,
-                    top: `${(getEqY(fPeakVal) / H_EQ) * 100}%`,
-                    transform: 'translate(-50%, -115%)'
-                  }}
-                >
-                  <span className="text-[8px] text-slate-400 uppercase font-bold leading-tight">Peak</span>
-                  <span className="text-[10px] font-black text-emerald-400 leading-tight">
-                    ₹{fPeakVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
-
-                {/* Low Badge */}
-                <div 
-                  className="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#EF4444] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center"
-                  style={{
-                    left: `${(getEqX(fLowIdx) / W) * 100}%`,
-                    top: `${(getEqY(fLowVal) / H_EQ) * 100}%`,
-                    transform: 'translate(-50%, 15%)'
-                  }}
-                >
-                  <span className="text-[8px] text-slate-400 uppercase font-bold leading-tight">Low</span>
-                  <span className="text-[10px] font-black text-rose-400 leading-tight">
-                    ₹{fLowVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
-
-                {/* Now Badge */}
-                <div 
-                  className="absolute pointer-events-none whitespace-nowrap bg-[#080C16] border border-[#10B981] px-2 py-0.5 rounded-lg shadow-lg flex flex-col items-center"
-                  style={{
-                    left: `${(getEqX(fLastIdx) / W) * 100}%`,
-                    top: `${(getEqY(filteredEqPoints[fLastIdx].capital) / H_EQ) * 100}%`,
-                    transform: 'translate(-85%, -115%)'
-                  }}
-                >
-                  <span className="text-[8px] text-slate-400 uppercase font-bold leading-tight">Now</span>
-                  <span className="text-[10px] font-black text-emerald-400 leading-tight">
-                    ₹{filteredEqPoints[fLastIdx].capital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
-
-                {/* Date Labels at Bottom */}
-                {filteredEqPoints.length > 1 && [0, Math.floor(filteredEqPoints.length / 2), filteredEqPoints.length - 1].map((idx, i) => (
-                  <span 
-                    key={i}
-                    className="absolute text-[8.5px] font-mono text-slate-400 pointer-events-none transform -translate-x-1/2 bottom-1"
-                    style={{ left: `${(getEqX(idx) / W) * 100}%` }}
-                  >
-                    {filteredEqPoints[idx].trade_date || ''}
-                  </span>
-                ))}
-              </div>
-
               {/* Hover Tooltip */}
               {hoverEquity && (
                 <div 
@@ -694,47 +620,55 @@ export default function StatsTab({ analyticsData, onRefresh }) {
           {/* 3 Top Circular KPI Cards (1x3 Grid) */}
           <div className="grid grid-cols-3 gap-2 font-mono">
             {/* Card 1: Current Drawdown */}
-            <div className="p-2.5 sm:p-3 rounded-2xl border border-amber-500/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
-              <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.15)] flex-shrink-0">
-                <TrendingDown className="w-4 h-4" />
+            <div className="p-2 sm:p-2.5 md:p-3 rounded-2xl border border-amber-500/25 bg-[#080C16] flex flex-col justify-between shadow-lg min-w-0">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
+                  <TrendingDown className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[8.5px] sm:text-[9.5px] text-slate-400 uppercase tracking-wider font-bold truncate">Current DD</span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Current DD</span>
-                <span className={`text-xs sm:text-sm font-black truncate block ${govStats.current_drawdown_r >= -5.0 ? 'text-emerald-400' : (govStats.current_drawdown_r <= -15.0 ? 'text-rose-400' : 'text-amber-400')}`}>
+              <div>
+                <span className={`text-xs sm:text-sm md:text-base font-black block whitespace-nowrap leading-tight ${govStats.current_drawdown_r >= -5.0 ? 'text-emerald-400' : (govStats.current_drawdown_r <= -15.0 ? 'text-rose-400' : 'text-amber-400')}`}>
                   {govStats.current_drawdown_r >= 0 ? '+' : ''}{govStats.current_drawdown_r.toFixed(2)} R
                 </span>
-                <span className="text-[8px] text-slate-400 truncate block">
+                <span className="text-[8px] sm:text-[8.5px] text-slate-400 block whitespace-nowrap leading-tight mt-0.5">
                   (-{Math.abs((govStats.current_drawdown_r * 200 / initialCap) * 100).toFixed(2)}%)
                 </span>
               </div>
             </div>
 
             {/* Card 2: Peak Drawdown */}
-            <div className="p-2.5 sm:p-3 rounded-2xl border border-rose-500/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
-              <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-rose-500/10 border border-rose-500/25 flex items-center justify-center text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.15)] flex-shrink-0">
-                <Activity className="w-4 h-4" />
+            <div className="p-2 sm:p-2.5 md:p-3 rounded-2xl border border-rose-500/25 bg-[#080C16] flex flex-col justify-between shadow-lg min-w-0">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-rose-500/10 border border-rose-500/25 flex items-center justify-center text-rose-400 flex-shrink-0">
+                  <Activity className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[8.5px] sm:text-[9.5px] text-slate-400 uppercase tracking-wider font-bold truncate">Peak DD</span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Peak DD</span>
-                <span className="text-xs sm:text-sm font-black text-rose-400 truncate block">
+              <div>
+                <span className="text-xs sm:text-sm md:text-base font-black text-rose-400 block whitespace-nowrap leading-tight">
                   {govStats.max_drawdown_r.toFixed(2)} R
                 </span>
-                <span className="text-[8px] text-slate-400 truncate block">
+                <span className="text-[8px] sm:text-[8.5px] text-slate-400 block whitespace-nowrap leading-tight mt-0.5">
                   (-{Math.abs((govStats.max_drawdown_r * 200 / initialCap) * 100).toFixed(2)}%)
                 </span>
               </div>
             </div>
 
             {/* Card 3: Normal Target */}
-            <div className="p-2.5 sm:p-3 rounded-2xl border border-cyan-500/25 bg-[#080C16] flex items-center gap-2 shadow-lg">
-              <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center text-cyan-300 shadow-[0_0_12px_rgba(56,189,248,0.15)] flex-shrink-0">
-                <Target className="w-4 h-4" />
+            <div className="p-2 sm:p-2.5 md:p-3 rounded-2xl border border-cyan-500/25 bg-[#080C16] flex flex-col justify-between shadow-lg min-w-0">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center text-cyan-300 flex-shrink-0">
+                  <Target className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[8.5px] sm:text-[9.5px] text-slate-400 uppercase tracking-wider font-bold truncate">Normal Target</span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[8px] sm:text-[8.5px] text-slate-400 block uppercase tracking-wider font-bold">Normal Target</span>
-                <span className="text-xs sm:text-sm font-black text-cyan-300 truncate block">-5.00 R</span>
-                <span className="text-[8px] text-slate-400 truncate block">
-                  {govStats.distance_to_normal_r > 0 ? `(Need +${govStats.distance_to_normal_r.toFixed(2)} R)` : '(Normal Active)'}
+              <div>
+                <span className="text-xs sm:text-sm md:text-base font-black text-cyan-300 block whitespace-nowrap leading-tight">
+                  {(govStats.recovery_threshold_r !== undefined ? govStats.recovery_threshold_r : -5.0).toFixed(2)} R
+                </span>
+                <span className="text-[8px] sm:text-[8.5px] text-slate-400 block whitespace-nowrap leading-tight mt-0.5">
+                  (-{Math.abs(((govStats.recovery_threshold_r !== undefined ? govStats.recovery_threshold_r : -5.0) * 200 / initialCap) * 100).toFixed(2)}%)
                 </span>
               </div>
             </div>
@@ -875,27 +809,6 @@ export default function StatsTab({ analyticsData, onRefresh }) {
                   </g>
                 )}
               </svg>
-
-              {/* Crisp HTML Overlays */}
-              <div className="absolute inset-0 pointer-events-none select-none">
-                {/* Y-Axis Labels */}
-                <span className="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm" style={{ left: '8px', top: `${(yDdZero / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>0.0 R</span>
-                <span className="absolute text-[8.5px] font-mono font-bold text-cyan-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-cyan-400/30 shadow-sm" style={{ left: '8px', top: `${(yDdNormal / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-5.0 R</span>
-                <span className="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm" style={{ left: '8px', top: `${(getDdY(-10.0) / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-10.0 R</span>
-                <span className="absolute text-[8.5px] font-mono font-bold text-rose-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-rose-500/30 shadow-sm" style={{ left: '8px', top: `${(yDdDefensive / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-15.0 R</span>
-                <span className="absolute text-[8.5px] font-mono font-bold text-slate-400 bg-[#080C16]/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm" style={{ left: '8px', top: `${(getDdY(-20.0) / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-20.0 R</span>
-
-                {/* Zone Badges */}
-                <span className="absolute text-[8px] font-mono font-bold text-emerald-400 bg-[#080C16] border border-emerald-500/60 px-2 py-0.5 rounded-full shadow-md" style={{ left: '55px', top: `${((yDdZero + 5) / H_DD) * 100}%` }}>Normal 1.00 Zone</span>
-                <span className="absolute text-[8px] font-mono font-bold text-cyan-400 bg-[#080C16] border border-cyan-400/60 px-2 py-0.5 rounded-full shadow-md" style={{ right: '12px', top: `${(yDdNormal / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-5.00 R — Normal Target (~ -0.18 R)</span>
-                <span className="absolute text-[8px] font-mono font-bold text-amber-400 bg-[#080C16] border border-amber-500/60 px-2 py-0.5 rounded-full shadow-md" style={{ left: '55px', top: `${(getDdY(-10.0) / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>Defensive 0.5R Zone</span>
-                <span className="absolute text-[8px] font-mono font-bold text-rose-400 bg-[#080C16] border border-rose-500/60 px-1.5 py-0.5 rounded shadow-md" style={{ left: '55px', top: `${(yDdDefensive / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-15.0 R</span>
-                <span className="absolute text-[8px] font-mono font-bold text-purple-300 bg-[#080C16] border border-purple-500/50 px-2 py-0.5 rounded-full shadow-md" style={{ left: '110px', top: `${((yDdDefensive + 6) / H_DD) * 100}%` }}>Critical Zone (-15.00 R to -20.00 R)</span>
-
-                {/* Point Pinned Badges */}
-                <span className="absolute text-[9px] font-mono font-black text-pink-400 bg-[#080C16] border border-pink-500/60 px-2 py-0.5 rounded-lg shadow-lg whitespace-nowrap" style={{ left: `${(getDdX(fTroughIdx) / W) * 100}%`, top: `${(getDdY(fMinDdVal) / H_DD) * 100}%`, transform: 'translate(-50%, 12px)' }}>Trough: {fMinDdVal.toFixed(2)} R</span>
-                <span className="absolute text-[9px] font-mono font-black text-amber-400 bg-[#080C16] border border-amber-500/60 px-2 py-0.5 rounded-lg shadow-lg whitespace-nowrap" style={{ left: `${(getDdX(fDdLastIdx) / W) * 100}%`, top: `${(getDdY(filteredDdPoints[fDdLastIdx].drawdown_r) / H_DD) * 100}%`, transform: 'translate(-50%, -125%)' }}>Current: {filteredDdPoints[fDdLastIdx].drawdown_r.toFixed(2)} R</span>
-              </div>
 
               {/* Hover Tooltip */}
               {hoverDd && (
