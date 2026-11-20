@@ -429,74 +429,79 @@
 </div>
 </div>
 <!-- DUAL VISUAL CURVES: CAPITAL EQUITY & DYNAMIC RISK GOVERNOR DRAWDOWN -->
-<div class="space-y-3.5 pt-1" id="analyticsCurvesSection">
+<div class="space-y-4 pt-1" id="analyticsCurvesSection">
   
   <!-- Curve 1: Capital Equity Growth Curve Card -->
   <div class="glass-panel p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-surfaceCard via-surfaceCard to-surfaceLow">
-    <div class="flex items-start justify-between flex-wrap gap-2 pb-2.5 border-b border-white/5">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emeraldBull/15 border border-emeraldBull/30 flex items-center justify-center text-emeraldBull shadow-[0_0_12px_rgba(16,185,129,0.25)] flex-shrink-0">
+    <div class="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-emeraldBull/15 border border-emeraldBull/30 flex items-center justify-center text-emeraldBull shadow-[0_0_12px_rgba(16,185,129,0.25)] flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
         </div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</span>
-            <span class="px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30" id="equityTradeCountBadge">0 Executions</span>
+            <span class="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30" id="equityTradeCountBadge">0 Executions</span>
           </div>
-          <span class="text-[9px] text-slate-400 font-mono block mt-0.5">Cumulative Demat account balance &amp; cumulative R trajectory</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-2 text-right font-mono flex-wrap">
-        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
-          <span class="text-[8px] text-slate-400 block font-bold uppercase">Initial Capital</span>
-          <span class="text-[11px] font-black text-slate-300">₹1,25,000</span>
-        </div>
-        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
-          <span class="text-[8px] text-slate-400 block font-bold uppercase">Current Equity</span>
-          <span class="text-[11px] font-black text-white" id="equityCurrentCapitalDisplay">₹1,25,000.00</span>
-        </div>
-        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
-          <span class="text-[8px] text-slate-400 block font-bold uppercase">All-Time Peak</span>
-          <span class="text-[11px] font-black text-emeraldBull" id="equityPeakCapitalDisplay">₹1,25,000.00</span>
+          <span class="text-[9.5px] text-slate-400 font-mono block mt-0.5">Realized Demat capital (₹1,25,000 base) &amp; cumulative R trajectory</span>
         </div>
       </div>
     </div>
 
-    <!-- Equity SVG Canvas Wrapper with Interactive Tooltip -->
-    <div class="relative w-full mt-2.5 select-none" id="equityChartWrapper">
-      <div class="w-full h-48 sm:h-56 relative" id="equitySvgContainer"></div>
-      <div id="equityTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-30 bg-surfaceCard/95 backdrop-blur-md border border-cyanAccent/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"></div>
+    <!-- 3-Column Bento Metric Summary Bar -->
+    <div class="grid grid-cols-3 gap-2 mt-2.5 font-mono text-center">
+      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
+        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Initial Base</span>
+        <span class="text-xs sm:text-sm font-black text-slate-300">₹1,25,000</span>
+      </div>
+      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
+        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Current Equity</span>
+        <span class="text-xs sm:text-sm font-black text-white" id="equityCurrentCapitalDisplay">₹1,25,000.00</span>
+      </div>
+      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
+        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">All-Time Peak</span>
+        <span class="text-xs sm:text-sm font-black text-emeraldBull" id="equityPeakCapitalDisplay">₹1,25,000.00</span>
+      </div>
+    </div>
+
+    <!-- Equity Canvas Wrapper with HTML Overlay Labels & Tooltip -->
+    <div class="relative w-full mt-3 select-none" id="equityChartWrapper">
+      <div class="w-full h-56 sm:h-64 relative rounded-xl bg-surfaceLow/40 border border-white/5 overflow-hidden" id="equitySvgContainer"></div>
+      <!-- Floating Interactive Tooltip -->
+      <div id="equityTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-40 bg-surfaceCard/95 backdrop-blur-md border border-cyanAccent/40 rounded-xl p-2.5 shadow-2xl text-[10px] font-mono space-y-1"></div>
     </div>
   </div>
 
   <!-- Curve 2: Dynamic Risk Governor & Drawdown Recovery Curve Card -->
   <div class="glass-panel p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-surfaceCard via-surfaceCard to-surfaceLow">
-    <div class="flex items-start justify-between flex-wrap gap-2 pb-2.5 border-b border-white/5">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-amberTactical/15 border border-amberTactical/30 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.25)] flex-shrink-0">
+    <div class="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-amberTactical/15 border border-amberTactical/30 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.25)] flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>
         </div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs font-black text-white font-mono uppercase tracking-wider">Dynamic Risk Governor &amp; Drawdown</span>
-            <span id="governorModeBadge" class="px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-amberTactical/20 text-amberTactical border border-amberTactical/40 animate-pulse">DEFENSIVE (0.5R Risk)</span>
+            <span class="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Dynamic Risk Governor &amp; Drawdown</span>
           </div>
-          <span class="text-[9px] text-slate-400 font-mono block mt-0.5">Peak-to-trough R-drawdown, Normal mode (&gt; -5.0R) recovery &amp; Defensive circuit breaker (&lt; -15.0R)</span>
+          <span class="text-[9.5px] text-slate-400 font-mono block mt-0.5">Peak-to-trough R-drawdown, Normal mode (&gt; -5.0R) recovery &amp; Defensive circuit breaker (&lt; -15.0R)</span>
         </div>
       </div>
-      <div class="flex items-center gap-2 text-right font-mono flex-wrap">
-        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
-          <span class="text-[8px] text-slate-400 block font-bold uppercase">Current Drawdown</span>
-          <span class="text-[11px] font-black text-roseBear" id="govCurrentDdDisplay">-0.00 R</span>
-        </div>
-        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
-          <span class="text-[8px] text-slate-400 block font-bold uppercase">Peak Trough</span>
-          <span class="text-[11px] font-black text-rose-500" id="govPeakDdDisplay">-0.00 R</span>
-        </div>
-        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
-          <span class="text-[8px] text-slate-400 block font-bold uppercase">Normal Recovery Line</span>
-          <span class="text-[11px] font-black text-cyanAccent">-5.00 R</span>
-        </div>
+      <span id="governorModeBadge" class="px-2.5 py-1 rounded-full text-[9px] font-mono font-extrabold bg-amberTactical/20 text-amberTactical border border-amberTactical/40 animate-pulse flex-shrink-0">DEFENSIVE (0.5R Risk)</span>
+    </div>
+
+    <!-- 3-Column Bento Metric Summary Bar -->
+    <div class="grid grid-cols-3 gap-2 mt-2.5 font-mono text-center">
+      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
+        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Current DD</span>
+        <span class="text-xs sm:text-sm font-black text-roseBear" id="govCurrentDdDisplay">-0.00 R</span>
+      </div>
+      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
+        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Peak Trough</span>
+        <span class="text-xs sm:text-sm font-black text-rose-500" id="govPeakDdDisplay">-0.00 R</span>
+      </div>
+      <div class="bg-surfaceHigh/60 px-2 py-1.5 rounded-xl border border-white/5">
+        <span class="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Normal Target</span>
+        <span class="text-xs sm:text-sm font-black text-cyanAccent">-5.00 R</span>
       </div>
     </div>
 
@@ -513,17 +518,18 @@
       <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden p-0.5 border border-white/10">
         <div id="govRecoveryBar" class="h-full rounded-full bg-gradient-to-r from-amberTactical via-cyanAccent to-emeraldBull transition-all duration-500 shadow-[0_0_8px_rgba(56,189,248,0.5)]" style="width: 0%;"></div>
       </div>
-      <div class="flex items-center justify-between text-[8px] text-slate-400">
+      <div class="flex items-center justify-between text-[8.5px] text-slate-400">
         <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-roseBear"></span> Trough: <strong id="govTroughSubText">-19.13 R</strong></span>
         <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-cyanAccent"></span> Normal Threshold: <strong>-5.00 R</strong></span>
         <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emeraldBull"></span> Peak HWM: <strong>0.00 R</strong></span>
       </div>
     </div>
 
-    <!-- Drawdown SVG Canvas Wrapper with Visual Bands & Tooltip -->
-    <div class="relative w-full mt-2.5 select-none" id="drawdownChartWrapper">
-      <div class="w-full h-52 sm:h-60 relative" id="drawdownSvgContainer"></div>
-      <div id="drawdownTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-30 bg-surfaceCard/95 backdrop-blur-md border border-amberTactical/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"></div>
+    <!-- Drawdown Canvas Wrapper with HTML Overlay Labels & Tooltip -->
+    <div class="relative w-full mt-3 select-none" id="drawdownChartWrapper">
+      <div class="w-full h-60 sm:h-68 relative rounded-xl bg-surfaceLow/40 border border-white/5 overflow-hidden" id="drawdownSvgContainer"></div>
+      <!-- Floating Interactive Tooltip -->
+      <div id="drawdownTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-40 bg-surfaceCard/95 backdrop-blur-md border border-amberTactical/40 rounded-xl p-2.5 shadow-2xl text-[10px] font-mono space-y-1"></div>
     </div>
   </div>
 
@@ -2591,9 +2597,9 @@ Trigger Condition:
       const tooltip = document.getElementById('equityTooltip');
       if (!container) return;
 
-      const W = 800;
+      const W = 1000;
       const H = 220;
-      const pad = { top: 25, right: 30, bottom: 35, left: 70 };
+      const pad = { top: 25, right: 30, bottom: 30, left: 65 };
       const plotW = W - pad.left - pad.right;
       const plotH = H - pad.top - pad.bottom;
 
@@ -2615,30 +2621,28 @@ Trigger Condition:
       const getY = (val) => pad.top + plotH - ((val - minCap) / (maxCap - minCap)) * plotH;
       const yBase = getY(125000.0);
 
-      // Grid levels
+      // Grid levels & HTML labels
       const gridCount = 4;
-      let gridLinesHtml = '';
+      let gridLinesSvg = '';
+      let yAxisLabelsHtml = '';
       for (let g = 0; g <= gridCount; g++) {
         const val = minCap + (g / gridCount) * (maxCap - minCap);
         const yPos = getY(val);
-        gridLinesHtml += `
-          <line x1="${pad.left}" y1="${yPos}" x2="${W - pad.right}" y2="${yPos}" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="4,4" />
-          <text x="${pad.left - 8}" y="${yPos + 3.5}" fill="#64748B" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">₹${Math.round(val).toLocaleString('en-IN')}</text>
-        `;
+        const pctY = (yPos / H) * 100;
+        gridLinesSvg += `<line x1="${pad.left}" y1="${yPos}" x2="${W - pad.right}" y2="${yPos}" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="4,4" />`;
+        yAxisLabelsHtml += `<span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctY}%; transform: translateY(-50%);">₹${Math.round(val).toLocaleString('en-IN')}</span>`;
       }
 
-      // Starting Baseline ₹125,000 Line
-      const baselineHtml = `
-        <line x1="${pad.left}" y1="${yBase}" x2="${W - pad.right}" y2="${yBase}" stroke="rgba(0, 240, 255, 0.35)" stroke-width="1.5" stroke-dasharray="5,4" />
-        <text x="${W - pad.right}" y="${yBase - 6}" fill="#00F0FF" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace" text-anchor="end">START BASELINE (₹1,25,000)</text>
-      `;
+      // Starting Baseline ₹125,000 Line & Badge
+      const baselineSvg = `<line x1="${pad.left}" y1="${yBase}" x2="${W - pad.right}" y2="${yBase}" stroke="rgba(0, 240, 255, 0.45)" stroke-width="1.5" stroke-dasharray="5,4" />`;
+      const pctBase = (yBase / H) * 100;
+      const baselineBadgeHtml = `<span class="absolute text-[9.5px] font-mono font-black text-cyanAccent bg-surfaceCard/95 px-2 py-0.5 rounded-md border border-cyanAccent/50 shadow-[0_0_8px_rgba(0,240,255,0.25)] pointer-events-none flex items-center gap-1" style="right: 8px; top: ${pctBase}%; transform: translateY(-50%);">Start Baseline ₹1,25,000 (0.0R)</span>`;
 
       // Build Path & Area
       let pathD = `M ${getX(0)},${getY(points[0].capital)}`;
       for (let i = 1; i < points.length; i++) {
         pathD += ` L ${getX(i)},${getY(points[i].capital)}`;
       }
-
       const areaD = `${pathD} L ${getX(points.length - 1)},${pad.top + plotH} L ${getX(0)},${pad.top + plotH} Z`;
 
       // Peak Capital Point
@@ -2661,8 +2665,16 @@ Trigger Condition:
       const strokeColor = isCurrentProfitable ? '#10B981' : '#00F0FF';
       const gradientStart = isCurrentProfitable ? 'rgba(16, 185, 129, 0.35)' : 'rgba(0, 240, 255, 0.30)';
 
-      const svgHtml = `
-        <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-visible" preserveAspectRatio="none" id="equitySvgEl">
+      const pctPeakX = (peakX / W) * 100;
+      const pctPeakY = (peakY / H) * 100;
+      const pctLastX = (lastX / W) * 100;
+      const pctLastY = (lastY / H) * 100;
+
+      const peakBadgeHtml = `<span class="absolute text-[8.5px] font-mono font-bold text-emeraldBull bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-emeraldBull/40 shadow-sm pointer-events-none whitespace-nowrap" style="left: ${pctPeakX}%; top: ${pctPeakY}%; transform: translate(-50%, -20px);">Peak: ₹${peakVal.toLocaleString('en-IN')}</span>`;
+      const lastBadgeHtml = `<span class="absolute text-[8.5px] font-mono font-bold ${isCurrentProfitable ? 'text-emeraldBull border-emeraldBull/40' : 'text-cyanAccent border-cyanAccent/40'} bg-surfaceCard/90 px-1.5 py-0.5 rounded border shadow-sm pointer-events-none whitespace-nowrap" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-50%, 12px);">Now: ₹${points[lastIdx].capital.toLocaleString('en-IN')}</span>`;
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none" id="equitySvgEl">
           <defs>
             <linearGradient id="equityGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="${gradientStart}" />
@@ -2675,10 +2687,10 @@ Trigger Condition:
           </defs>
 
           <!-- Grid Lines -->
-          ${gridLinesHtml}
+          ${gridLinesSvg}
 
-          <!-- ₹125,000 Baseline -->
-          ${baselineHtml}
+          <!-- Baseline Line -->
+          ${baselineSvg}
 
           <!-- Gradient Area Fill -->
           <path d="${areaD}" fill="url(#equityGradient)" />
@@ -2686,21 +2698,27 @@ Trigger Condition:
           <!-- Equity Line Curve -->
           <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#equityGlow)" />
 
-          <!-- All-Time Peak Marker -->
+          <!-- Peak Circle Marker -->
           <circle cx="${peakX}" cy="${peakY}" r="4.5" fill="#10B981" stroke="#FFFFFF" stroke-width="1.5" />
           <circle cx="${peakX}" cy="${peakY}" r="8" fill="none" stroke="#10B981" stroke-width="1" opacity="0.6" />
 
-          <!-- Current Point Marker -->
+          <!-- Current Circle Marker -->
           <circle cx="${lastX}" cy="${lastY}" r="5" fill="${strokeColor}" stroke="#FFFFFF" stroke-width="2" />
           <circle cx="${lastX}" cy="${lastY}" r="9" fill="none" stroke="${strokeColor}" stroke-width="1.5" class="animate-ping" opacity="0.75" />
 
-          <!-- Dynamic Crosshair Line (hidden initially) -->
+          <!-- Dynamic Crosshair Line -->
           <line id="equityCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(0, 240, 255, 0.7)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0" />
           <circle id="equityCrosshairDot" cx="0" cy="0" r="5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" opacity="0" />
         </svg>
-      `;
 
-      container.innerHTML = svgHtml;
+        <!-- Crisp HTML Overlays (Zero-squeeze typography) -->
+        <div class="absolute inset-0 pointer-events-none select-none">
+          ${yAxisLabelsHtml}
+          ${baselineBadgeHtml}
+          ${peakBadgeHtml}
+          ${lastBadgeHtml}
+        </div>
+      `;
 
       // Mousemove / Touchmove Interactive Crosshair & Tooltip
       const handleHover = (clientX) => {
@@ -2751,7 +2769,7 @@ Trigger Condition:
             <div class="text-[8px] text-slate-500 pt-0.5">${pt.trade_date} ${pt.time || ''}</div>
           `;
 
-          const tooltipW = 200;
+          const tooltipW = 210;
           let leftPos = (ptX / W) * rect.width - tooltipW / 2;
           if (leftPos < 10) leftPos = 10;
           if (leftPos + tooltipW > rect.width - 10) leftPos = rect.width - tooltipW - 10;
@@ -2783,9 +2801,9 @@ Trigger Condition:
       const tooltip = document.getElementById('drawdownTooltip');
       if (!container) return;
 
-      const W = 800;
-      const H = 240;
-      const pad = { top: 25, right: 30, bottom: 35, left: 70 };
+      const W = 1000;
+      const H = 260;
+      const pad = { top: 25, right: 30, bottom: 30, left: 65 };
       const plotW = W - pad.left - pad.right;
       const plotH = H - pad.top - pad.bottom;
 
@@ -2806,52 +2824,28 @@ Trigger Condition:
       const yDefensive = getY(-15.0);
       const yBottom = pad.top + plotH;
 
-      // 1. Shaded Visual Zones
-      const normalZoneHtml = `
-        <rect x="${pad.left}" y="${yZero}" width="${plotW}" height="${Math.max(0, yNormal - yZero)}" fill="rgba(16, 185, 129, 0.07)" />
-        <text x="${pad.left + 8}" y="${yZero + 14}" fill="rgba(16, 185, 129, 0.8)" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace">NORMAL 1.0R RISK ZONE (Drawdown > -5.0R)</text>
-      `;
+      // Shaded Zones SVG
+      const normalZoneSvg = `<rect x="${pad.left}" y="${yZero}" width="${plotW}" height="${Math.max(0, yNormal - yZero)}" fill="rgba(16, 185, 129, 0.07)" />`;
+      const defensiveZoneSvg = `<rect x="${pad.left}" y="${yNormal}" width="${plotW}" height="${Math.max(0, yDefensive - yNormal)}" fill="rgba(245, 158, 11, 0.07)" />`;
+      const criticalZoneSvg = `<rect x="${pad.left}" y="${yDefensive}" width="${plotW}" height="${Math.max(0, yBottom - yDefensive)}" fill="rgba(255, 51, 102, 0.08)" />`;
 
-      const defensiveZoneHtml = `
-        <rect x="${pad.left}" y="${yNormal}" width="${plotW}" height="${Math.max(0, yDefensive - yNormal)}" fill="rgba(245, 158, 11, 0.07)" />
-        <text x="${pad.left + 8}" y="${yNormal + 14}" fill="rgba(245, 158, 11, 0.8)" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace">DEFENSIVE 0.5R RISK ZONE (Recovery in Progress)</text>
-      `;
-
-      const criticalZoneHtml = `
-        <rect x="${pad.left}" y="${yDefensive}" width="${plotW}" height="${Math.max(0, yBottom - yDefensive)}" fill="rgba(255, 51, 102, 0.08)" />
-        <text x="${pad.left + 8}" y="${yDefensive + 14}" fill="rgba(255, 51, 102, 0.85)" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace">CIRCUIT BREAKER TRIGGER ZONE (< -15.0R)</text>
-      `;
-
-      // 2. Threshold Reference Lines
-      const thresholdLinesHtml = `
+      // Threshold lines SVG
+      const thresholdLinesSvg = `
         <line x1="${pad.left}" y1="${yZero}" x2="${W - pad.right}" y2="${yZero}" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1.2" stroke-dasharray="4,4" />
-        <text x="${pad.left - 8}" y="${yZero + 3.5}" fill="#94A3B8" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">0.0 R</text>
-        <text x="${W - pad.right}" y="${yZero - 5}" fill="#94A3B8" font-size="8" font-family="'JetBrains Mono', monospace" text-anchor="end">PEAK HIGH-WATER MARK</text>
-
         <line x1="${pad.left}" y1="${yNormal}" x2="${W - pad.right}" y2="${yNormal}" stroke="#00F0FF" stroke-width="1.8" stroke-dasharray="5,4" />
-        <text x="${pad.left - 8}" y="${yNormal + 3.5}" fill="#00F0FF" font-size="9" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">-5.0 R</text>
-        <text x="${W - pad.right}" y="${yNormal - 5}" fill="#00F0FF" font-size="8.5" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">▲ NORMAL 1.0R RESTORATION LINE (-5.00 R)</text>
-
         <line x1="${pad.left}" y1="${yDefensive}" x2="${W - pad.right}" y2="${yDefensive}" stroke="#FF3366" stroke-width="1.8" stroke-dasharray="5,4" />
-        <text x="${pad.left - 8}" y="${yDefensive + 3.5}" fill="#FF3366" font-size="9" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">-15.0 R</text>
-        <text x="${W - pad.right}" y="${yDefensive - 5}" fill="#FF3366" font-size="8.5" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">▼ DEFENSIVE 0.5R CIRCUIT BREAKER TRIGGER (-15.00 R)</text>
-
         <line x1="${pad.left}" y1="${getY(-10.0)}" x2="${W - pad.right}" y2="${getY(-10.0)}" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" stroke-dasharray="3,3" />
-        <text x="${pad.left - 8}" y="${getY(-10.0) + 3.5}" fill="#64748B" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">-10.0 R</text>
-
         <line x1="${pad.left}" y1="${getY(-20.0)}" x2="${W - pad.right}" y2="${getY(-20.0)}" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" stroke-dasharray="3,3" />
-        <text x="${pad.left - 8}" y="${getY(-20.0) + 3.5}" fill="#64748B" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">-20.0 R</text>
       `;
 
-      // 3. Drawdown Line Path & Area
+      // Drawdown Line Path & Area
       let ddPathD = `M ${getX(0)},${getY(points[0].drawdown_r)}`;
       for (let i = 1; i < points.length; i++) {
         ddPathD += ` L ${getX(i)},${getY(points[i].drawdown_r)}`;
       }
-
       const ddAreaD = `${ddPathD} L ${getX(points.length - 1)},${yZero} L ${getX(0)},${yZero} Z`;
 
-      // 4. Find Peak Trough Point
+      // Find Peak Trough Point
       let troughIdx = 0;
       let minDdVal = points[0].drawdown_r;
       points.forEach((p, idx) => {
@@ -2868,8 +2862,46 @@ Trigger Condition:
       const lastX = getX(lastIdx);
       const lastY = getY(points[lastIdx].drawdown_r);
 
-      const svgHtml = `
-        <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-visible" preserveAspectRatio="none" id="drawdownSvgEl">
+      // Percentage Coordinates for HTML Overlays
+      const pctZero = (yZero / H) * 100;
+      const pctNormal = (yNormal / H) * 100;
+      const pctDefensive = (yDefensive / H) * 100;
+      const pctMinus10 = (getY(-10.0) / H) * 100;
+      const pctMinus20 = (getY(-20.0) / H) * 100;
+
+      const pctTroughX = (troughX / W) * 100;
+      const pctTroughY = (troughY / H) * 100;
+      const pctLastX = (lastX / W) * 100;
+      const pctLastY = (lastY / H) * 100;
+
+      // Crisp HTML Overlays
+      const yAxisLabelsHtml = `
+        <span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctZero}%; transform: translateY(-50%);">0.0 R</span>
+        <span class="absolute text-[9px] font-mono font-bold text-cyanAccent bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-cyanAccent/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctNormal}%; transform: translateY(-50%);">-5.0 R</span>
+        <span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus10}%; transform: translateY(-50%);">-10.0 R</span>
+        <span class="absolute text-[9px] font-mono font-bold text-roseBear bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-roseBear/30 pointer-events-none shadow-sm" style="left: 8px; top: ${pctDefensive}%; transform: translateY(-50%);">-15.0 R</span>
+        <span class="absolute text-[9px] font-mono font-bold text-slate-400 bg-surfaceCard/90 px-1.5 py-0.5 rounded border border-white/10 pointer-events-none shadow-sm" style="left: 8px; top: ${pctMinus20}%; transform: translateY(-50%);">-20.0 R</span>
+      `;
+
+      const zoneTagsHtml = `
+        <span class="absolute text-[8.5px] font-mono font-bold text-emeraldBull bg-surfaceCard/90 border border-emeraldBull/30 px-2 py-0.5 rounded shadow-sm pointer-events-none" style="left: 60px; top: ${((yZero + 6) / H) * 100}%;">NORMAL 1.0R ZONE</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-amberTactical bg-surfaceCard/90 border border-amberTactical/30 px-2 py-0.5 rounded shadow-sm pointer-events-none" style="left: 60px; top: ${((yNormal + 6) / H) * 100}%;">DEFENSIVE 0.5R ZONE</span>
+        <span class="absolute text-[8.5px] font-mono font-bold text-roseBear bg-surfaceCard/90 border border-roseBear/30 px-2 py-0.5 rounded shadow-sm pointer-events-none" style="left: 60px; top: ${((yDefensive + 6) / H) * 100}%;">CRITICAL ZONE (&lt; -15.0R)</span>
+      `;
+
+      const thresholdBadgesHtml = `
+        <span class="absolute text-[9px] font-mono font-bold text-slate-300 bg-surfaceCard/90 border border-white/10 px-2 py-0.5 rounded-md pointer-events-none" style="right: 8px; top: ${pctZero}%; transform: translateY(-50%);">0.00 R Peak HWM</span>
+        <span class="absolute text-[9.5px] font-mono font-black text-cyanAccent bg-surfaceCard/95 border border-cyanAccent/50 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(0,240,255,0.25)] pointer-events-none flex items-center gap-1" style="right: 8px; top: ${pctNormal}%; transform: translateY(-50%);"><span>▲</span> Normal Target (-5.00 R)</span>
+        <span class="absolute text-[9.5px] font-mono font-black text-roseBear bg-surfaceCard/95 border border-roseBear/50 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(255,51,102,0.25)] pointer-events-none flex items-center gap-1" style="right: 8px; top: ${pctDefensive}%; transform: translateY(-50%);"><span>▼</span> Defensive Trigger (-15.00 R)</span>
+      `;
+
+      const markerBadgesHtml = `
+        <span class="absolute text-[9px] font-mono font-black text-rose-400 bg-surfaceCard/95 border border-rose-500/50 px-1.5 py-0.5 rounded shadow-md pointer-events-none whitespace-nowrap" style="left: ${pctTroughX}%; top: ${pctTroughY}%; transform: translate(-50%, 8px);">Trough: ${minDdVal.toFixed(2)} R</span>
+        <span class="absolute text-[9px] font-mono font-black text-cyanAccent bg-surfaceCard/95 border border-cyanAccent/50 px-1.5 py-0.5 rounded shadow-md pointer-events-none whitespace-nowrap" style="left: ${pctLastX}%; top: ${pctLastY}%; transform: translate(-50%, -24px);">Current: ${points[lastIdx].drawdown_r.toFixed(2)} R</span>
+      `;
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none" id="drawdownSvgEl">
           <defs>
             <linearGradient id="ddAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="rgba(245, 158, 11, 0.02)" />
@@ -2882,12 +2914,12 @@ Trigger Condition:
           </defs>
 
           <!-- Zone Shading -->
-          ${normalZoneHtml}
-          ${defensiveZoneHtml}
-          ${criticalZoneHtml}
+          ${normalZoneSvg}
+          ${defensiveZoneSvg}
+          ${criticalZoneSvg}
 
-          <!-- Threshold Grid & Labels -->
-          ${thresholdLinesHtml}
+          <!-- Threshold Grid Lines -->
+          ${thresholdLinesSvg}
 
           <!-- Drawdown Fill Area -->
           <path d="${ddAreaD}" fill="url(#ddAreaGrad)" />
@@ -2898,7 +2930,6 @@ Trigger Condition:
           <!-- Peak Trough Marker -->
           <circle cx="${troughX}" cy="${troughY}" r="5" fill="#FF3366" stroke="#FFFFFF" stroke-width="2" />
           <circle cx="${troughX}" cy="${troughY}" r="9" fill="none" stroke="#FF3366" stroke-width="1.5" opacity="0.8" />
-          <text x="${troughX}" y="${troughY + 16}" fill="#FF3366" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace" text-anchor="middle">TROUGH: ${minDdVal.toFixed(2)}R</text>
 
           <!-- Current Point Marker -->
           <circle cx="${lastX}" cy="${lastY}" r="5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" />
@@ -2908,9 +2939,15 @@ Trigger Condition:
           <line id="ddCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(245, 158, 11, 0.8)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0" />
           <circle id="ddCrosshairDot" cx="0" cy="0" r="5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2" opacity="0" />
         </svg>
-      `;
 
-      container.innerHTML = svgHtml;
+        <!-- Crisp HTML Overlays (Zero-squeeze typography) -->
+        <div class="absolute inset-0 pointer-events-none select-none">
+          ${yAxisLabelsHtml}
+          ${zoneTagsHtml}
+          ${thresholdBadgesHtml}
+          ${markerBadgesHtml}
+        </div>
+      `;
 
       // Mousemove / Touchmove Interactive Crosshair & Tooltip
       const handleHover = (clientX) => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { 
   Download, 
   TrendingUp, 
@@ -9,9 +9,6 @@ import {
   Percent,
   ChevronDown,
   ChevronUp,
-  Clock,
-  Layers,
-  ShieldCheck,
   ShieldAlert,
   Activity
 } from 'lucide-react';
@@ -33,7 +30,7 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
   };
 
   // Derive Chronological Equity Curve & Governor Stats if not directly provided
-  const points = React.useMemo(() => {
+  const points = useMemo(() => {
     if (data.equity_curve && Array.isArray(data.equity_curve) && data.equity_curve.length > 0) {
       return data.equity_curve;
     }
@@ -101,7 +98,7 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
     return pts;
   }, [data.equity_curve, dateGroups]);
 
-  const govStats = React.useMemo(() => {
+  const govStats = useMemo(() => {
     if (data.governor_stats) return data.governor_stats;
 
     const lastPt = points[points.length - 1];
@@ -136,10 +133,10 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
   const ddContainerRef = useRef(null);
 
   // SVG Dimensions & Math
-  const W = 800;
+  const W = 1000;
   const H_EQ = 220;
-  const H_DD = 240;
-  const pad = { top: 25, right: 30, bottom: 35, left: 70 };
+  const H_DD = 260;
+  const pad = { top: 25, right: 30, bottom: 30, left: 65 };
   const plotW = W - pad.left - pad.right;
   const plotH_EQ = H_EQ - pad.top - pad.bottom;
   const plotH_DD = H_DD - pad.top - pad.bottom;
@@ -180,7 +177,7 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
   }
   const ddAreaD = `${ddPathD} L ${getDdX(points.length - 1)},${yDdZero} L ${getDdX(0)},${yDdZero} Z`;
 
-  // Trough Index
+  // Peak Trough Index
   let troughIdx = 0;
   let minDdVal = points[0].drawdown_r;
   points.forEach((p, idx) => {
@@ -323,53 +320,54 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
       <div className="space-y-4 pt-1">
         
         {/* CURVE 1: CAPITAL EQUITY GROWTH CURVE */}
-        <div className="bento-card p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-[#0E1426] to-[#090E1D]">
-          <div className="flex items-start justify-between flex-wrap gap-2 pb-2.5 border-b border-white/5">
+        <div className="bento-card p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-[#0E1426] to-[#090E1D]">
+          <div className="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.25)] flex-shrink-0">
                 <TrendingUp className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</span>
-                  <span className="px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-sky-500/15 text-sky-300 border border-sky-500/30">
+                  <span className="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</span>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-sky-500/15 text-sky-300 border border-sky-500/30">
                     {points.length - 1} Executions
                   </span>
                 </div>
-                <span className="text-[9.5px] text-slate-400 font-mono block mt-0.5">Cumulative Demat account balance &amp; cumulative R trajectory</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 text-right font-mono flex-wrap">
-              <div className="bg-slate-800/60 px-2.5 py-1 rounded-xl border border-white/5">
-                <span className="text-[8px] text-slate-400 block font-bold uppercase">Initial Capital</span>
-                <span className="text-[11px] font-black text-slate-300">₹1,25,000</span>
-              </div>
-              <div className="bg-slate-800/60 px-2.5 py-1 rounded-xl border border-white/5">
-                <span className="text-[8px] text-slate-400 block font-bold uppercase">Current Equity</span>
-                <span className={`text-[11px] font-black ${latestPt.capital >= 125000 ? 'text-emerald-400' : 'text-amber-400'}`}>
-                  ₹{latestPt.capital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
-              </div>
-              <div className="bg-slate-800/60 px-2.5 py-1 rounded-xl border border-white/5">
-                <span className="text-[8px] text-slate-400 block font-bold uppercase">All-Time Peak</span>
-                <span className="text-[11px] font-black text-emerald-400">
-                  ₹{peakCapital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
+                <span className="text-[9.5px] text-slate-400 font-mono block mt-0.5">Realized Demat capital (₹1,25,000 base) &amp; cumulative R trajectory</span>
               </div>
             </div>
           </div>
 
-          {/* Equity SVG Canvas with Interactive Cursor & Tooltip */}
+          {/* 3-Column Bento Metric Summary Bar */}
+          <div className="grid grid-cols-3 gap-2 mt-2.5 font-mono text-center">
+            <div className="bg-slate-800/60 px-2 py-1.5 rounded-xl border border-white/5">
+              <span className="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Initial Base</span>
+              <span className="text-xs sm:text-sm font-black text-slate-300">₹1,25,000</span>
+            </div>
+            <div className="bg-slate-800/60 px-2 py-1.5 rounded-xl border border-white/5">
+              <span className="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Current Equity</span>
+              <span className={`text-xs sm:text-sm font-black ${latestPt.capital >= 125000 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                ₹{latestPt.capital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+            </div>
+            <div className="bg-slate-800/60 px-2 py-1.5 rounded-xl border border-white/5">
+              <span className="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">All-Time Peak</span>
+              <span className="text-xs sm:text-sm font-black text-emerald-400">
+                ₹{peakCapital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+            </div>
+          </div>
+
+          {/* Equity Canvas Wrapper with HTML Overlay Labels & Tooltip */}
           <div 
             ref={equityContainerRef}
             onMouseMove={(e) => handleEquityHover(e.clientX)}
             onMouseLeave={() => setHoverEquity(null)}
             onTouchMove={(e) => e.touches?.[0] && handleEquityHover(e.touches[0].clientX)}
             onTouchEnd={() => setHoverEquity(null)}
-            className="relative w-full h-48 sm:h-56 mt-2.5 select-none"
+            className="relative w-full h-56 sm:h-64 mt-3 select-none rounded-xl bg-[#090E1D]/50 border border-white/5 overflow-hidden"
           >
-            <svg viewBox={`0 0 ${W} ${H_EQ}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
+            <svg viewBox={`0 0 ${W} ${H_EQ}`} className="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="reactEqGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor={latestPt.capital >= 125000 ? 'rgba(16, 185, 129, 0.35)' : 'rgba(56, 189, 248, 0.30)'} />
@@ -386,20 +384,12 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
                 const val = minCap + (g / 4) * (maxCap - minCap);
                 const yPos = getEqY(val);
                 return (
-                  <g key={g}>
-                    <line x1={pad.left} y1={yPos} x2={W - pad.right} y2={yPos} stroke="rgba(255, 255, 255, 0.05)" strokeWidth="1" strokeDasharray="4,4" />
-                    <text x={pad.left - 8} y={yPos + 3.5} fill="#64748B" fontSize="9" fontFamily="'JetBrains Mono', monospace" textAnchor="end">
-                      ₹{Math.round(val).toLocaleString('en-IN')}
-                    </text>
-                  </g>
+                  <line key={g} x1={pad.left} y1={yPos} x2={W - pad.right} y2={yPos} stroke="rgba(255, 255, 255, 0.05)" strokeWidth="1" strokeDasharray="4,4" />
                 );
               })}
 
               {/* Baseline */}
-              <line x1={pad.left} y1={yEqBase} x2={W - pad.right} y2={yEqBase} stroke="rgba(56, 189, 248, 0.35)" strokeWidth="1.5" strokeDasharray="5,4" />
-              <text x={W - pad.right} y={yEqBase - 6} fill="#38BDF8" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace" textAnchor="end">
-                START BASELINE (₹1,25,000)
-              </text>
+              <line x1={pad.left} y1={yEqBase} x2={W - pad.right} y2={yEqBase} stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1.5" strokeDasharray="5,4" />
 
               {/* Area & Line */}
               <path d={eqAreaD} fill="url(#reactEqGrad)" />
@@ -417,10 +407,48 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
               )}
             </svg>
 
+            {/* Crisp HTML Overlays (Zero-squeeze typography) */}
+            <div className="absolute inset-0 pointer-events-none select-none">
+              {/* Y-Axis Labels */}
+              {[0, 1, 2, 3, 4].map(g => {
+                const val = minCap + (g / 4) * (maxCap - minCap);
+                const pctY = (getEqY(val) / H_EQ) * 100;
+                return (
+                  <span 
+                    key={g} 
+                    className="absolute text-[9px] font-mono font-bold text-slate-400 bg-slate-900/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm"
+                    style={{ left: '8px', top: `${pctY}%`, transform: 'translateY(-50%)' }}
+                  >
+                    ₹{Math.round(val).toLocaleString('en-IN')}
+                  </span>
+                );
+              })}
+
+              {/* Baseline Badge */}
+              <span 
+                className="absolute text-[9.5px] font-mono font-black text-sky-400 bg-slate-900/95 px-2 py-0.5 rounded-md border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.25)] flex items-center gap-1"
+                style={{ right: '8px', top: `${(yEqBase / H_EQ) * 100}%`, transform: 'translateY(-50%)' }}
+              >
+                Start Baseline ₹1,25,000 (0.0R)
+              </span>
+
+              {/* Current Capital Marker Badge */}
+              <span 
+                className="absolute text-[8.5px] font-mono font-bold text-sky-300 bg-slate-900/90 px-1.5 py-0.5 rounded border border-sky-400/40 shadow-sm whitespace-nowrap"
+                style={{
+                  left: `${(getEqX(points.length - 1) / W) * 100}%`,
+                  top: `${(getEqY(latestPt.capital) / H_EQ) * 100}%`,
+                  transform: 'translate(-50%, 12px)'
+                }}
+              >
+                Now: ₹{latestPt.capital.toLocaleString('en-IN')}
+              </span>
+            </div>
+
             {/* Hover Tooltip */}
             {hoverEquity && (
               <div 
-                className="absolute pointer-events-none z-30 bg-[#0E1426]/95 backdrop-blur-md border border-sky-500/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"
+                className="absolute pointer-events-none z-40 bg-slate-900/95 backdrop-blur-md border border-sky-500/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"
                 style={{
                   top: '10px',
                   left: `clamp(10px, ${hoverEquity.pctX}% - 100px, calc(100% - 210px))`
@@ -455,42 +483,44 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
         </div>
 
         {/* CURVE 2: DYNAMIC RISK GOVERNOR & DRAWDOWN RECOVERY CURVE */}
-        <div className="bento-card p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-[#0E1426] to-[#090E1D]">
-          <div className="flex items-start justify-between flex-wrap gap-2 pb-2.5 border-b border-white/5">
+        <div className="bento-card p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-[#0E1426] to-[#090E1D]">
+          <div className="flex items-center justify-between pb-2.5 border-b border-white/5 flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.25)] flex-shrink-0">
                 <ShieldAlert className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-black text-white font-mono uppercase tracking-wider">Dynamic Risk Governor &amp; Drawdown</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold border ${
-                    govStats.mode === 'DEFENSIVE' 
-                      ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 animate-pulse' 
-                      : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
-                  }`}>
-                    {govStats.mode === 'DEFENSIVE' ? 'DEFENSIVE (0.5R Risk)' : 'NORMAL (1.0R Risk)'}
-                  </span>
+                  <span className="text-xs sm:text-sm font-black text-white font-mono uppercase tracking-wider">Dynamic Risk Governor &amp; Drawdown</span>
                 </div>
                 <span className="text-[9.5px] text-slate-400 font-mono block mt-0.5">Peak-to-trough R-drawdown, Normal mode (&gt; -5.0R) recovery &amp; Defensive circuit breaker (&lt; -15.0R)</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-right font-mono flex-wrap">
-              <div className="bg-slate-800/60 px-2.5 py-1 rounded-xl border border-white/5">
-                <span className="text-[8px] text-slate-400 block font-bold uppercase">Current Drawdown</span>
-                <span className={`text-[11px] font-black ${govStats.current_drawdown_r >= -5.0 ? 'text-emerald-400' : (govStats.current_drawdown_r <= -15.0 ? 'text-rose-400' : 'text-amber-400')}`}>
-                  {govStats.current_drawdown_r >= 0 ? '+' : ''}{govStats.current_drawdown_r.toFixed(2)} R
-                </span>
-              </div>
-              <div className="bg-slate-800/60 px-2.5 py-1 rounded-xl border border-white/5">
-                <span className="text-[8px] text-slate-400 block font-bold uppercase">Peak Trough</span>
-                <span className="text-[11px] font-black text-rose-500">{govStats.max_drawdown_r.toFixed(2)} R</span>
-              </div>
-              <div className="bg-slate-800/60 px-2.5 py-1 rounded-xl border border-white/5">
-                <span className="text-[8px] text-slate-400 block font-bold uppercase">Normal Recovery Line</span>
-                <span className="text-[11px] font-black text-sky-400">-5.00 R</span>
-              </div>
+            <span className={`px-2.5 py-1 rounded-full text-[9px] font-mono font-extrabold border flex-shrink-0 ${
+              govStats.mode === 'DEFENSIVE' 
+                ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 animate-pulse' 
+                : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+            }`}>
+              {govStats.mode === 'DEFENSIVE' ? 'DEFENSIVE (0.5R Risk)' : 'NORMAL (1.0R Risk)'}
+            </span>
+          </div>
+
+          {/* 3-Column Bento Metric Summary Bar */}
+          <div className="grid grid-cols-3 gap-2 mt-2.5 font-mono text-center">
+            <div className="bg-slate-800/60 px-2 py-1.5 rounded-xl border border-white/5">
+              <span className="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Current DD</span>
+              <span className={`text-xs sm:text-sm font-black ${govStats.current_drawdown_r >= -5.0 ? 'text-emerald-400' : (govStats.current_drawdown_r <= -15.0 ? 'text-rose-400' : 'text-amber-400')}`}>
+                {govStats.current_drawdown_r >= 0 ? '+' : ''}{govStats.current_drawdown_r.toFixed(2)} R
+              </span>
+            </div>
+            <div className="bg-slate-800/60 px-2 py-1.5 rounded-xl border border-white/5">
+              <span className="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Peak Trough</span>
+              <span className="text-xs sm:text-sm font-black text-rose-500">{govStats.max_drawdown_r.toFixed(2)} R</span>
+            </div>
+            <div className="bg-slate-800/60 px-2 py-1.5 rounded-xl border border-white/5">
+              <span className="text-[8.5px] text-slate-400 block font-bold uppercase tracking-wider">Normal Target</span>
+              <span className="text-xs sm:text-sm font-black text-sky-400">-5.00 R</span>
             </div>
           </div>
 
@@ -514,23 +544,23 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
                 style={{ width: `${Math.min(100, Math.max(0, govStats.recovery_pct || 0))}%` }}
               />
             </div>
-            <div className="flex items-center justify-between text-[8px] text-slate-400">
+            <div className="flex items-center justify-between text-[8.5px] text-slate-400">
               <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Trough: <strong>{govStats.max_drawdown_r.toFixed(2)} R</strong></span>
               <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span> Normal Threshold: <strong>-5.00 R</strong></span>
               <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Peak HWM: <strong>0.00 R</strong></span>
             </div>
           </div>
 
-          {/* Drawdown SVG Canvas with Visual Bands & Tooltip */}
+          {/* Drawdown Canvas Wrapper with HTML Overlay Labels & Tooltip */}
           <div 
             ref={ddContainerRef}
             onMouseMove={(e) => handleDdHover(e.clientX)}
             onMouseLeave={() => setHoverDd(null)}
             onTouchMove={(e) => e.touches?.[0] && handleDdHover(e.touches[0].clientX)}
             onTouchEnd={() => setHoverDd(null)}
-            className="relative w-full h-52 sm:h-60 mt-2.5 select-none"
+            className="relative w-full h-60 sm:h-68 mt-3 select-none rounded-xl bg-[#090E1D]/50 border border-white/5 overflow-hidden"
           >
-            <svg viewBox={`0 0 ${W} ${H_DD}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
+            <svg viewBox={`0 0 ${W} ${H_DD}`} className="w-full h-full overflow-hidden absolute inset-0" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="reactDdAreaGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="rgba(245, 158, 11, 0.02)" />
@@ -544,45 +574,25 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
 
               {/* Shaded Zones */}
               <rect x={pad.left} y={yDdZero} width={plotW} height={Math.max(0, yDdNormal - yDdZero)} fill="rgba(16, 185, 129, 0.07)" />
-              <text x={pad.left + 8} y={yDdZero + 14} fill="rgba(16, 185, 129, 0.8)" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace">
-                NORMAL 1.0R RISK ZONE (Drawdown &gt; -5.0R)
-              </text>
-
               <rect x={pad.left} y={yDdNormal} width={plotW} height={Math.max(0, yDdDefensive - yDdNormal)} fill="rgba(245, 158, 11, 0.07)" />
-              <text x={pad.left + 8} y={yDdNormal + 14} fill="rgba(245, 158, 11, 0.8)" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace">
-                DEFENSIVE 0.5R RISK ZONE (Recovery in Progress)
-              </text>
-
               <rect x={pad.left} y={yDdDefensive} width={plotW} height={Math.max(0, yDdBottom - yDdDefensive)} fill="rgba(255, 51, 102, 0.08)" />
-              <text x={pad.left + 8} y={yDdDefensive + 14} fill="rgba(255, 51, 102, 0.85)" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace">
-                CIRCUIT BREAKER TRIGGER ZONE (&lt; -15.0R)
-              </text>
 
               {/* Threshold Lines */}
               <line x1={pad.left} y1={yDdZero} x2={W - pad.right} y2={yDdZero} stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1.2" strokeDasharray="4,4" />
-              <text x={pad.left - 8} y={yDdZero + 3.5} fill="#94A3B8" fontSize="9" fontFamily="'JetBrains Mono', monospace" textAnchor="end">0.0 R</text>
-              <text x={W - pad.right} y={yDdZero - 5} fill="#94A3B8" fontSize="8" fontFamily="'JetBrains Mono', monospace" textAnchor="end">PEAK HIGH-WATER MARK</text>
-
               <line x1={pad.left} y1={yDdNormal} x2={W - pad.right} y2={yDdNormal} stroke="#38BDF8" strokeWidth="1.8" strokeDasharray="5,4" />
-              <text x={pad.left - 8} y={yDdNormal + 3.5} fill="#38BDF8" fontSize="9" fontWeight="bold" fontFamily="'JetBrains Mono', monospace" textAnchor="end">-5.0 R</text>
-              <text x={W - pad.right} y={yDdNormal - 5} fill="#38BDF8" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace" textAnchor="end">▲ NORMAL 1.0R RESTORATION LINE (-5.00 R)</text>
-
               <line x1={pad.left} y1={yDdDefensive} x2={W - pad.right} y2={yDdDefensive} stroke="#FF3366" strokeWidth="1.8" strokeDasharray="5,4" />
-              <text x={pad.left - 8} y={yDdDefensive + 3.5} fill="#FF3366" fontSize="9" fontWeight="bold" fontFamily="'JetBrains Mono', monospace" textAnchor="end">-15.0 R</text>
-              <text x={W - pad.right} y={yDdDefensive - 5} fill="#FF3366" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace" textAnchor="end">▼ DEFENSIVE 0.5R CIRCUIT BREAKER TRIGGER (-15.00 R)</text>
+              <line x1={pad.left} y1={getDdY(-10.0)} x2={W - pad.right} y2={getDdY(-10.0)} stroke="rgba(255, 255, 255, 0.04)" strokeWidth="1" strokeDasharray="3,3" />
+              <line x1={pad.left} y1={getDdY(-20.0)} x2={W - pad.right} y2={getDdY(-20.0)} stroke="rgba(255, 255, 255, 0.04)" strokeWidth="1" strokeDasharray="3,3" />
 
               {/* Drawdown Area & Line */}
               <path d={ddAreaD} fill="url(#reactDdAreaGrad)" />
               <path d={ddPathD} fill="none" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" filter="url(#reactDdGlow)" />
 
-              {/* Peak Trough Marker */}
+              {/* Peak Trough Circle Marker */}
               <circle cx={getDdX(troughIdx)} cy={getDdY(minDdVal)} r="5" fill="#FF3366" stroke="#FFFFFF" strokeWidth="2" />
               <circle cx={getDdX(troughIdx)} cy={getDdY(minDdVal)} r="9" fill="none" stroke="#FF3366" strokeWidth="1.5" opacity="0.8" />
-              <text x={getDdX(troughIdx)} y={getDdY(minDdVal) + 16} fill="#FF3366" fontSize="8.5" fontWeight="bold" fontFamily="'JetBrains Mono', monospace" textAnchor="middle">
-                TROUGH: {minDdVal.toFixed(2)}R
-              </text>
 
-              {/* Current Point Marker */}
+              {/* Current Circle Marker */}
               <circle cx={getDdX(points.length - 1)} cy={getDdY(latestPt.drawdown_r)} r="5" fill="#38BDF8" stroke="#FFFFFF" strokeWidth="2" />
 
               {/* Hover Crosshair */}
@@ -594,10 +604,34 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
               )}
             </svg>
 
+            {/* Crisp HTML Overlays (Zero-squeeze typography) */}
+            <div className="absolute inset-0 pointer-events-none select-none">
+              {/* Left Y-Axis Labels */}
+              <span className="absolute text-[9px] font-mono font-bold text-slate-400 bg-slate-900/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm" style={{ left: '8px', top: `${(yDdZero / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>0.0 R</span>
+              <span className="absolute text-[9px] font-mono font-bold text-sky-400 bg-slate-900/90 px-1.5 py-0.5 rounded border border-sky-400/30 shadow-sm" style={{ left: '8px', top: `${(yDdNormal / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-5.0 R</span>
+              <span className="absolute text-[9px] font-mono font-bold text-slate-400 bg-slate-900/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm" style={{ left: '8px', top: `${(getDdY(-10.0) / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-10.0 R</span>
+              <span className="absolute text-[9px] font-mono font-bold text-rose-400 bg-slate-900/90 px-1.5 py-0.5 rounded border border-rose-500/30 shadow-sm" style={{ left: '8px', top: `${(yDdDefensive / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-15.0 R</span>
+              <span className="absolute text-[9px] font-mono font-bold text-slate-400 bg-slate-900/90 px-1.5 py-0.5 rounded border border-white/10 shadow-sm" style={{ left: '8px', top: `${(getDdY(-20.0) / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>-20.0 R</span>
+
+              {/* Zone Tags */}
+              <span className="absolute text-[8.5px] font-mono font-bold text-emerald-400 bg-slate-900/90 border border-emerald-500/30 px-2 py-0.5 rounded shadow-sm" style={{ left: '60px', top: `${((yDdZero + 6) / H_DD) * 100}%` }}>NORMAL 1.0R ZONE</span>
+              <span className="absolute text-[8.5px] font-mono font-bold text-amber-400 bg-slate-900/90 border border-amber-500/30 px-2 py-0.5 rounded shadow-sm" style={{ left: '60px', top: `${((yDdNormal + 6) / H_DD) * 100}%` }}>DEFENSIVE 0.5R ZONE</span>
+              <span className="absolute text-[8.5px] font-mono font-bold text-rose-400 bg-slate-900/90 border border-rose-500/30 px-2 py-0.5 rounded shadow-sm" style={{ left: '60px', top: `${((yDdDefensive + 6) / H_DD) * 100}%` }}>CRITICAL ZONE (&lt; -15.0R)</span>
+
+              {/* Right Threshold Badges */}
+              <span className="absolute text-[9px] font-mono font-bold text-slate-300 bg-slate-900/90 border border-white/10 px-2 py-0.5 rounded-md" style={{ right: '8px', top: `${(yDdZero / H_DD) * 100}%`, transform: 'translateY(-50%)' }}>0.00 R Peak HWM</span>
+              <span className="absolute text-[9.5px] font-mono font-black text-sky-400 bg-slate-900/95 border border-sky-400/50 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(56,189,248,0.25)] flex items-center gap-1" style={{ right: '8px', top: `${(yDdNormal / H_DD) * 100}%`, transform: 'translateY(-50%)' }}><span>▲</span> Normal Target (-5.00 R)</span>
+              <span className="absolute text-[9.5px] font-mono font-black text-rose-400 bg-slate-900/95 border border-rose-500/50 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(255,51,102,0.25)] flex items-center gap-1" style={{ right: '8px', top: `${(yDdDefensive / H_DD) * 100}%`, transform: 'translateY(-50%)' }}><span>▼</span> Defensive Trigger (-15.00 R)</span>
+
+              {/* Point Markers */}
+              <span className="absolute text-[9px] font-mono font-black text-rose-400 bg-slate-900/95 border border-rose-500/50 px-1.5 py-0.5 rounded shadow-md whitespace-nowrap" style={{ left: `${(getDdX(troughIdx) / W) * 100}%`, top: `${(getDdY(minDdVal) / H_DD) * 100}%`, transform: 'translate(-50%, 8px)' }}>Trough: {minDdVal.toFixed(2)} R</span>
+              <span className="absolute text-[9px] font-mono font-black text-sky-400 bg-slate-900/95 border border-sky-400/50 px-1.5 py-0.5 rounded shadow-md whitespace-nowrap" style={{ left: `${(getDdX(points.length - 1) / W) * 100}%`, top: `${(getDdY(latestPt.drawdown_r) / H_DD) * 100}%`, transform: 'translate(-50%, -24px)' }}>Current: {latestPt.drawdown_r.toFixed(2)} R</span>
+            </div>
+
             {/* Hover Tooltip */}
             {hoverDd && (
               <div 
-                className="absolute pointer-events-none z-30 bg-[#0E1426]/95 backdrop-blur-md border border-amber-500/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"
+                className="absolute pointer-events-none z-40 bg-slate-900/95 backdrop-blur-md border border-amber-500/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"
                 style={{
                   top: '10px',
                   left: `clamp(10px, ${hoverDd.pctX}% - 105px, calc(100% - 220px))`
