@@ -64,13 +64,14 @@ class PortfolioManager:
           - If current_drawdown_r >= -5.0 R: NORMAL MODE (multiplier = 1.0)
         """
         history = db.get_trade_history()
-        # Sort chronologically by entry_time / created_at
+        # Sort chronologically (oldest to newest) to accurately compute the cumulative equity curve and drawdown
+        history_chronological = sorted(history, key=lambda x: (x.get('trade_date', ''), x.get('entry_time', ''), x.get('created_at', '')))
         cum_r = 0.0
         peak_r = 0.0
         curr_mode = "NORMAL"
         curr_mult = 1.0
 
-        for t in history:
+        for t in history_chronological:
             r = float(t.get('realized_r', 0.0))
             cum_r += r
             if cum_r > peak_r:
