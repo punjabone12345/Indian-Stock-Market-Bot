@@ -270,6 +270,73 @@ def get_analytics():
     best_trade = max((t['realized_pnl'] for t in trades), default=0.0)
     worst_trade = min((t['realized_pnl'] for t in trades), default=0.0)
 
+    # Generate Chronological Equity & Drawdown Curves
+    chrono_trades = sorted(trades, key=lambda x: (x.get('trade_date', ''), x.get('entry_time', ''), x.get('created_at', '')))
+    starting_capital = 125000.0
+    cum_pnl = 0.0
+    cum_r = 0.0
+    peak_r = 0.0
+    max_dd_r = 0.0
+    curr_gov_mode = "NORMAL"
+
+    curve_points = [{
+        'trade_num': 0,
+        'symbol': 'START',
+        'direction': '',
+        'trade_date': 'Start',
+        'time': '09:15',
+        'pnl': 0.0,
+        'r': 0.0,
+        'capital': starting_capital,
+        'cum_pnl': 0.0,
+        'cum_r': 0.0,
+        'drawdown_r': 0.0,
+        'peak_r': 0.0,
+        'governor_mode': 'NORMAL'
+    }]
+
+    for idx, t in enumerate(chrono_trades, start=1):
+        pnl = float(t.get('realized_pnl', 0.0))
+        r = float(t.get('realized_r', 0.0))
+        cum_pnl += pnl
+        cum_r += r
+        if cum_r > peak_r:
+            peak_r = cum_r
+        dd = cum_r - peak_r
+        if dd < max_dd_r:
+            max_dd_r = dd
+
+        if curr_gov_mode == "NORMAL" and dd <= -15.0:
+            curr_gov_mode = "DEFENSIVE"
+        elif curr_gov_mode == "DEFENSIVE" and dd >= -5.0:
+            curr_gov_mode = "NORMAL"
+
+        curve_points.append({
+            'trade_num': idx,
+            'id': t.get('id', ''),
+            'symbol': t.get('symbol', ''),
+            'direction': t.get('direction', ''),
+            'trade_date': t.get('trade_date', ''),
+            'time': t.get('exit_time', ''),
+            'pnl': round(pnl, 2),
+            'r': round(r, 2),
+            'capital': round(starting_capital + cum_pnl, 2),
+            'cum_pnl': round(cum_pnl, 2),
+            'cum_r': round(cum_r, 2),
+            'drawdown_r': round(dd, 2),
+            'peak_r': round(peak_r, 2),
+            'governor_mode': curr_gov_mode
+        })
+
+    # Recovery Stats towards Normal Mode (-5.0 R)
+    trough = abs(max_dd_r) if max_dd_r < -5.0 else 5.0
+    target_dd = 5.0  # -5.0 R
+    curr_dd_abs = abs(portfolio.current_drawdown_r)
+    recovered_r = max(0.0, trough - curr_dd_abs)
+    total_recovery_span = max(0.1, trough - target_dd)
+    recovery_pct = round(min(100.0, max(0.0, (recovered_r / total_recovery_span) * 100.0)), 1)
+    distance_to_normal_r = round(max(0.0, curr_dd_abs - target_dd), 2)
+
     return {
         'total_trades': tot,
         'wins': wins,
@@ -288,6 +355,19 @@ def get_analytics():
             'peak_realized_r': portfolio.peak_realized_r,
             'effective_risk': portfolio.get_effective_risk()
         },
+        'governor_stats': {
+            'mode': portfolio.governor_mode,
+            'multiplier': portfolio.governor_multiplier,
+            'current_drawdown_r': portfolio.current_drawdown_r,
+            'max_drawdown_r': round(max_dd_r, 2),
+            'peak_realized_r': portfolio.peak_realized_r,
+            'effective_risk': portfolio.get_effective_risk(),
+            'defense_threshold_r': -15.0,
+            'recovery_threshold_r': -5.0,
+            'distance_to_normal_r': distance_to_normal_r,
+            'recovery_pct': recovery_pct
+        },
+        'equity_curve': curve_points,
         'date_groups': date_groups
     }
 
