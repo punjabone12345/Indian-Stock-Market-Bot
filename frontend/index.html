@@ -428,6 +428,107 @@
 <span class="text-[10px] text-slate-400 mt-0.5 block font-medium">Dhan &amp; Zerodha Standard</span>
 </div>
 </div>
+<!-- DUAL VISUAL CURVES: CAPITAL EQUITY & DYNAMIC RISK GOVERNOR DRAWDOWN -->
+<div class="space-y-3.5 pt-1" id="analyticsCurvesSection">
+  
+  <!-- Curve 1: Capital Equity Growth Curve Card -->
+  <div class="glass-panel p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-surfaceCard via-surfaceCard to-surfaceLow">
+    <div class="flex items-start justify-between flex-wrap gap-2 pb-2.5 border-b border-white/5">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emeraldBull/15 border border-emeraldBull/30 flex items-center justify-center text-emeraldBull shadow-[0_0_12px_rgba(16,185,129,0.25)] flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-black text-white font-mono uppercase tracking-wider">Capital Equity Growth Curve</span>
+            <span class="px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30" id="equityTradeCountBadge">0 Executions</span>
+          </div>
+          <span class="text-[9px] text-slate-400 font-mono block mt-0.5">Cumulative Demat account balance &amp; cumulative R trajectory</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-right font-mono flex-wrap">
+        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
+          <span class="text-[8px] text-slate-400 block font-bold uppercase">Initial Capital</span>
+          <span class="text-[11px] font-black text-slate-300">₹1,25,000</span>
+        </div>
+        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
+          <span class="text-[8px] text-slate-400 block font-bold uppercase">Current Equity</span>
+          <span class="text-[11px] font-black text-white" id="equityCurrentCapitalDisplay">₹1,25,000.00</span>
+        </div>
+        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
+          <span class="text-[8px] text-slate-400 block font-bold uppercase">All-Time Peak</span>
+          <span class="text-[11px] font-black text-emeraldBull" id="equityPeakCapitalDisplay">₹1,25,000.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Equity SVG Canvas Wrapper with Interactive Tooltip -->
+    <div class="relative w-full mt-2.5 select-none" id="equityChartWrapper">
+      <div class="w-full h-48 sm:h-56 relative" id="equitySvgContainer"></div>
+      <div id="equityTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-30 bg-surfaceCard/95 backdrop-blur-md border border-cyanAccent/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"></div>
+    </div>
+  </div>
+
+  <!-- Curve 2: Dynamic Risk Governor & Drawdown Recovery Curve Card -->
+  <div class="glass-panel p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-b from-surfaceCard via-surfaceCard to-surfaceLow">
+    <div class="flex items-start justify-between flex-wrap gap-2 pb-2.5 border-b border-white/5">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-amberTactical/15 border border-amberTactical/30 flex items-center justify-center text-amberTactical shadow-[0_0_12px_rgba(245,158,11,0.25)] flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-black text-white font-mono uppercase tracking-wider">Dynamic Risk Governor &amp; Drawdown</span>
+            <span id="governorModeBadge" class="px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-amberTactical/20 text-amberTactical border border-amberTactical/40 animate-pulse">DEFENSIVE (0.5R Risk)</span>
+          </div>
+          <span class="text-[9px] text-slate-400 font-mono block mt-0.5">Peak-to-trough R-drawdown, Normal mode (&gt; -5.0R) recovery &amp; Defensive circuit breaker (&lt; -15.0R)</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-right font-mono flex-wrap">
+        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
+          <span class="text-[8px] text-slate-400 block font-bold uppercase">Current Drawdown</span>
+          <span class="text-[11px] font-black text-roseBear" id="govCurrentDdDisplay">-0.00 R</span>
+        </div>
+        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
+          <span class="text-[8px] text-slate-400 block font-bold uppercase">Peak Trough</span>
+          <span class="text-[11px] font-black text-rose-500" id="govPeakDdDisplay">-0.00 R</span>
+        </div>
+        <div class="bg-surfaceHigh/60 px-2 py-1 rounded-xl border border-white/5">
+          <span class="text-[8px] text-slate-400 block font-bold uppercase">Normal Recovery Line</span>
+          <span class="text-[11px] font-black text-cyanAccent">-5.00 R</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recovery Progress Telemetry Bar -->
+    <div class="mt-2.5 p-2.5 rounded-xl bg-surfaceHigh/40 border border-white/5 space-y-1.5 font-mono">
+      <div class="flex items-center justify-between text-[9.5px]">
+        <span class="text-slate-300 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-cyanAccent animate-ping"></span>
+          <span>Governor Recovery Progress to Normal Mode (1.0R):</span>
+          <span class="text-cyanAccent font-black" id="govRecoveryPctText">0.0%</span>
+        </span>
+        <span class="text-slate-400" id="govDistanceText">Gap: 0.00 R</span>
+      </div>
+      <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden p-0.5 border border-white/10">
+        <div id="govRecoveryBar" class="h-full rounded-full bg-gradient-to-r from-amberTactical via-cyanAccent to-emeraldBull transition-all duration-500 shadow-[0_0_8px_rgba(56,189,248,0.5)]" style="width: 0%;"></div>
+      </div>
+      <div class="flex items-center justify-between text-[8px] text-slate-400">
+        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-roseBear"></span> Trough: <strong id="govTroughSubText">-19.13 R</strong></span>
+        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-cyanAccent"></span> Normal Threshold: <strong>-5.00 R</strong></span>
+        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emeraldBull"></span> Peak HWM: <strong>0.00 R</strong></span>
+      </div>
+    </div>
+
+    <!-- Drawdown SVG Canvas Wrapper with Visual Bands & Tooltip -->
+    <div class="relative w-full mt-2.5 select-none" id="drawdownChartWrapper">
+      <div class="w-full h-52 sm:h-60 relative" id="drawdownSvgContainer"></div>
+      <div id="drawdownTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 z-30 bg-surfaceCard/95 backdrop-blur-md border border-amberTactical/40 rounded-xl p-2.5 shadow-2xl text-[9.5px] font-mono space-y-0.5"></div>
+    </div>
+  </div>
+
+</div>
+
 <!-- Chronological Master Ledger grouped date-wise -->
 <div class="space-y-2 pt-1">
 <div class="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider px-1">Chronological Trade Ledger</div>
@@ -1569,6 +1670,7 @@ Trigger Condition:
           userState.positions = [];
           renderPositions();
           renderLedger();
+          renderAnalyticsCurves();
           recalculateMarginsAndPnl();
           showToast("⏰ 03:00 PM IST Reached: All intraday positions auto-squared off.");
         }
@@ -1588,6 +1690,8 @@ Trigger Condition:
         if (!res.ok) return;
         const data = await res.json();
         if (data && Array.isArray(data.date_groups)) {
+          if (data.equity_curve) userState.equityCurve = data.equity_curve;
+          if (data.governor_stats) userState.governorStats = data.governor_stats;
           const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
           userState.ledger = data.date_groups.map(group => ({
             date: group.date === todayIso ? "TODAY" : group.date,
@@ -2326,7 +2430,562 @@ Trigger Condition:
         anPf.innerText = totalTrades > 0 ? (totalGrossLosses > 0 ? (totalGrossWins / totalGrossLosses).toFixed(2) : "100.00") : "0.00";
       }
 
+      renderAnalyticsCurves();
       if (window.lucide) lucide.createIcons();
+    }
+
+    // ==============================================
+    // DUAL VISUAL CURVES: CAPITAL EQUITY & DRAWDOWN
+    // ==============================================
+    function renderAnalyticsCurves() {
+      let points = userState.equityCurve;
+      let stats = userState.governorStats;
+
+      // Fallback: derive curve points from userState.ledger if backend curve is unavailable
+      if (!points || points.length === 0) {
+        points = [{
+          trade_num: 0,
+          symbol: 'START',
+          direction: '',
+          trade_date: 'Start',
+          time: '09:15',
+          pnl: 0,
+          r: 0,
+          capital: 125000.0,
+          cum_pnl: 0,
+          cum_r: 0,
+          drawdown_r: 0,
+          peak_r: 0,
+          governor_mode: 'NORMAL'
+        }];
+
+        const allTrades = [];
+        if (userState.ledger && Array.isArray(userState.ledger)) {
+          const daysCopy = [...userState.ledger].reverse();
+          daysCopy.forEach(day => {
+            if (day.trades && Array.isArray(day.trades)) {
+              day.trades.forEach(t => allTrades.push({ ...t, trade_date: day.fullDate || day.date }));
+            }
+          });
+        }
+
+        let cumPnl = 0;
+        let cumR = 0;
+        let peakR = 0;
+        let maxDd = 0;
+        let currentMode = "NORMAL";
+
+        allTrades.forEach((t, idx) => {
+          const pnl = Number(t.netPnl !== undefined ? t.netPnl : 0);
+          const r = Number(t.rMultiple ? parseFloat(t.rMultiple) : (pnl / (userState.riskPerTrade || 200)));
+          cumPnl += pnl;
+          cumR += r;
+          if (cumR > peakR) peakR = cumR;
+          const dd = cumR - peakR;
+          if (dd < maxDd) maxDd = dd;
+
+          if (currentMode === "NORMAL" && dd <= -15.0) currentMode = "DEFENSIVE";
+          else if (currentMode === "DEFENSIVE" && dd >= -5.0) currentMode = "NORMAL";
+
+          points.push({
+            trade_num: idx + 1,
+            symbol: t.symbol || 'STOCK',
+            direction: t.side || t.direction || 'BUY',
+            trade_date: t.trade_date || '',
+            time: t.exitTime || t.time || '',
+            pnl: Math.round(pnl * 100) / 100,
+            r: Math.round(r * 100) / 100,
+            capital: Math.round((125000.0 + cumPnl) * 100) / 100,
+            cum_pnl: Math.round(cumPnl * 100) / 100,
+            cum_r: Math.round(cumR * 100) / 100,
+            drawdown_r: Math.round(dd * 100) / 100,
+            peak_r: Math.round(peakR * 100) / 100,
+            governor_mode: currentMode
+          });
+        });
+
+        if (!stats) {
+          const currDd = points[points.length - 1].drawdown_r;
+          const trough = Math.abs(maxDd) > 5.0 ? Math.abs(maxDd) : 5.0;
+          const currDdAbs = Math.abs(currDd);
+          const recoveredR = Math.max(0, trough - currDdAbs);
+          const totalRecoverySpan = Math.max(0.1, trough - 5.0);
+          const recoveryPct = Math.round(Math.min(100, Math.max(0, (recoveredR / totalRecoverySpan) * 100)) * 10) / 10;
+          const distToNormal = Math.round(Math.max(0, currDdAbs - 5.0) * 100) / 100;
+
+          stats = {
+            mode: currentMode,
+            multiplier: currentMode === "DEFENSIVE" ? 0.5 : 1.0,
+            current_drawdown_r: currDd,
+            max_drawdown_r: Math.round(maxDd * 100) / 100,
+            peak_realized_r: Math.round(peakR * 100) / 100,
+            effective_risk: currentMode === "DEFENSIVE" ? 100.0 : 200.0,
+            defense_threshold_r: -15.0,
+            recovery_threshold_r: -5.0,
+            distance_to_normal_r: distToNormal,
+            recovery_pct: recoveryPct
+          };
+        }
+      }
+
+      // Update Header Badges & Telemetry
+      const latestPoint = points[points.length - 1];
+      const allCapitals = points.map(p => p.capital);
+      const peakCapital = Math.max(...allCapitals);
+
+      const countBadge = document.getElementById('equityTradeCountBadge');
+      if (countBadge) countBadge.innerText = `${points.length - 1} Executions`;
+
+      const curCapDisp = document.getElementById('equityCurrentCapitalDisplay');
+      if (curCapDisp) {
+        curCapDisp.innerText = `₹${latestPoint.capital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        curCapDisp.className = `text-[11px] font-black ${latestPoint.capital >= 125000 ? 'text-emeraldBull' : 'text-amberTactical'}`;
+      }
+
+      const peakCapDisp = document.getElementById('equityPeakCapitalDisplay');
+      if (peakCapDisp) peakCapDisp.innerText = `₹${peakCapital.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+      const govBadge = document.getElementById('governorModeBadge');
+      if (govBadge) {
+        if (stats.mode === 'DEFENSIVE') {
+          govBadge.className = "px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-amberTactical/20 text-amberTactical border border-amberTactical/40 animate-pulse";
+          govBadge.innerText = "DEFENSIVE (0.5R Risk)";
+        } else {
+          govBadge.className = "px-2 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold bg-emeraldBull/20 text-emeraldBull border border-emeraldBull/40";
+          govBadge.innerText = "NORMAL (1.0R Risk)";
+        }
+      }
+
+      const curDdDisp = document.getElementById('govCurrentDdDisplay');
+      if (curDdDisp) {
+        curDdDisp.innerText = `${stats.current_drawdown_r >= 0 ? '+' : ''}${stats.current_drawdown_r.toFixed(2)} R`;
+        curDdDisp.className = `text-[11px] font-black ${stats.current_drawdown_r >= -5.0 ? 'text-emeraldBull' : (stats.current_drawdown_r <= -15.0 ? 'text-roseBear' : 'text-amberTactical')}`;
+      }
+
+      const peakDdDisp = document.getElementById('govPeakDdDisplay');
+      if (peakDdDisp) peakDdDisp.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+
+      const recPctText = document.getElementById('govRecoveryPctText');
+      if (recPctText) recPctText.innerText = `${stats.recovery_pct || 0}%`;
+
+      const distText = document.getElementById('govDistanceText');
+      if (distText) {
+        distText.innerText = stats.distance_to_normal_r > 0 
+          ? `Gap to Normal: ${stats.distance_to_normal_r.toFixed(2)} R (~₹${Math.round(stats.distance_to_normal_r * (userState.riskPerTrade || 200))})`
+          : `Fully in Normal 1.0R Mode`;
+      }
+
+      const recBar = document.getElementById('govRecoveryBar');
+      if (recBar) recBar.style.width = `${Math.min(100, Math.max(0, stats.recovery_pct || 0))}%`;
+
+      const troughSub = document.getElementById('govTroughSubText');
+      if (troughSub) troughSub.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
+
+      // Render the SVGs
+      renderEquityCurveSvg(points);
+      renderDrawdownCurveSvg(points, stats);
+    }
+
+    function renderEquityCurveSvg(points) {
+      const container = document.getElementById('equitySvgContainer');
+      const tooltip = document.getElementById('equityTooltip');
+      if (!container) return;
+
+      const W = 800;
+      const H = 220;
+      const pad = { top: 25, right: 30, bottom: 35, left: 70 };
+      const plotW = W - pad.left - pad.right;
+      const plotH = H - pad.top - pad.bottom;
+
+      if (!points || points.length === 0) {
+        container.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs">Awaiting Execution Data</div>';
+        return;
+      }
+
+      const capitals = points.map(p => p.capital);
+      let minCap = Math.min(...capitals, 125000);
+      let maxCap = Math.max(...capitals, 125000);
+      const span = maxCap - minCap;
+      const buffer = Math.max(300, span * 0.15);
+      minCap = Math.floor((minCap - buffer) / 500) * 500;
+      maxCap = Math.ceil((maxCap + buffer) / 500) * 500;
+      if (maxCap <= minCap) maxCap = minCap + 1000;
+
+      const getX = (i) => pad.left + (points.length === 1 ? plotW / 2 : (i / (points.length - 1)) * plotW);
+      const getY = (val) => pad.top + plotH - ((val - minCap) / (maxCap - minCap)) * plotH;
+      const yBase = getY(125000.0);
+
+      // Grid levels
+      const gridCount = 4;
+      let gridLinesHtml = '';
+      for (let g = 0; g <= gridCount; g++) {
+        const val = minCap + (g / gridCount) * (maxCap - minCap);
+        const yPos = getY(val);
+        gridLinesHtml += `
+          <line x1="${pad.left}" y1="${yPos}" x2="${W - pad.right}" y2="${yPos}" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" stroke-dasharray="4,4" />
+          <text x="${pad.left - 8}" y="${yPos + 3.5}" fill="#64748B" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">₹${Math.round(val).toLocaleString('en-IN')}</text>
+        `;
+      }
+
+      // Starting Baseline ₹125,000 Line
+      const baselineHtml = `
+        <line x1="${pad.left}" y1="${yBase}" x2="${W - pad.right}" y2="${yBase}" stroke="rgba(0, 240, 255, 0.35)" stroke-width="1.5" stroke-dasharray="5,4" />
+        <text x="${W - pad.right}" y="${yBase - 6}" fill="#00F0FF" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace" text-anchor="end">START BASELINE (₹1,25,000)</text>
+      `;
+
+      // Build Path & Area
+      let pathD = `M ${getX(0)},${getY(points[0].capital)}`;
+      for (let i = 1; i < points.length; i++) {
+        pathD += ` L ${getX(i)},${getY(points[i].capital)}`;
+      }
+
+      const areaD = `${pathD} L ${getX(points.length - 1)},${pad.top + plotH} L ${getX(0)},${pad.top + plotH} Z`;
+
+      // Peak Capital Point
+      let peakIdx = 0;
+      let peakVal = points[0].capital;
+      points.forEach((p, idx) => {
+        if (p.capital > peakVal) {
+          peakVal = p.capital;
+          peakIdx = idx;
+        }
+      });
+
+      const lastIdx = points.length - 1;
+      const peakX = getX(peakIdx);
+      const peakY = getY(peakVal);
+      const lastX = getX(lastIdx);
+      const lastY = getY(points[lastIdx].capital);
+
+      const isCurrentProfitable = points[lastIdx].capital >= 125000;
+      const strokeColor = isCurrentProfitable ? '#10B981' : '#00F0FF';
+      const gradientStart = isCurrentProfitable ? 'rgba(16, 185, 129, 0.35)' : 'rgba(0, 240, 255, 0.30)';
+
+      const svgHtml = `
+        <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-visible" preserveAspectRatio="none" id="equitySvgEl">
+          <defs>
+            <linearGradient id="equityGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${gradientStart}" />
+              <stop offset="100%" stop-color="rgba(14, 20, 38, 0)" />
+            </linearGradient>
+            <filter id="equityGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Grid Lines -->
+          ${gridLinesHtml}
+
+          <!-- ₹125,000 Baseline -->
+          ${baselineHtml}
+
+          <!-- Gradient Area Fill -->
+          <path d="${areaD}" fill="url(#equityGradient)" />
+
+          <!-- Equity Line Curve -->
+          <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#equityGlow)" />
+
+          <!-- All-Time Peak Marker -->
+          <circle cx="${peakX}" cy="${peakY}" r="4.5" fill="#10B981" stroke="#FFFFFF" stroke-width="1.5" />
+          <circle cx="${peakX}" cy="${peakY}" r="8" fill="none" stroke="#10B981" stroke-width="1" opacity="0.6" />
+
+          <!-- Current Point Marker -->
+          <circle cx="${lastX}" cy="${lastY}" r="5" fill="${strokeColor}" stroke="#FFFFFF" stroke-width="2" />
+          <circle cx="${lastX}" cy="${lastY}" r="9" fill="none" stroke="${strokeColor}" stroke-width="1.5" class="animate-ping" opacity="0.75" />
+
+          <!-- Dynamic Crosshair Line (hidden initially) -->
+          <line id="equityCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(0, 240, 255, 0.7)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0" />
+          <circle id="equityCrosshairDot" cx="0" cy="0" r="5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" opacity="0" />
+        </svg>
+      `;
+
+      container.innerHTML = svgHtml;
+
+      // Mousemove / Touchmove Interactive Crosshair & Tooltip
+      const handleHover = (clientX) => {
+        const rect = container.getBoundingClientRect();
+        const offsetX = clientX - rect.left;
+        const normX = (offsetX / rect.width) * W;
+        const clampedX = Math.min(W - pad.right, Math.max(pad.left, normX));
+        const ratio = (clampedX - pad.left) / plotW;
+        const ptIdx = Math.min(points.length - 1, Math.max(0, Math.round(ratio * (points.length - 1))));
+        const pt = points[ptIdx];
+
+        const ptX = getX(ptIdx);
+        const ptY = getY(pt.capital);
+
+        const crosshairLine = document.getElementById('equityCrosshairLine');
+        const crosshairDot = document.getElementById('equityCrosshairDot');
+
+        if (crosshairLine && crosshairDot) {
+          crosshairLine.setAttribute('x1', ptX);
+          crosshairLine.setAttribute('x2', ptX);
+          crosshairLine.setAttribute('opacity', '1');
+
+          crosshairDot.setAttribute('cx', ptX);
+          crosshairDot.setAttribute('cy', ptY);
+          crosshairDot.setAttribute('opacity', '1');
+        }
+
+        if (tooltip) {
+          const isGain = pt.pnl >= 0;
+          const isProfitableTotal = pt.capital >= 125000;
+          tooltip.innerHTML = `
+            <div class="flex items-center justify-between border-b border-white/10 pb-1 gap-3">
+              <span class="text-white font-black">Trade #${pt.trade_num} • ${pt.symbol || 'START'} ${pt.direction ? '(' + pt.direction + ')' : ''}</span>
+              <span class="px-1.5 py-0.2 rounded text-[8px] font-bold ${pt.governor_mode === 'DEFENSIVE' ? 'bg-amberTactical/20 text-amberTactical' : 'bg-emeraldBull/20 text-emeraldBull'}">${pt.governor_mode || 'NORMAL'}</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-300 gap-3">
+              <span class="text-slate-400">Capital:</span>
+              <span class="font-black ${isProfitableTotal ? 'text-emeraldBull' : 'text-amberTactical'}">₹${pt.capital.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-300 gap-3">
+              <span class="text-slate-400">Trade P&amp;L:</span>
+              <span class="font-bold ${isGain ? 'text-emeraldBull' : 'text-roseBear'}">${isGain && pt.trade_num > 0 ? '+' : ''}₹${pt.pnl.toFixed(2)} (${isGain && pt.trade_num > 0 ? '+' : ''}${pt.r.toFixed(2)}R)</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-300 gap-3">
+              <span class="text-slate-400">Cumulative R:</span>
+              <span class="font-bold text-slate-200">${pt.cum_r >= 0 ? '+' : ''}${pt.cum_r.toFixed(2)}R</span>
+            </div>
+            <div class="text-[8px] text-slate-500 pt-0.5">${pt.trade_date} ${pt.time || ''}</div>
+          `;
+
+          const tooltipW = 200;
+          let leftPos = (ptX / W) * rect.width - tooltipW / 2;
+          if (leftPos < 10) leftPos = 10;
+          if (leftPos + tooltipW > rect.width - 10) leftPos = rect.width - tooltipW - 10;
+
+          tooltip.style.left = `${leftPos}px`;
+          tooltip.style.top = `10px`;
+          tooltip.style.opacity = '1';
+        }
+      };
+
+      const handleLeave = () => {
+        const crosshairLine = document.getElementById('equityCrosshairLine');
+        const crosshairDot = document.getElementById('equityCrosshairDot');
+        if (crosshairLine) crosshairLine.setAttribute('opacity', '0');
+        if (crosshairDot) crosshairDot.setAttribute('opacity', '0');
+        if (tooltip) tooltip.style.opacity = '0';
+      };
+
+      container.onmousemove = (e) => handleHover(e.clientX);
+      container.onmouseleave = handleLeave;
+      container.ontouchmove = (e) => {
+        if (e.touches && e.touches[0]) handleHover(e.touches[0].clientX);
+      };
+      container.ontouchend = handleLeave;
+    }
+
+    function renderDrawdownCurveSvg(points, stats) {
+      const container = document.getElementById('drawdownSvgContainer');
+      const tooltip = document.getElementById('drawdownTooltip');
+      if (!container) return;
+
+      const W = 800;
+      const H = 240;
+      const pad = { top: 25, right: 30, bottom: 35, left: 70 };
+      const plotW = W - pad.left - pad.right;
+      const plotH = H - pad.top - pad.bottom;
+
+      if (!points || points.length === 0) {
+        container.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs">Awaiting Drawdown Telemetry</div>';
+        return;
+      }
+
+      const minDrawdown = Math.min(...points.map(p => p.drawdown_r), stats ? stats.max_drawdown_r : -16.0);
+      const yMin = Math.min(minDrawdown, -17.0) - 2.5;
+      const yMax = 1.0;
+
+      const getX = (i) => pad.left + (points.length === 1 ? plotW / 2 : (i / (points.length - 1)) * plotW);
+      const getY = (dd) => pad.top + ((yMax - dd) / (yMax - yMin)) * plotH;
+
+      const yZero = getY(0.0);
+      const yNormal = getY(-5.0);
+      const yDefensive = getY(-15.0);
+      const yBottom = pad.top + plotH;
+
+      // 1. Shaded Visual Zones
+      const normalZoneHtml = `
+        <rect x="${pad.left}" y="${yZero}" width="${plotW}" height="${Math.max(0, yNormal - yZero)}" fill="rgba(16, 185, 129, 0.07)" />
+        <text x="${pad.left + 8}" y="${yZero + 14}" fill="rgba(16, 185, 129, 0.8)" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace">NORMAL 1.0R RISK ZONE (Drawdown > -5.0R)</text>
+      `;
+
+      const defensiveZoneHtml = `
+        <rect x="${pad.left}" y="${yNormal}" width="${plotW}" height="${Math.max(0, yDefensive - yNormal)}" fill="rgba(245, 158, 11, 0.07)" />
+        <text x="${pad.left + 8}" y="${yNormal + 14}" fill="rgba(245, 158, 11, 0.8)" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace">DEFENSIVE 0.5R RISK ZONE (Recovery in Progress)</text>
+      `;
+
+      const criticalZoneHtml = `
+        <rect x="${pad.left}" y="${yDefensive}" width="${plotW}" height="${Math.max(0, yBottom - yDefensive)}" fill="rgba(255, 51, 102, 0.08)" />
+        <text x="${pad.left + 8}" y="${yDefensive + 14}" fill="rgba(255, 51, 102, 0.85)" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace">CIRCUIT BREAKER TRIGGER ZONE (< -15.0R)</text>
+      `;
+
+      // 2. Threshold Reference Lines
+      const thresholdLinesHtml = `
+        <line x1="${pad.left}" y1="${yZero}" x2="${W - pad.right}" y2="${yZero}" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1.2" stroke-dasharray="4,4" />
+        <text x="${pad.left - 8}" y="${yZero + 3.5}" fill="#94A3B8" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">0.0 R</text>
+        <text x="${W - pad.right}" y="${yZero - 5}" fill="#94A3B8" font-size="8" font-family="'JetBrains Mono', monospace" text-anchor="end">PEAK HIGH-WATER MARK</text>
+
+        <line x1="${pad.left}" y1="${yNormal}" x2="${W - pad.right}" y2="${yNormal}" stroke="#00F0FF" stroke-width="1.8" stroke-dasharray="5,4" />
+        <text x="${pad.left - 8}" y="${yNormal + 3.5}" fill="#00F0FF" font-size="9" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">-5.0 R</text>
+        <text x="${W - pad.right}" y="${yNormal - 5}" fill="#00F0FF" font-size="8.5" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">▲ NORMAL 1.0R RESTORATION LINE (-5.00 R)</text>
+
+        <line x1="${pad.left}" y1="${yDefensive}" x2="${W - pad.right}" y2="${yDefensive}" stroke="#FF3366" stroke-width="1.8" stroke-dasharray="5,4" />
+        <text x="${pad.left - 8}" y="${yDefensive + 3.5}" fill="#FF3366" font-size="9" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">-15.0 R</text>
+        <text x="${W - pad.right}" y="${yDefensive - 5}" fill="#FF3366" font-size="8.5" font-bold font-family="'JetBrains Mono', monospace" text-anchor="end">▼ DEFENSIVE 0.5R CIRCUIT BREAKER TRIGGER (-15.00 R)</text>
+
+        <line x1="${pad.left}" y1="${getY(-10.0)}" x2="${W - pad.right}" y2="${getY(-10.0)}" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" stroke-dasharray="3,3" />
+        <text x="${pad.left - 8}" y="${getY(-10.0) + 3.5}" fill="#64748B" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">-10.0 R</text>
+
+        <line x1="${pad.left}" y1="${getY(-20.0)}" x2="${W - pad.right}" y2="${getY(-20.0)}" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1" stroke-dasharray="3,3" />
+        <text x="${pad.left - 8}" y="${getY(-20.0) + 3.5}" fill="#64748B" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="end">-20.0 R</text>
+      `;
+
+      // 3. Drawdown Line Path & Area
+      let ddPathD = `M ${getX(0)},${getY(points[0].drawdown_r)}`;
+      for (let i = 1; i < points.length; i++) {
+        ddPathD += ` L ${getX(i)},${getY(points[i].drawdown_r)}`;
+      }
+
+      const ddAreaD = `${ddPathD} L ${getX(points.length - 1)},${yZero} L ${getX(0)},${yZero} Z`;
+
+      // 4. Find Peak Trough Point
+      let troughIdx = 0;
+      let minDdVal = points[0].drawdown_r;
+      points.forEach((p, idx) => {
+        if (p.drawdown_r < minDdVal) {
+          minDdVal = p.drawdown_r;
+          troughIdx = idx;
+        }
+      });
+
+      const troughX = getX(troughIdx);
+      const troughY = getY(minDdVal);
+
+      const lastIdx = points.length - 1;
+      const lastX = getX(lastIdx);
+      const lastY = getY(points[lastIdx].drawdown_r);
+
+      const svgHtml = `
+        <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-visible" preserveAspectRatio="none" id="drawdownSvgEl">
+          <defs>
+            <linearGradient id="ddAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(245, 158, 11, 0.02)" />
+              <stop offset="100%" stop-color="rgba(245, 158, 11, 0.25)" />
+            </linearGradient>
+            <filter id="ddGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Zone Shading -->
+          ${normalZoneHtml}
+          ${defensiveZoneHtml}
+          ${criticalZoneHtml}
+
+          <!-- Threshold Grid & Labels -->
+          ${thresholdLinesHtml}
+
+          <!-- Drawdown Fill Area -->
+          <path d="${ddAreaD}" fill="url(#ddAreaGrad)" />
+
+          <!-- Drawdown Main Line -->
+          <path d="${ddPathD}" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#ddGlow)" />
+
+          <!-- Peak Trough Marker -->
+          <circle cx="${troughX}" cy="${troughY}" r="5" fill="#FF3366" stroke="#FFFFFF" stroke-width="2" />
+          <circle cx="${troughX}" cy="${troughY}" r="9" fill="none" stroke="#FF3366" stroke-width="1.5" opacity="0.8" />
+          <text x="${troughX}" y="${troughY + 16}" fill="#FF3366" font-size="8.5" font-weight="bold" font-family="'JetBrains Mono', monospace" text-anchor="middle">TROUGH: ${minDdVal.toFixed(2)}R</text>
+
+          <!-- Current Point Marker -->
+          <circle cx="${lastX}" cy="${lastY}" r="5" fill="#00F0FF" stroke="#FFFFFF" stroke-width="2" />
+          <circle cx="${lastX}" cy="${lastY}" r="9" fill="none" stroke="#00F0FF" stroke-width="1.5" class="animate-ping" opacity="0.85" />
+
+          <!-- Dynamic Crosshair Line -->
+          <line id="ddCrosshairLine" x1="0" y1="${pad.top}" x2="0" y2="${pad.top + plotH}" stroke="rgba(245, 158, 11, 0.8)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0" />
+          <circle id="ddCrosshairDot" cx="0" cy="0" r="5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2" opacity="0" />
+        </svg>
+      `;
+
+      container.innerHTML = svgHtml;
+
+      // Mousemove / Touchmove Interactive Crosshair & Tooltip
+      const handleHover = (clientX) => {
+        const rect = container.getBoundingClientRect();
+        const offsetX = clientX - rect.left;
+        const normX = (offsetX / rect.width) * W;
+        const clampedX = Math.min(W - pad.right, Math.max(pad.left, normX));
+        const ratio = (clampedX - pad.left) / plotW;
+        const ptIdx = Math.min(points.length - 1, Math.max(0, Math.round(ratio * (points.length - 1))));
+        const pt = points[ptIdx];
+
+        const ptX = getX(ptIdx);
+        const ptY = getY(pt.drawdown_r);
+
+        const crosshairLine = document.getElementById('ddCrosshairLine');
+        const crosshairDot = document.getElementById('ddCrosshairDot');
+
+        if (crosshairLine && crosshairDot) {
+          crosshairLine.setAttribute('x1', ptX);
+          crosshairLine.setAttribute('x2', ptX);
+          crosshairLine.setAttribute('opacity', '1');
+
+          crosshairDot.setAttribute('cx', ptX);
+          crosshairDot.setAttribute('cy', ptY);
+          crosshairDot.setAttribute('opacity', '1');
+        }
+
+        if (tooltip) {
+          const isNormal = pt.governor_mode === 'NORMAL';
+          const distToNormal = Math.max(0, Math.abs(pt.drawdown_r) - 5.0).toFixed(2);
+          tooltip.innerHTML = `
+            <div class="flex items-center justify-between border-b border-white/10 pb-1 gap-3">
+              <span class="text-white font-black">Trade #${pt.trade_num} • ${pt.symbol || 'START'}</span>
+              <span class="px-1.5 py-0.2 rounded text-[8px] font-bold ${isNormal ? 'bg-emeraldBull/20 text-emeraldBull' : 'bg-amberTactical/20 text-amberTactical'}">${pt.governor_mode || 'NORMAL'} (${isNormal ? '1.0R' : '0.5R'})</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-300 gap-3">
+              <span class="text-slate-400">R-Drawdown:</span>
+              <span class="font-black ${pt.drawdown_r >= -5.0 ? 'text-emeraldBull' : (pt.drawdown_r <= -15.0 ? 'text-roseBear' : 'text-amberTactical')}">${pt.drawdown_r.toFixed(2)} R</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-300 gap-3">
+              <span class="text-slate-400">Capital Value:</span>
+              <span class="font-bold text-white">₹${pt.capital.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-300 gap-3">
+              <span class="text-slate-400">Return to Normal:</span>
+              <span class="font-bold ${distToNormal === '0.00' ? 'text-emeraldBull' : 'text-cyanAccent'}">${distToNormal === '0.00' ? 'Normal Mode Active' : `Need +${distToNormal} R (~₹${Math.round(distToNormal * 200)})`}</span>
+            </div>
+            <div class="text-[8px] text-slate-500 pt-0.5">${pt.trade_date} ${pt.time || ''}</div>
+          `;
+
+          const tooltipW = 210;
+          let leftPos = (ptX / W) * rect.width - tooltipW / 2;
+          if (leftPos < 10) leftPos = 10;
+          if (leftPos + tooltipW > rect.width - 10) leftPos = rect.width - tooltipW - 10;
+
+          tooltip.style.left = `${leftPos}px`;
+          tooltip.style.top = `10px`;
+          tooltip.style.opacity = '1';
+        }
+      };
+
+      const handleLeave = () => {
+        const crosshairLine = document.getElementById('ddCrosshairLine');
+        const crosshairDot = document.getElementById('ddCrosshairDot');
+        if (crosshairLine) crosshairLine.setAttribute('opacity', '0');
+        if (crosshairDot) crosshairDot.setAttribute('opacity', '0');
+        if (tooltip) tooltip.style.opacity = '0';
+      };
+
+      container.onmousemove = (e) => handleHover(e.clientX);
+      container.onmouseleave = handleLeave;
+      container.ontouchmove = (e) => {
+        if (e.touches && e.touches[0]) handleHover(e.touches[0].clientX);
+      };
+      container.ontouchend = handleLeave;
     }
 
     function openTradeDetail(dayIdx, tradeIdx) {
