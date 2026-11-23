@@ -191,15 +191,15 @@ class Database:
             d['bot_active'] = bool(d.get('bot_active', 1))
             return d
         return {
-            'capital': 125000.0,
-            'risk_per_trade': 200.0,
+            'capital': 100000.0,
+            'risk_per_trade': 2500.0,
             'trading_mode': 'PAPER',
             'dhan_client_id': '',
             'dhan_access_token': '',
             'telegram_token': '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc',
             'telegram_chat_id': '5582938659',
-            'max_open_positions': 14,
-            'target_rr': 2.0,
+            'max_open_positions': 1,
+            'target_rr': 4.0,
             'bot_active': True
         }
 

@@ -270,9 +270,9 @@ def get_analytics():
     best_trade = max((t['realized_pnl'] for t in trades), default=0.0)
     worst_trade = min((t['realized_pnl'] for t in trades), default=0.0)
 
-    # Generate Chronological Equity & Drawdown Curves
+    # Generate Chronological Equity & Drawdown Curves (Starting Baseline: ₹1,00,000.00)
     chrono_trades = sorted(trades, key=lambda x: (x.get('trade_date', ''), x.get('entry_time', ''), x.get('created_at', '')))
-    starting_capital = 125000.0
+    starting_capital = 100000.0
     cum_pnl = 0.0
     cum_r = 0.0
     peak_r = 0.0
