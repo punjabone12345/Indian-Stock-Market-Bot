@@ -52,16 +52,16 @@ class TelegramService:
         text = (
             f"🔔 *MARKET READINESS CONFIRMED (09:00 AM IST)*\n\n"
             f"🤖 *Indian Stock Market Bot is Armed & Ready!*\n\n"
-            f"• *Strategy:* `Velocity Compounder (Pure Leader 4.0R)`\n"
+            f"• *Strategy:* `Velocity Compounder (Pure 90% Margin)`\n"
             f"• *Execution:* `{mode} MODE`\n"
             f"• *Universe:* `29 Liquid NSE Mega-Caps`\n"
             f"• *Capital Balance:* `₹{capital:,.2f}` (Avail Margin: `₹{avail:,.2f}`)\n"
-            f"• *Risk Sizing:* `Dynamic 2.5% Compounding` (*{gov_badge}*)\n"
-            f"• *Target RRR:* `1:{target_rr}` (Floor SL: `0.50%`)\n"
+            f"• *Position Sizing:* `Pure 90% Fixed Margin Allocation` (*{gov_badge}*)\n"
+            f"• *Target RRR:* `1:{target_rr}` (Floor SL: `0.50%` | Cap SL: `1.50%`)\n"
             f"• *Protection:* `BE Lock @ +1.5R` | `Trailing Stop @ +2.5R`\n"
             f"• *Selection:* `10:00 AM Pure #1 RS Leader` (Max 1 Trade/Day)\n"
             f"• *EOD Square-Off:* `03:00 PM IST` (Strict Intraday, zero overnight hold)\n"
-            f"• *Historical Edge:* `+491.8% Net Return (5.92x) | 1.70 PF | 31.9% Max DD`"
+            f"• *Compounded Edge:* `+8.5% Compounded/Mo | 113.9x Multiplier`"
         )
         return self.send_message(text)
 
@@ -79,9 +79,9 @@ class TelegramService:
             f"• *Take Profit:* `₹{pos['take_profit']:,.2f}` (1:{pos.get('target_rr', 4.0)} RRR)\n"
             f"• *Quantity:* `{pos['quantity']} shares`\n"
             f"• *Margin Locked (5x MIS):* `₹{pos['margin_used']:,.2f}`\n"
-            f"• *Risk Allocated:* `₹{pos.get('risk_amount', 2500):,.2f}` (2.5% of Equity)\n"
+            f"• *Risk Allocated:* `₹{pos.get('risk_amount', 6000):,.2f}` ({pos.get('risk_pct', 6.0):.2f}% of Equity)\n"
             f"• *Execution Time:* `{now_ist_str('%H:%M:%S IST')}`\n"
-            f"• *Strategy:* `Velocity Compounder (Pure Leader 4.0R)`"
+            f"• *Strategy:* `Velocity Compounder (Pure 90% Margin)`"
         )
         return self.send_message(text)
 

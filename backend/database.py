@@ -192,7 +192,8 @@ class Database:
             return d
         return {
             'capital': 100000.0,
-            'risk_per_trade': 2500.0,
+            'risk_per_trade': 6210.0,
+            'margin_allocation_pct': 0.90,
             'trading_mode': 'PAPER',
             'dhan_client_id': '',
             'dhan_access_token': '',

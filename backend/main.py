@@ -504,8 +504,8 @@ def reset_danger_zone():
         "⚠️ *FACTORY RESET EXECUTED*\n\n"
         "• All positions and trade history cleared.\n"
         "• Account capital reset to default: *₹1,00,000*.\n"
-        "• Strategy: Velocity Compounder (Pure Leader 4.0R).\n"
-        "• Dynamic Risk initialized to 2.5% (₹2,500 base).\n"
+        "• Strategy: Velocity Compounder (Pure 90% Margin).\n"
+        "• Position Sizing: Pure 90% Fixed Margin Allocation (₹90,000 / 4.5x exposure).\n"
         "• Universe: 29 Liquid NSE Mega-Caps."
     )
     return {'status': 'success', 'message': 'Factory reset complete. Account restored to default ₹1,00,000.'}
@@ -582,9 +582,10 @@ def simulate_paper_position(payload: dict = Body(None)):
 def health_check():
     return {
         'status': 'healthy', 
-        'strategy': 'Velocity Compounder (Pure Leader 4.0R)',
+        'strategy': 'Velocity Compounder (Pure 90% Margin)',
         'instruments_count': 29,
         'target_rr': 4.0,
-        'dynamic_risk_pct': '2.5%',
+        'position_sizing': 'Pure 90% Margin Allocation (5x MIS)',
+        'dynamic_risk_pct': '6.21% (Float 2.25% - 6.75%)',
         'timestamp': now_ist().isoformat()
     }

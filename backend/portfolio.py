@@ -21,13 +21,16 @@ class PortfolioManager:
         self.peak_realized_r = 0.0
         self.cumulative_realized_r = 0.0
         self.current_drawdown_r = 0.0
-        self.dynamic_risk_pct = 0.025  # 2.5% dynamic risk per trade (Velocity Compounder)
+        self.margin_allocation_pct = 0.90  # Route 2: Pure 90% Fixed Margin Allocation
+        self.dynamic_risk_pct = 0.0621     # Average risk ~6.21% across instruments
         self.refresh_from_db()
 
     def refresh_from_db(self):
         settings = db.get_settings()
         self.capital = float(settings.get('capital', 100000.0))
-        # Recalculate dynamic risk amount (2.5% of current equity)
+        self.margin_allocation_pct = float(settings.get('margin_allocation_pct', 0.90))
+        self.dynamic_risk_pct = 0.0621
+        # Recalculate dynamic risk amount (mean ~6.21% of equity under 90% margin)
         self.risk_per_trade = round(self.capital * self.dynamic_risk_pct, 2)
         self.trading_mode = settings.get('trading_mode', 'PAPER')
         self.max_open_positions = int(settings.get('max_open_positions', 1))  # Pure Leader: 1 trade max
@@ -94,7 +97,7 @@ class PortfolioManager:
             telegram_service.notify_governor_switch(curr_mode, self.current_drawdown_r, curr_mult, eff)
 
     def get_effective_risk(self) -> float:
-        """Returns 2.5% of current equity, scaled by governor if in defensive mode."""
+        """Returns effective average risk in Rupees under Pure 90% Margin Allocation (mean 6.21% of equity)."""
         base_risk = self.capital * self.dynamic_risk_pct
         return round(base_risk * self.governor_multiplier, 2)
 
@@ -174,8 +177,11 @@ class PortfolioManager:
         if sl_dist <= 0:
             return {'status': 'error', 'message': 'Invalid Stop Loss price.'}
 
-        eff_risk = self.get_effective_risk()
-        quantity = int(eff_risk / sl_dist)
+        # PURE 90% FIXED MARGIN ALLOCATION (5x MIS Leverage):
+        # Target Margin = 90% of current equity * governor multiplier
+        target_margin = self.capital * self.margin_allocation_pct * self.governor_multiplier
+        target_exposure = target_margin * 5.0  # 5x intraday leverage
+        quantity = int(target_exposure / entry_price)
         if quantity <= 0:
             quantity = 1
 
@@ -199,6 +205,9 @@ class PortfolioManager:
         pos_id = str(uuid.uuid4())[:8]
         entry_time_str = now_ist_str("%H:%M:%S")
 
+        actual_risk = round(quantity * sl_dist, 2)
+        actual_risk_pct = round((actual_risk / self.capital) * 100, 2)
+
         pos_dict = {
             'id': pos_id,
             'symbol': symbol,
@@ -209,7 +218,7 @@ class PortfolioManager:
             'quantity': quantity,
             'margin_used': margin_used,
             'entry_time': entry_time_str,
-            'setup': signal.get('setup', 'Velocity Compounder (Pure Leader 4.0R)'),
+            'setup': signal.get('setup', 'Velocity Compounder (Pure 90% Margin)'),
             'sl_dist': round(sl_dist, 2),
             'current_price': round(entry_price, 2),
             'unrealized_pnl': 0.0,
@@ -217,7 +226,8 @@ class PortfolioManager:
             'be_locked': False,
             'created_at': now_ist_datetime_str(),
             'governor_mode': self.governor_mode,
-            'risk_amount': eff_risk,
+            'risk_amount': actual_risk,
+            'risk_pct': actual_risk_pct,
             'target_rr': self.target_rr
         }
 
@@ -256,7 +266,8 @@ class PortfolioManager:
         gross_pnl = (exit_p - entry_p) * qty if direction == 'BUY' else (entry_p - exit_p) * qty
         charges = self.calculate_statutory_charges(entry_p, exit_p, qty, direction)
         net_pnl = round(gross_pnl - charges, 2)
-        realized_r = round(net_pnl / self.risk_per_trade, 2)
+        trade_risk = pos.get('risk_amount', self.risk_per_trade)
+        realized_r = round(net_pnl / max(trade_risk, 1.0), 2)
 
         self.capital = round(self.capital + net_pnl, 2)
         db.update_settings({'capital': self.capital})
@@ -365,7 +376,8 @@ class PortfolioManager:
                 charges = self.calculate_statutory_charges(entry_p, exit_price, qty, direction)
                 final_pnl = (exit_price - entry_p) * qty if direction == 'BUY' else (entry_p - exit_price) * qty
                 net_pnl = round(final_pnl - charges, 2)
-                realized_r = round(net_pnl / max(self.risk_per_trade, 1.0), 2)
+                trade_risk = pos.get('risk_amount', self.risk_per_trade)
+                realized_r = round(net_pnl / max(trade_risk, 1.0), 2)
 
                 self.capital = round(self.capital + net_pnl, 2)
                 db.update_settings({'capital': self.capital})
@@ -429,7 +441,8 @@ class PortfolioManager:
             'total_r': total_r,
             'total_trades': total_trades,
             'win_rate': win_rate,
-            'strategy_name': 'Velocity Compounder (Pure Leader 4.0R)',
+            'strategy_name': 'Velocity Compounder (Pure 90% Margin)',
+            'margin_allocation_pct': round(self.margin_allocation_pct * 100, 1),
             'governor_mode': self.governor_mode,
             'governor_multiplier': self.governor_multiplier,
             'current_drawdown_r': self.current_drawdown_r,

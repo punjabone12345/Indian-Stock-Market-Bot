@@ -29,7 +29,7 @@ export default function SettingsTab({
 }) {
   const [formData, setFormData] = useState({
     capital: settings?.capital || 100000,
-    risk_per_trade: settings?.risk_per_trade || 2500,
+    risk_per_trade: settings?.risk_per_trade || 6210,
     target_rr: settings?.target_rr || 4.0,
     max_open_positions: settings?.max_open_positions || 1,
     trading_mode: settings?.trading_mode || 'PAPER',
