@@ -19,6 +19,39 @@ def now_ist_date_str(fmt: str = "%Y-%m-%d") -> str:
     """Returns current IST date string."""
     return now_ist().strftime(fmt)
 
+# Official NSE Trading Holidays (2026 Calendar)
+NSE_HOLIDAYS_2026 = {
+    "2026-01-26": "Republic Day",
+    "2026-03-03": "Holi",
+    "2026-03-20": "Id-ul-Fitr",
+    "2026-04-03": "Good Friday",
+    "2026-04-14": "Dr. Ambedkar Jayanti",
+    "2026-05-01": "Maharashtra Day",
+    "2026-05-27": "Bakri Id",
+    "2026-08-15": "Independence Day",
+    "2026-10-02": "Mahatma Gandhi Jayanti",
+    "2026-10-20": "Dussehra",
+    "2026-11-08": "Diwali Laxmi Pujan",
+    "2026-11-10": "Diwali Balipratipada",
+    "2026-11-24": "Guru Nanak Jayanti",
+    "2026-12-25": "Christmas"
+}
+
+def get_nse_holiday(dt: datetime = None) -> str:
+    """Returns holiday name if dt is an official NSE trading holiday, else None."""
+    if dt is None:
+        dt = now_ist()
+    d_str = dt.strftime("%Y-%m-%d")
+    return NSE_HOLIDAYS_2026.get(d_str, None)
+
+def is_trading_day(dt: datetime = None) -> bool:
+    """Returns True if dt is a normal weekday and not an NSE holiday."""
+    if dt is None:
+        dt = now_ist()
+    if dt.weekday() >= 5:  # Saturday (5) or Sunday (6)
+        return False
+    return get_nse_holiday(dt) is None
+
 def to_ist_time_str(time_str: str) -> str:
     """
     Takes any time string (e.g. '06:57:49' UTC or '12:27:49' IST or '2026-11-16 12:27:49')

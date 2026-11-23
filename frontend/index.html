@@ -1865,13 +1865,37 @@ Trigger Condition:
       const minutes = ist.getMinutes();
       const timeInMinutes = hours * 60 + minutes;
 
+      const year = ist.getFullYear();
+      const month = String(ist.getMonth() + 1).padStart(2, '0');
+      const date = String(ist.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${date}`;
+      
+      const nseHolidays2026 = {
+        '2026-01-26': 'Republic Day',
+        '2026-03-03': 'Holi',
+        '2026-03-20': 'Id-ul-Fitr',
+        '2026-04-03': 'Good Friday',
+        '2026-04-14': 'Dr. Ambedkar Jayanti',
+        '2026-05-01': 'Maharashtra Day',
+        '2026-05-27': 'Bakri Id',
+        '2026-08-15': 'Independence Day',
+        '2026-10-02': 'Mahatma Gandhi Jayanti',
+        '2026-10-20': 'Dussehra',
+        '2026-11-08': 'Diwali Laxmi Pujan',
+        '2026-11-10': 'Diwali Balipratipada',
+        '2026-11-24': 'Guru Nanak Jayanti',
+        '2026-12-25': 'Christmas'
+      };
+      const holiday = nseHolidays2026[dateStr] || null;
+
       const isWeekday = day >= 1 && day <= 5;
       const isMarketHours = timeInMinutes >= (9 * 60 + 15) && timeInMinutes <= (15 * 60 + 30);
       const isPast3PM = isWeekday && (timeInMinutes >= (15 * 60) && timeInMinutes <= (15 * 60 + 30)); // Strict 3:00 PM IST EOD Square-off window
 
       return {
-        isOpen: isWeekday && isMarketHours && !isPast3PM,
+        isOpen: isWeekday && isMarketHours && !isPast3PM && !holiday,
         isPast3PM: isPast3PM,
+        holiday: holiday,
         timeStr: ist.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
       };
     }
@@ -1932,6 +1956,9 @@ Trigger Condition:
         if (isOpen) {
           beacon.className = "live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/30 shrink-0";
           beacon.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span> 1s LIVE';
+        } else if (localStatus.holiday) {
+          beacon.className = "live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 shrink-0";
+          beacon.innerHTML = '🏖️ NSE HOLIDAY';
         } else {
           beacon.className = "live-market-badge flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold bg-surfaceHigh text-slate-400 border border-white/10 shrink-0";
           beacon.innerHTML = '🌙 NSE CLOSED';
@@ -1942,6 +1969,9 @@ Trigger Condition:
         if (isOpen) {
           regimeBadge.className = "flex items-center gap-1 px-2 py-0.5 rounded-full bg-emeraldBull/10 text-emeraldBull border border-emeraldBull/25 text-[8.5px] font-bold shrink-0";
           regimeBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span><span>PULLBACKS ON</span>';
+        } else if (localStatus.holiday) {
+          regimeBadge.className = "flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/25 text-[8.5px] font-bold shrink-0";
+          regimeBadge.innerHTML = `<span>HOLIDAY: ${localStatus.holiday.toUpperCase()}</span>`;
         } else {
           regimeBadge.className = "flex items-center gap-1 px-2 py-0.5 rounded-full bg-surfaceHigh text-slate-400 border border-white/10 text-[8.5px] font-bold shrink-0";
           regimeBadge.innerHTML = '<span>MARKET CLOSED</span>';

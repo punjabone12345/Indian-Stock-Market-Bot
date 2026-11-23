@@ -12,9 +12,9 @@ import ssl
 import json
 
 try:
-    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str, get_nse_holiday, is_trading_day
 except ImportError:
-    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str, get_nse_holiday, is_trading_day
 try:
     from database import db
     from market_data import market_service, CHAMPION_14_INSTRUMENTS
@@ -36,22 +36,38 @@ async def background_market_scanner():
     print("[Engine] Velocity Compounder (Pure Leader 4.0R) Scanner initialized across 29 Mega-Caps.")
     while True:
         try:
-            # 1. Check & send 9:00 AM IST Morning Market Readiness Alert on trading days
+            # 1. Check & send 9:00 AM IST Morning Market Readiness Alert on trading days (or Holiday Alert)
             now_obj = now_ist()
+            holiday = get_nse_holiday(now_obj)
             is_weekday = (0 <= now_obj.weekday() <= 4)
             today_date = now_obj.strftime("%Y-%m-%d")
             time_mins = now_obj.hour * 60 + now_obj.minute
 
             # If it's a weekday and time is on/after 09:00 AM IST (540 mins) and not yet sent today
             if is_weekday and time_mins >= 9 * 60 and last_morning_alert_date != today_date:
-                try:
-                    summary = portfolio.get_summary()
-                    sent = telegram_service.notify_morning_readiness(summary)
-                    if sent:
+                if holiday:
+                    try:
+                        text = (
+                            f"🏖️ *NSE EXCHANGE HOLIDAY: {holiday.upper()}*\n\n"
+                            f"• The National Stock Exchange (NSE) is *CLOSED* today ({today_date}).\n"
+                            f"• Capital: *₹1,00,000* safely held in 100% Cash (Zero Risk).\n"
+                            f"• The Velocity Compounder engine is resting (Zero Trades Today).\n"
+                            f"• Live execution resumes on the next trading session at 09:15 AM IST."
+                        )
+                        telegram_service.send_message(text)
                         last_morning_alert_date = today_date
-                        print(f"[Telegram] 09:00 AM Morning Market Readiness alert delivered for {today_date}.")
-                except Exception as ex:
-                    print(f"[Telegram] Error sending 9:00 AM morning readiness alert: {ex}")
+                        print(f"[Telegram] Holiday alert delivered for {holiday} ({today_date}).")
+                    except Exception as ex:
+                        print(f"[Telegram] Error sending holiday alert: {ex}")
+                else:
+                    try:
+                        summary = portfolio.get_summary()
+                        sent = telegram_service.notify_morning_readiness(summary)
+                        if sent:
+                            last_morning_alert_date = today_date
+                            print(f"[Telegram] 09:00 AM Morning Market Readiness alert delivered for {today_date}.")
+                    except Exception as ex:
+                        print(f"[Telegram] Error sending 9:00 AM morning readiness alert: {ex}")
 
             # 2. Run market scan for all 14 champions
             await asyncio.to_thread(trade_engine.run_market_scan)
@@ -143,13 +159,16 @@ def get_dashboard_data():
 
     nifty = quotes.get('NIFTY50', {})
     now_ist_obj = now_ist()
+    holiday = get_nse_holiday(now_ist_obj)
     is_weekday = (0 <= now_ist_obj.weekday() <= 4)
     time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
-    is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
+    is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30) and (holiday is None)
+    market_status_str = 'OPEN' if is_market_open else (f'CLOSED (HOLIDAY: {holiday.upper()})' if holiday else 'CLOSED')
 
     return {
         'is_market_open': is_market_open,
-        'market_status': 'OPEN' if is_market_open else 'CLOSED',
+        'market_status': market_status_str,
+        'holiday': holiday,
         'ist_time': now_ist_obj.strftime("%H:%M:%S IST"),
         'server_time': now_ist_obj.strftime("%Y-%m-%d %H:%M:%S IST"),
         'last_scan_time': trade_engine.last_scan_time or now_ist_obj.strftime("%H:%M:%S IST"),
