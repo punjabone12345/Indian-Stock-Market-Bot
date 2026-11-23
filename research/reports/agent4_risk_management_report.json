@@ -1,0 +1,164 @@
+{
+  "GAP_AND_GO_CATALYST": {
+    "Fixed_1.0%": {
+      "final_equity": 127908.97,
+      "total_return_pct": 27.91,
+      "max_drawdown_pct": -31.0,
+      "cagr_pct": 5.26
+    },
+    "Fixed_0.5%": {
+      "final_equity": 114364.91,
+      "total_return_pct": 14.36,
+      "max_drawdown_pct": -16.87,
+      "cagr_pct": 2.84
+    },
+    "Dynamic_Tiered_Breaker": {
+      "final_equity": 135192.33,
+      "total_return_pct": 35.19,
+      "max_drawdown_pct": -11.8,
+      "cagr_pct": 6.48,
+      "avg_risk_pct": 0.28
+    },
+    "Dynamic_Breaker_Daily_Limit": {
+      "final_equity": 135192.33,
+      "total_return_pct": 35.19,
+      "max_drawdown_pct": -11.8,
+      "cagr_pct": 6.48
+    }
+  },
+  "MULTI_TIMEFRAME_TREND": {
+    "Fixed_1.0%": {
+      "final_equity": 12766.85,
+      "total_return_pct": -87.23,
+      "max_drawdown_pct": -88.59,
+      "cagr_pct": -34.87
+    },
+    "Fixed_0.5%": {
+      "final_equity": 36551.86,
+      "total_return_pct": -63.45,
+      "max_drawdown_pct": -65.57,
+      "cagr_pct": -18.92
+    },
+    "Dynamic_Tiered_Breaker": {
+      "final_equity": 74476.27,
+      "total_return_pct": -25.52,
+      "max_drawdown_pct": -26.0,
+      "cagr_pct": -5.95,
+      "avg_risk_pct": 0.14
+    },
+    "Dynamic_Breaker_Daily_Limit": {
+      "final_equity": 74476.27,
+      "total_return_pct": -25.52,
+      "max_drawdown_pct": -26.0,
+      "cagr_pct": -5.95
+    }
+  },
+  "ORB_MOMENTUM_RVOL": {
+    "Fixed_1.0%": {
+      "final_equity": 58321.68,
+      "total_return_pct": -41.68,
+      "max_drawdown_pct": -57.43,
+      "cagr_pct": -10.63
+    },
+    "Fixed_0.5%": {
+      "final_equity": 77716.8,
+      "total_return_pct": -22.28,
+      "max_drawdown_pct": -33.96,
+      "cagr_pct": -5.12
+    },
+    "Dynamic_Tiered_Breaker": {
+      "final_equity": 100455.28,
+      "total_return_pct": 0.46,
+      "max_drawdown_pct": -15.56,
+      "cagr_pct": 0.09,
+      "avg_risk_pct": 0.18
+    },
+    "Dynamic_Breaker_Daily_Limit": {
+      "final_equity": 100455.28,
+      "total_return_pct": 0.46,
+      "max_drawdown_pct": -15.56,
+      "cagr_pct": 0.09
+    }
+  },
+  "RELATIVE_STRENGTH_BREAKOUT": {
+    "Fixed_1.0%": {
+      "final_equity": 63029.17,
+      "total_return_pct": -36.97,
+      "max_drawdown_pct": -58.04,
+      "cagr_pct": -9.17
+    },
+    "Fixed_0.5%": {
+      "final_equity": 80459.4,
+      "total_return_pct": -19.54,
+      "max_drawdown_pct": -34.65,
+      "cagr_pct": -4.43
+    },
+    "Dynamic_Tiered_Breaker": {
+      "final_equity": 112232.79,
+      "total_return_pct": 12.23,
+      "max_drawdown_pct": -16.15,
+      "cagr_pct": 2.43,
+      "avg_risk_pct": 0.25
+    },
+    "Dynamic_Breaker_Daily_Limit": {
+      "final_equity": 112232.79,
+      "total_return_pct": 12.23,
+      "max_drawdown_pct": -16.15,
+      "cagr_pct": 2.43
+    }
+  },
+  "VOLATILITY_SQUEEZE_EXPANSION": {
+    "Fixed_1.0%": {
+      "final_equity": 22663.62,
+      "total_return_pct": -77.34,
+      "max_drawdown_pct": -79.76,
+      "cagr_pct": -26.6
+    },
+    "Fixed_0.5%": {
+      "final_equity": 48394.78,
+      "total_return_pct": -51.61,
+      "max_drawdown_pct": -54.43,
+      "cagr_pct": -14.03
+    },
+    "Dynamic_Tiered_Breaker": {
+      "final_equity": 80838.37,
+      "total_return_pct": -19.16,
+      "max_drawdown_pct": -21.53,
+      "cagr_pct": -4.33,
+      "avg_risk_pct": 0.17
+    },
+    "Dynamic_Breaker_Daily_Limit": {
+      "final_equity": 80838.37,
+      "total_return_pct": -19.16,
+      "max_drawdown_pct": -21.53,
+      "cagr_pct": -4.33
+    }
+  },
+  "VWAP_PULLBACK_RETEST": {
+    "Fixed_1.0%": {
+      "final_equity": 2962893.52,
+      "total_return_pct": 2862.89,
+      "max_drawdown_pct": -22.84,
+      "cagr_pct": 102.59
+    },
+    "Fixed_0.5%": {
+      "final_equity": 563907.87,
+      "total_return_pct": 463.91,
+      "max_drawdown_pct": -12.09,
+      "cagr_pct": 43.38
+    },
+    "Dynamic_Tiered_Breaker": {
+      "final_equity": 1517865.05,
+      "total_return_pct": 1417.87,
+      "max_drawdown_pct": -10.4,
+      "cagr_pct": 76.23,
+      "avg_risk_pct": 0.68
+    },
+    "Dynamic_Breaker_Daily_Limit": {
+      "final_equity": 1517865.05,
+      "total_return_pct": 1417.87,
+      "max_drawdown_pct": -10.4,
+      "cagr_pct": 76.23
+    }
+  }
+}

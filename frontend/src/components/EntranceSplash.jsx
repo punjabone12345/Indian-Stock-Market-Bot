@@ -39,7 +39,7 @@ export default function EntranceSplash({ onFinish }) {
           INDIAN STOCK MARKET BOT
         </h1>
         <p className="text-xs sm:text-sm font-medium tracking-widest text-slate-400 uppercase">
-          Top 14 VWAP Institutional Quant Engine
+          Velocity Compounder 4.0R Quant Engine
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export default function EntranceSplash({ onFinish }) {
           5x MIS Cash
         </span>
         <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50 text-slate-300">
-          1:2 RRR • Risk Governor
+          1:4 RRR • Velocity Leader
         </span>
         <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400">
           DhanHQ Connected

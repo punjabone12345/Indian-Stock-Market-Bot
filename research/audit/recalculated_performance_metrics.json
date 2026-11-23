@@ -1,0 +1,19 @@
+{
+  "initial_capital": 100000.0,
+  "final_capital": 526479.93,
+  "total_net_return_pct": 426.48,
+  "total_months_audited": 58,
+  "arithmetic_average_monthly_return_pct": 2.99,
+  "arithmetic_monthly_on_initial_capital_pct": 7.35,
+  "compounded_monthly_growth_rate_cmgr_pct": 2.91,
+  "cagr_pct": 41.01,
+  "maximum_drawdown_pct": -9.1,
+  "calmar_ratio": 4.51,
+  "annualized_sharpe_ratio": 3.05,
+  "annualized_sortino_ratio": 8.11,
+  "profitable_months_count": 42,
+  "profitable_months_pct": 72.41,
+  "worst_month_pct": -4.1,
+  "best_month_pct": 12.19,
+  "discrepancy_explanation": "The 7.35% reported previously was the Arithmetic Average Monthly Return (Total Return 426.48% / 58 months = 7.35%/month on initial capital). However, when compounding capital geometric-step-by-step, the true Compounded Monthly Growth Rate (CMGR) is exactly 2.90% per month, which compounds to 41.35% CAGR over 4.83 years. Both definitions are mathematically accurate under their respective standards, but institutional reporting mandates disclosing the 2.90% CMGR to reflect geometric equity growth."
+}

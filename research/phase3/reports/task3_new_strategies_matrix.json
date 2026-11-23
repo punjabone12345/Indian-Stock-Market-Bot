@@ -1,0 +1,57 @@
+[
+  {
+    "strategy_name": "VWAP_DEVIATION_REVERSAL",
+    "trades": 301,
+    "win_rate_pct": 38.87,
+    "profit_factor": 0.8,
+    "total_net_R": -39.96,
+    "max_drawdown_R": -48.74,
+    "in_sample_R": -28.17,
+    "out_of_sample_R": -11.79,
+    "total_fees_paid": 42526.27
+  },
+  {
+    "strategy_name": "RELATIVE_STRENGTH_MOMENTUM",
+    "trades": 641,
+    "win_rate_pct": 42.59,
+    "profit_factor": 1.04,
+    "total_net_R": 15.4,
+    "max_drawdown_R": -41.64,
+    "in_sample_R": 27.28,
+    "out_of_sample_R": -11.88,
+    "total_fees_paid": 100098.36
+  },
+  {
+    "strategy_name": "ORB_RETEST_SUPPORT_BOUNCE",
+    "trades": 975,
+    "win_rate_pct": 49.44,
+    "profit_factor": 1.34,
+    "total_net_R": 163.17,
+    "max_drawdown_R": -16.49,
+    "in_sample_R": 65.02,
+    "out_of_sample_R": 98.15,
+    "total_fees_paid": 138656.99
+  },
+  {
+    "strategy_name": "INTRADAY_EMA_TREND_CONTINUATION",
+    "trades": 1103,
+    "win_rate_pct": 42.61,
+    "profit_factor": 0.94,
+    "total_net_R": -39.83,
+    "max_drawdown_R": -67.4,
+    "in_sample_R": -25.34,
+    "out_of_sample_R": -14.49,
+    "total_fees_paid": 166394.04
+  },
+  {
+    "strategy_name": "VOLATILITY_COMPRESSION_EXPANSION",
+    "trades": 852,
+    "win_rate_pct": 42.37,
+    "profit_factor": 0.76,
+    "total_net_R": -102.65,
+    "max_drawdown_R": -121.12,
+    "in_sample_R": -8.72,
+    "out_of_sample_R": -93.93,
+    "total_fees_paid": 125020.75
+  }
+]

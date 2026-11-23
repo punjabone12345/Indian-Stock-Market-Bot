@@ -33,7 +33,7 @@ last_morning_alert_date = None
 
 async def background_market_scanner():
     global last_morning_alert_date
-    print("[Engine] Top 14 VWAP Pullback Scanner & Dynamic Risk Governor initialized.")
+    print("[Engine] Velocity Compounder (Pure Leader 4.0R) Scanner initialized across 29 Mega-Caps.")
     while True:
         try:
             # 1. Check & send 9:00 AM IST Morning Market Readiness Alert on trading days
@@ -497,17 +497,18 @@ def test_dhan_connection(payload: dict = Body(...)):
 
 @app.post("/api/settings/reset-danger-zone")
 def reset_danger_zone():
-    """Danger Zone: Factory reset - clears all trades, open positions, resets capital to ₹1,25,000"""
+    """Danger Zone: Factory reset - clears all trades, open positions, resets capital to ₹1,00,000"""
     db.reset_database()
     portfolio.refresh_from_db()
     telegram_service.send_message(
         "⚠️ *FACTORY RESET EXECUTED*\n\n"
         "• All positions and trade history cleared.\n"
-        "• Account capital reset to default: *₹1,25,000*.\n"
-        "• Strategy: Top 14 VWAP Institutional Pullback.\n"
-        "• Risk Governor initialized to NORMAL (1.0R)."
+        "• Account capital reset to default: *₹1,00,000*.\n"
+        "• Strategy: Velocity Compounder (Pure Leader 4.0R).\n"
+        "• Dynamic Risk initialized to 2.5% (₹2,500 base).\n"
+        "• Universe: 29 Liquid NSE Mega-Caps."
     )
-    return {'status': 'success', 'message': 'Factory reset complete. Account restored to default ₹1,25,000.'}
+    return {'status': 'success', 'message': 'Factory reset complete. Account restored to default ₹1,00,000.'}
 
 @app.post("/api/bot/toggle")
 def toggle_bot():
@@ -515,7 +516,7 @@ def toggle_bot():
     db.update_settings({'bot_active': new_state})
     portfolio.refresh_from_db()
     status_str = "RESUMED" if new_state else "PAUSED"
-    telegram_service.send_message(f"🤖 *BOT STATE CHANGED*\n\nTop 14 VWAP Engine is now *{status_str}*.")
+    telegram_service.send_message(f"🤖 *BOT STATE CHANGED*\n\nVelocity Compounder Engine is now *{status_str}*.")
     return {'status': 'success', 'bot_active': new_state}
 
 # ----------------- SIMULATION & COMPATIBILITY ALIASES -----------------
@@ -548,7 +549,7 @@ def close_position_post_alias(pos_id: str):
 
 @app.post("/api/positions/simulate")
 def simulate_paper_position(payload: dict = Body(None)):
-    """Simulate a realistic Top 14 VWAP trade with 0.50% SL floor, 5x MIS margin & Dynamic Risk Governor"""
+    """Simulate a realistic Velocity Compounder trade with 2.5% dynamic risk, 4.0R target, and 5x MIS margin"""
     import random
     quotes = market_service.fetch_live_quotes()
     available_symbols = [s for s in TOP_14_SYMBOLS if s not in [p['symbol'] for p in portfolio.positions.values()]]
@@ -559,8 +560,8 @@ def simulate_paper_position(payload: dict = Body(None)):
     q = quotes.get(sym, {})
     cur_p = q.get('price', 1344.80)
     direction = random.choice(['BUY', 'SELL'])
-    # Strict 0.50% SL floor
-    sl_dist = round(max(cur_p * 0.0050, 1.0), 2)
+    # Clamped between 0.50% and 1.50%
+    sl_dist = round(max(cur_p * 0.0075, 1.0), 2)
 
     sl_price = round(cur_p - sl_dist, 2) if direction == 'BUY' else round(cur_p + sl_dist, 2)
     tp_price = round(cur_p + (sl_dist * portfolio.target_rr), 2) if direction == 'BUY' else round(cur_p - (sl_dist * portfolio.target_rr), 2)
@@ -571,7 +572,7 @@ def simulate_paper_position(payload: dict = Body(None)):
         'entry_price': cur_p,
         'stop_loss': sl_price,
         'take_profit': tp_price,
-        'setup': 'Top 14 VWAP Institutional Pullback'
+        'setup': 'Velocity Compounder (Pure Leader 4.0R)'
     }
 
     res = portfolio.open_position(signal)
@@ -581,6 +582,9 @@ def simulate_paper_position(payload: dict = Body(None)):
 def health_check():
     return {
         'status': 'healthy', 
-        'strategy': 'Top 14 VWAP Pullback + Dynamic Risk Governor',
+        'strategy': 'Velocity Compounder (Pure Leader 4.0R)',
+        'instruments_count': 29,
+        'target_rr': 4.0,
+        'dynamic_risk_pct': '2.5%',
         'timestamp': now_ist().isoformat()
     }

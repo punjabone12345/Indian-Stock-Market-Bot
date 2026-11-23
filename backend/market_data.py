@@ -8,29 +8,45 @@ try:
 except ImportError:
     from backend.ist_time import now_ist_str
 
-# 14 Top Liquid Champion Instruments (Backtested 4.8 Years with Dynamic Risk Governor)
-CHAMPION_14_INSTRUMENTS = {
-    'RELIANCE': {'ticker': 'RELIANCE.NS', 'name': 'Reliance Industries', 'sector': 'Energy', 'baseline': 1344.80},
-    'INDUSINDBK': {'ticker': 'INDUSINDBK.NS', 'name': 'IndusInd Bank', 'sector': 'Banking & Finance', 'baseline': 914.55},
-    'LT': {'ticker': 'LT.NS', 'name': 'Larsen & Toubro', 'sector': 'Infrastructure', 'baseline': 4140.00},
-    'ADANIENT': {'ticker': 'ADANIENT.NS', 'name': 'Adani Enterprises', 'sector': 'Diversified Conglomerate', 'baseline': 2659.00},
-    'TATAMOTORS': {'ticker': 'TMCV.NS', 'alt_ticker': 'TMPV.NS', 'name': 'Tata Motors Limited', 'sector': 'Automobiles', 'baseline': 428.25},
-    'SUNPHARMA': {'ticker': 'SUNPHARMA.NS', 'name': 'Sun Pharmaceutical Ind', 'sector': 'Healthcare & Pharma', 'baseline': 1867.50},
-    'WIPRO': {'ticker': 'WIPRO.NS', 'name': 'Wipro Limited', 'sector': 'IT & Software', 'baseline': 193.54},
-    'JSWSTEEL': {'ticker': 'JSWSTEEL.NS', 'name': 'JSW Steel Ltd', 'sector': 'Metals & Mining', 'baseline': 1334.60},
-    'TATASTEEL': {'ticker': 'TATASTEEL.NS', 'name': 'Tata Steel Ltd', 'sector': 'Metals & Mining', 'baseline': 182.26},
-    'BAJFINANCE': {'ticker': 'BAJFINANCE.NS', 'name': 'Bajaj Finance Ltd', 'sector': 'NBFC & Lending', 'baseline': 1110.00},
-    'SBIN': {'ticker': 'SBIN.NS', 'name': 'State Bank of India', 'sector': 'Public Sector Banking', 'baseline': 1090.50},
-    'ONGC': {'ticker': 'ONGC.NS', 'name': 'Oil & Natural Gas Corp', 'sector': 'Energy & Utilities', 'baseline': 226.99},
-    'TCS': {'ticker': 'TCS.NS', 'name': 'Tata Consultancy Services', 'sector': 'IT Services', 'baseline': 2405.00},
-    'MARUTI': {'ticker': 'MARUTI.NS', 'name': 'Maruti Suzuki India', 'sector': 'Automobiles', 'baseline': 12571.00},
-    'NIFTY50': {'ticker': '^NSEI', 'name': 'Nifty 50 Benchmark', 'sector': 'Macro Index', 'baseline': 25291.10}
+# 29 Liquid NSE Mega-Cap Universe (Velocity Compounder Strategy)
+MEGACAP_29_INSTRUMENTS = {
+    'RELIANCE': {'ticker': 'RELIANCE.NS', 'name': 'Reliance Industries', 'sector': 'Energy', 'baseline': 1344.80, 'vol_45m_base': 1696232},
+    'TCS': {'ticker': 'TCS.NS', 'name': 'Tata Consultancy Services', 'sector': 'IT Services', 'baseline': 2465.00, 'vol_45m_base': 638405},
+    'HDFCBANK': {'ticker': 'HDFCBANK.NS', 'name': 'HDFC Bank Ltd', 'sector': 'Banking', 'baseline': 1740.00, 'vol_45m_base': 3636200},
+    'ICICIBANK': {'ticker': 'ICICIBANK.NS', 'name': 'ICICI Bank Ltd', 'sector': 'Banking', 'baseline': 1397.00, 'vol_45m_base': 1210653},
+    'SBIN': {'ticker': 'SBIN.NS', 'name': 'State Bank of India', 'sector': 'Banking', 'baseline': 962.60, 'vol_45m_base': 1052733},
+    'INFY': {'ticker': 'INFY.NS', 'name': 'Infosys Limited', 'sector': 'IT Services', 'baseline': 1850.00, 'vol_45m_base': 1553132},
+    'LT': {'ticker': 'LT.NS', 'name': 'Larsen & Toubro', 'sector': 'Infrastructure', 'baseline': 3627.10, 'vol_45m_base': 207550},
+    'TATASTEEL': {'ticker': 'TATASTEEL.NS', 'name': 'Tata Steel Ltd', 'sector': 'Metals & Mining', 'baseline': 175.50, 'vol_45m_base': 2859123},
+    'BAJFINANCE': {'ticker': 'BAJFINANCE.NS', 'name': 'Bajaj Finance Ltd', 'sector': 'NBFC & Lending', 'baseline': 6850.00, 'vol_45m_base': 933491},
+    'MARUTI': {'ticker': 'MARUTI.NS', 'name': 'Maruti Suzuki India', 'sector': 'Automobiles', 'baseline': 11489.00, 'vol_45m_base': 54981},
+    'BHARTIARTL': {'ticker': 'BHARTIARTL.NS', 'name': 'Bharti Airtel Ltd', 'sector': 'Telecommunications', 'baseline': 1905.00, 'vol_45m_base': 963095},
+    'WIPRO': {'ticker': 'WIPRO.NS', 'name': 'Wipro Limited', 'sector': 'IT Services', 'baseline': 550.00, 'vol_45m_base': 3051102},
+    'GRASIM': {'ticker': 'GRASIM.NS', 'name': 'Grasim Industries', 'sector': 'Materials & Cement', 'baseline': 2920.00, 'vol_45m_base': 60865},
+    'SUNPHARMA': {'ticker': 'SUNPHARMA.NS', 'name': 'Sun Pharmaceutical Ind', 'sector': 'Healthcare & Pharma', 'baseline': 1758.80, 'vol_45m_base': 194366},
+    'INDUSINDBK': {'ticker': 'INDUSINDBK.NS', 'name': 'IndusInd Bank', 'sector': 'Banking', 'baseline': 877.00, 'vol_45m_base': 327069},
+    'TECHM': {'ticker': 'TECHM.NS', 'name': 'Tech Mahindra Ltd', 'sector': 'IT Services', 'baseline': 1790.00, 'vol_45m_base': 417024},
+    'HCLTECH': {'ticker': 'HCLTECH.NS', 'name': 'HCL Technologies', 'sector': 'IT Services', 'baseline': 1820.00, 'vol_45m_base': 538785},
+    'KOTAKBANK': {'ticker': 'KOTAKBANK.NS', 'name': 'Kotak Mahindra Bank', 'sector': 'Banking', 'baseline': 1750.00, 'vol_45m_base': 2978953},
+    'AXISBANK': {'ticker': 'AXISBANK.NS', 'name': 'Axis Bank Ltd', 'sector': 'Banking', 'baseline': 1290.00, 'vol_45m_base': 804924},
+    'ONGC': {'ticker': 'ONGC.NS', 'name': 'Oil & Natural Gas Corp', 'sector': 'Energy', 'baseline': 222.00, 'vol_45m_base': 1243422},
+    'NTPC': {'ticker': 'NTPC.NS', 'name': 'NTPC Limited', 'sector': 'Utilities & Power', 'baseline': 315.15, 'vol_45m_base': 1034843},
+    'POWERGRID': {'ticker': 'POWERGRID.NS', 'name': 'Power Grid Corp', 'sector': 'Utilities & Power', 'baseline': 250.45, 'vol_45m_base': 1247003},
+    'COALINDIA': {'ticker': 'COALINDIA.NS', 'name': 'Coal India Ltd', 'sector': 'Mining & Energy', 'baseline': 417.20, 'vol_45m_base': 804629},
+    'JSWSTEEL': {'ticker': 'JSWSTEEL.NS', 'name': 'JSW Steel Ltd', 'sector': 'Metals & Mining', 'baseline': 1216.30, 'vol_45m_base': 201143},
+    'ITC': {'ticker': 'ITC.NS', 'name': 'ITC Limited', 'sector': 'FMCG', 'baseline': 470.00, 'vol_45m_base': 2387108},
+    'HINDUNILVR': {'ticker': 'HINDUNILVR.NS', 'name': 'Hindustan Unilever', 'sector': 'FMCG', 'baseline': 2420.00, 'vol_45m_base': 177814},
+    'TITAN': {'ticker': 'TITAN.NS', 'name': 'Titan Company Ltd', 'sector': 'Consumer Discretionary', 'baseline': 3444.80, 'vol_45m_base': 104890},
+    'ADANIENT': {'ticker': 'ADANIENT.NS', 'name': 'Adani Enterprises', 'sector': 'Diversified Conglomerate', 'baseline': 2692.00, 'vol_45m_base': 180763},
+    'ULTRACEMCO': {'ticker': 'ULTRACEMCO.NS', 'name': 'UltraTech Cement', 'sector': 'Materials & Cement', 'baseline': 10907.00, 'vol_45m_base': 34902},
+    'NIFTY50': {'ticker': '^NSEI', 'name': 'Nifty 50 Benchmark', 'sector': 'Macro Index', 'baseline': 24350.00, 'vol_45m_base': 1000000}
 }
 
-# Alias for legacy compatibility
-CROWN_6_INSTRUMENTS = CHAMPION_14_INSTRUMENTS
+# Aliases for backward compatibility
+CHAMPION_14_INSTRUMENTS = MEGACAP_29_INSTRUMENTS
+CROWN_6_INSTRUMENTS = MEGACAP_29_INSTRUMENTS
 
-DEFAULT_BASELINES = {sym: info['baseline'] for sym, info in CHAMPION_14_INSTRUMENTS.items()}
+DEFAULT_BASELINES = {sym: info['baseline'] for sym, info in MEGACAP_29_INSTRUMENTS.items()}
 
 class MarketDataService:
     def __init__(self):
@@ -48,7 +64,7 @@ class MarketDataService:
         return self.quote_cache
 
     def _fetch_all_from_v8(self):
-        for sym, info in CHAMPION_14_INSTRUMENTS.items():
+        for sym, info in MEGACAP_29_INSTRUMENTS.items():
             ticker = info['ticker']
             base_p = info['baseline']
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=5m&range=1d"
@@ -87,7 +103,7 @@ class MarketDataService:
                     chg_pct = (chg / prev_c) * 100.0 if prev_c else 0.0
                     d_high = meta.get('regularMarketDayHigh') or cur_p
                     d_low = meta.get('regularMarketDayLow') or cur_p
-                    vol = meta.get('regularMarketVolume') or 0
+                    vol = meta.get('regularMarketVolume') or sum(c['volume'] for c in candles)
 
                     self.quote_cache[sym] = {
                         'symbol': sym,
@@ -101,38 +117,10 @@ class MarketDataService:
                         'day_high': round(float(d_high), 2),
                         'day_low': round(float(d_low), 2),
                         'volume': int(vol),
+                        'vol_45m_base': info['vol_45m_base'],
                         'updated_at': now_ist_str("%H:%M:%S")
                     }
             except Exception as e:
-                # Fallback to alternate ticker if provided (e.g. TMPV for TATAMOTORS)
-                alt_ticker = info.get('alt_ticker')
-                if alt_ticker:
-                    try:
-                        url_alt = f"https://query1.finance.yahoo.com/v8/finance/chart/{alt_ticker}?interval=5m&range=1d"
-                        req_alt = urllib.request.Request(url_alt, headers={'User-Agent': 'Mozilla/5.0'})
-                        with urllib.request.urlopen(req_alt, context=self.ctx, timeout=5) as resp_alt:
-                            data_alt = json.loads(resp_alt.read().decode('utf-8'))
-                            meta_alt = data_alt['chart']['result'][0]['meta']
-                            cur_p = meta_alt.get('regularMarketPrice') or base_p
-                            prev_c = meta_alt.get('chartPreviousClose') or cur_p
-                            self.quote_cache[sym] = {
-                                'symbol': sym,
-                                'ticker': alt_ticker,
-                                'name': info['name'],
-                                'sector': info['sector'],
-                                'price': round(float(cur_p), 2),
-                                'prev_close': round(float(prev_c), 2),
-                                'change': round(float(cur_p - prev_c), 2),
-                                'change_pct': round(float(((cur_p - prev_c)/prev_c)*100.0), 2) if prev_c else 0.0,
-                                'day_high': round(float(meta_alt.get('regularMarketDayHigh') or cur_p), 2),
-                                'day_low': round(float(meta_alt.get('regularMarketDayLow') or cur_p), 2),
-                                'volume': int(meta_alt.get('regularMarketVolume') or 0),
-                                'updated_at': now_ist_str("%H:%M:%S")
-                            }
-                            continue
-                    except Exception:
-                        pass
-
                 # Keep existing cache or use real baseline
                 if sym not in self.quote_cache:
                     self.quote_cache[sym] = {
@@ -147,6 +135,7 @@ class MarketDataService:
                         'day_high': base_p,
                         'day_low': base_p,
                         'volume': 0,
+                        'vol_45m_base': info['vol_45m_base'],
                         'updated_at': now_ist_str("%H:%M:%S")
                     }
 

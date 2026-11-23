@@ -20,7 +20,7 @@ import {
 export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggleBot, onPanicSquareOff }) {
   const [showPanicModal, setShowPanicModal] = useState(false);
 
-  const capital = portfolio?.capital ?? 125000;
+  const capital = portfolio?.capital ?? 100000;
   const availMargin = portfolio?.available_margin ?? capital;
   const usedMargin = portfolio?.used_margin ?? 0;
   const totalPnl = portfolio?.total_pnl ?? 0;
@@ -30,7 +30,7 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
   const openPositionsCount = portfolio?.open_positions_count ?? Object.keys(portfolio?.positions || {}).length;
   const govMode = portfolio?.governor_mode ?? 'NORMAL';
   const govScale = portfolio?.governor_multiplier ?? 1.0;
-  const effRisk = portfolio?.effective_risk ?? 200;
+  const effRisk = portfolio?.effective_risk ?? 2500;
 
   const isPositive = totalPnl >= 0;
   const niftyPrice = nifty?.price ?? 24350.00;
@@ -57,10 +57,10 @@ export default function HeaderBar({ portfolio, nifty, connectionStatus, onToggle
               <div>
                 <div className="flex items-center gap-1.5 leading-none">
                   <span className="text-sm sm:text-base font-black tracking-tight text-white font-mono">
-                    ISMB TOP 14
+                    ISMB VELOCITY
                   </span>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-extrabold bg-sky-500/15 text-sky-300 border border-sky-500/30 uppercase tracking-wider">
-                    VWAP PRO
+                    LEADER 4.0R
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 mt-1">

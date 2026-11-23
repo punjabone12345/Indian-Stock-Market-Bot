@@ -33,7 +33,7 @@ export default function DashboardTab({ dashboardData, onOpenChart }) {
       <div className="flex items-center justify-between px-1 pt-1 pb-2 border-b border-white/[0.08] flex-wrap gap-2">
         <div className="flex items-center gap-2.5">
           <span className="text-xs sm:text-sm font-black tracking-tight text-white font-mono uppercase">
-            Top 14 Champion Marketwatch
+            29 Mega-Cap Velocity Marketwatch
           </span>
           <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30">
             {instruments.length} Instruments

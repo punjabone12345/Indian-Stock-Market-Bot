@@ -38,30 +38,30 @@ class TelegramService:
 
     def notify_morning_readiness(self, summary: dict):
         """Daily 09:00 AM IST Market Readiness Telegram notification"""
-        capital = summary.get('capital', 125000.0)
+        capital = summary.get('capital', 100000.0)
         avail = summary.get('available_margin', capital)
         gov_mode = summary.get('governor_mode', 'NORMAL')
         gov_scale = summary.get('governor_multiplier', 1.0)
         curr_dd = summary.get('current_drawdown_r', 0.0)
-        eff_risk = summary.get('effective_risk', 200.0)
-        target_rr = summary.get('target_rr', 2.0)
+        eff_risk = summary.get('effective_risk', 2500.0)
+        target_rr = summary.get('target_rr', 4.0)
         mode = summary.get('trading_mode', 'PAPER')
 
-        gov_badge = f"🟢 NORMAL ({gov_scale:.1f}R / ₹{eff_risk:.0f})" if gov_mode == 'NORMAL' else f"🟡 DEFENSIVE ({gov_scale:.1f}R / ₹{eff_risk:.0f})"
+        gov_badge = f"🟢 NORMAL ({gov_scale:.1f}x / ₹{eff_risk:,.0f})" if gov_mode == 'NORMAL' else f"🟡 DEFENSIVE ({gov_scale:.1f}x / ₹{eff_risk:,.0f})"
 
         text = (
             f"🔔 *MARKET READINESS CONFIRMED (09:00 AM IST)*\n\n"
-            f"🤖 *Indian Stock Market Bot is Ready for Market!*\n\n"
-            f"• *Strategy:* `Nifty-Aligned VWAP Institutional Pullback`\n"
+            f"🤖 *Indian Stock Market Bot is Armed & Ready!*\n\n"
+            f"• *Strategy:* `Velocity Compounder (Pure Leader 4.0R)`\n"
             f"• *Execution:* `{mode} MODE`\n"
-            f"• *Watchlist (Top 14 Champions):* `RELIANCE`, `INDUSINDBK`, `LT`, `ADANIENT`, `TATAMOTORS`, `SUNPHARMA`, `WIPRO`, `JSWSTEEL`, `TATASTEEL`, `BAJFINANCE`, `SBIN`, `ONGC`, `TCS`, `MARUTI`\n"
-            f"• *Risk Governor:* *{gov_badge}*\n"
-            f"• *Current Drawdown:* `{curr_dd:+.2f} R` (Max DD target: < 40 R)\n"
-            f"• *Account Capital:* `₹{capital:,.2f}` (Avail Margin: `₹{avail:,.2f}`)\n"
+            f"• *Universe:* `29 Liquid NSE Mega-Caps`\n"
+            f"• *Capital Balance:* `₹{capital:,.2f}` (Avail Margin: `₹{avail:,.2f}`)\n"
+            f"• *Risk Sizing:* `Dynamic 2.5% Compounding` (*{gov_badge}*)\n"
             f"• *Target RRR:* `1:{target_rr}` (Floor SL: `0.50%`)\n"
-            f"• *Trading Window:* `09:15 AM - 02:45 PM IST`\n"
-            f"• *EOD Square-Off:* `03:00 PM IST` (Strict Intraday, all trades closed at 3 PM)\n"
-            f"• *System Health:* All quant indicators & NSE data feeds online."
+            f"• *Protection:* `BE Lock @ +1.5R` | `Trailing Stop @ +2.5R`\n"
+            f"• *Selection:* `10:00 AM Pure #1 RS Leader` (Max 1 Trade/Day)\n"
+            f"• *EOD Square-Off:* `03:00 PM IST` (Strict Intraday, zero overnight hold)\n"
+            f"• *Historical Edge:* `+491.8% Net Return (5.92x) | 1.70 PF | 31.9% Max DD`"
         )
         return self.send_message(text)
 
@@ -75,20 +75,49 @@ class TelegramService:
             f"• *Symbol:* `{pos['symbol']}`\n"
             f"• *Action:* *{dir_icon}*\n"
             f"• *{price_label}:* `₹{pos['entry_price']:,.2f}`\n"
-            f"• *Stop Loss:* `₹{pos['stop_loss']:,.2f}` ({pos.get('sl_pct', 0.50):.2f}% floor)\n"
-            f"• *Take Profit:* `₹{pos['take_profit']:,.2f}` (1:{pos.get('target_rr', 2.0)} RRR)\n"
+            f"• *Stop Loss:* `₹{pos['stop_loss']:,.2f}` ({pos.get('sl_pct', 0.50):.2f}% distance)\n"
+            f"• *Take Profit:* `₹{pos['take_profit']:,.2f}` (1:{pos.get('target_rr', 4.0)} RRR)\n"
             f"• *Quantity:* `{pos['quantity']} shares`\n"
             f"• *Margin Locked (5x MIS):* `₹{pos['margin_used']:,.2f}`\n"
-            f"• *Risk Allocated:* `₹{pos.get('risk_amount', 200):,.2f}`\n"
-            f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`\n"
-            f"• *Setup:* `{pos.get('setup', 'Top 14 VWAP Pullback')}`"
+            f"• *Risk Allocated:* `₹{pos.get('risk_amount', 2500):,.2f}` (2.5% of Equity)\n"
+            f"• *Execution Time:* `{now_ist_str('%H:%M:%S IST')}`\n"
+            f"• *Strategy:* `Velocity Compounder (Pure Leader 4.0R)`"
+        )
+        return self.send_message(text)
+
+    def notify_breakeven_locked(self, pos: dict):
+        text = (
+            f"🛡️ *BREAKEVEN STOP LOCKED (+1.5R MILESTONE)*\n\n"
+            f"• *Symbol:* `{pos['symbol']}` ({pos['direction']})\n"
+            f"• *LTP:* `₹{pos['current_price']:,.2f}`\n"
+            f"• *New Stop Loss:* `₹{pos['stop_loss']:,.2f}` (Locked at Entry + 0.10R)\n"
+            f"• *Risk Status:* **RISK-FREE TRADE (Scratch Protected)**\n"
+            f"• *Target Price:* `₹{pos['take_profit']:,.2f}` (4.0R)\n"
+            f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`"
+        )
+        return self.send_message(text)
+
+    def notify_trailing_stop_updated(self, pos: dict):
+        text = (
+            f"📈 *TRAILING STOP ADVANCED (+2.5R RUNNER)*\n\n"
+            f"• *Symbol:* `{pos['symbol']}` ({pos['direction']})\n"
+            f"• *LTP:* `₹{pos['current_price']:,.2f}`\n"
+            f"• *Trailing Stop Updated:* `₹{pos['stop_loss']:,.2f}`\n"
+            f"• *Status:* Profit locked in! Trailing 3-bar swing.\n"
+            f"• *Time:* `{now_ist_str('%H:%M:%S IST')}`"
         )
         return self.send_message(text)
 
     def notify_trade_exit(self, trade: dict):
         pnl = trade['realized_pnl']
         r = trade['realized_r']
-        icon = "🎯 TARGET REACHED" if "TARGET" in trade['exit_reason'] else ("🛑 STOP LOSS HIT" if "STOP" in trade['exit_reason'] else ("⏰ 03:00 PM EOD SQUARE-OFF" if "EOD" in trade['exit_reason'] else "⚡ POSITION CLOSED"))
+        icon = "🎯 TARGET 4.0R REACHED" if "TARGET" in trade['exit_reason'] else (
+            "🛡️ BREAKEVEN SCRATCH EXIT" if "BREAKEVEN" in trade['exit_reason'] else (
+                "🛑 STOP LOSS HIT" if "STOP" in trade['exit_reason'] else (
+                    "⏰ 03:00 PM EOD SQUARE-OFF" if "EOD" in trade['exit_reason'] else "⚡ POSITION CLOSED"
+                )
+            )
+        )
         pnl_str = f"+₹{pnl:,.2f} (+{r:+.2f} R)" if pnl >= 0 else f"-₹{abs(pnl):,.2f} ({r:+.2f} R)"
         price_label = "Sell Price" if trade.get('direction') == 'BUY' else "Buy Price"
         
@@ -98,7 +127,7 @@ class TelegramService:
             f"• *{price_label}:* `₹{trade['exit_price']:,.2f}`\n"
             f"• *Net Result:* *{pnl_str}*\n"
             f"• *Reason:* `{trade['exit_reason']}`\n"
-            f"• *Statutory Charges:* `₹{trade.get('charges', 0):,.2f}` (Exact Zerodha/Dhan Schedule)\n"
+            f"• *Statutory Charges:* `₹{trade.get('charges', 0):,.2f}` (Zerodha/Dhan schedule)\n"
             f"• *Margin Released:* `₹{trade['margin_used']:,.2f}`\n"
             f"• *Exit Time:* `{now_ist_str('%H:%M:%S IST')}`"
         )
@@ -107,9 +136,9 @@ class TelegramService:
     def notify_governor_switch(self, new_mode: str, drawdown_r: float, risk_scale: float, eff_risk: float):
         badge = "🟡 DEFENSIVE MODE ACTIVATED" if new_mode == "DEFENSIVE" else "🟢 NORMAL MODE RESTORED"
         desc = (
-            f"Drawdown crossed -15R threshold. Cutting position sizing by 50% (Risk: 0.5R / ₹{eff_risk:.0f}) to cap maximum drawdown strictly under 40 R."
+            f"Drawdown crossed -15R threshold. Cutting position sizing by 50% (Risk: ₹{eff_risk:,.0f}) to cap maximum drawdown."
             if new_mode == "DEFENSIVE"
-            else f"Drawdown recovered above -5R threshold. Restoring standard position sizing (Risk: 1.0R / ₹{eff_risk:.0f})."
+            else f"Drawdown recovered above -5R threshold. Restoring standard 2.5% dynamic position sizing (Risk: ₹{eff_risk:,.0f})."
         )
         text = (
             f"🛡️ *{badge}*\n\n"
@@ -149,9 +178,10 @@ class TelegramService:
         text = (
             f"🔔 *TEST NOTIFICATION SUCCESSFUL*\n\n"
             f"Your Telegram bot is successfully linked to **Indian Stock Market Bot**!\n"
-            f"• *Strategy:* Top 14 VWAP Institutional Pullback + Risk Governor\n"
+            f"• *Strategy:* Velocity Compounder (Pure Leader 4.0R)\n"
+            f"• *Watchlist:* 29 Liquid NSE Mega-Caps\n"
             f"• *Time:* `{now_ist_datetime_str('%Y-%m-%d %H:%M:%S IST')}`\n"
-            f"• *Status:* Online & Listening for live trade signals."
+            f"• *Status:* Online & Listening for 10:00 AM catalyst execution."
         )
         return self.send_message(text)
 

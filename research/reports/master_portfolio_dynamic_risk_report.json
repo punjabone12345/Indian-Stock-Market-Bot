@@ -1,0 +1,13 @@
+{
+  "initial_capital": 100000.0,
+  "final_capital": 526479.69,
+  "total_net_return_pct": 426.48,
+  "cagr_pct": 41.35,
+  "monthly_avg_return_pct": 7.35,
+  "max_drawdown_pct": -9.1,
+  "calmar_ratio": 4.54,
+  "profitable_months_pct": 72.41,
+  "total_months": 58,
+  "worst_month_pct": -4.1,
+  "best_month_pct": 12.19
+}

@@ -1,0 +1,80 @@
+[
+  {
+    "strategy_family": "ORB_MOMENTUM_RVOL",
+    "total_trades": 912,
+    "win_rate_pct": 41.23,
+    "profit_factor": 0.91,
+    "total_net_return_pct": -46.9,
+    "monthly_avg_return_pct": -0.81,
+    "max_drawdown_pct": -80.55,
+    "sharpe_ratio": -0.66,
+    "in_sample_return_pct": -38.31,
+    "out_of_sample_return_pct": -8.59,
+    "total_fees_paid": 113444.88
+  },
+  {
+    "strategy_family": "VWAP_PULLBACK_RETEST",
+    "total_trades": 1077,
+    "win_rate_pct": 49.95,
+    "profit_factor": 1.58,
+    "total_net_return_pct": 353.08,
+    "monthly_avg_return_pct": 6.09,
+    "max_drawdown_pct": -25.6,
+    "sharpe_ratio": 3.25,
+    "in_sample_return_pct": 150.34,
+    "out_of_sample_return_pct": 202.74,
+    "total_fees_paid": 193166.97
+  },
+  {
+    "strategy_family": "RELATIVE_STRENGTH_BREAKOUT",
+    "total_trades": 714,
+    "win_rate_pct": 44.68,
+    "profit_factor": 0.9,
+    "total_net_return_pct": -40.8,
+    "monthly_avg_return_pct": -0.7,
+    "max_drawdown_pct": -83.33,
+    "sharpe_ratio": -0.74,
+    "in_sample_return_pct": -4.44,
+    "out_of_sample_return_pct": -36.36,
+    "total_fees_paid": 97306.51
+  },
+  {
+    "strategy_family": "VOLATILITY_SQUEEZE_EXPANSION",
+    "total_trades": 1145,
+    "win_rate_pct": 40.87,
+    "profit_factor": 0.76,
+    "total_net_return_pct": -141.86,
+    "monthly_avg_return_pct": -2.45,
+    "max_drawdown_pct": -154.67,
+    "sharpe_ratio": -1.84,
+    "in_sample_return_pct": -47.21,
+    "out_of_sample_return_pct": -94.65,
+    "total_fees_paid": 158555.73
+  },
+  {
+    "strategy_family": "MULTI_TIMEFRAME_TREND",
+    "total_trades": 1182,
+    "win_rate_pct": 39.51,
+    "profit_factor": 0.74,
+    "total_net_return_pct": -196.73,
+    "monthly_avg_return_pct": -3.39,
+    "max_drawdown_pct": -209.49,
+    "sharpe_ratio": -2.14,
+    "in_sample_return_pct": -57.69,
+    "out_of_sample_return_pct": -139.04,
+    "total_fees_paid": 185791.91
+  },
+  {
+    "strategy_family": "GAP_AND_GO_CATALYST",
+    "total_trades": 535,
+    "win_rate_pct": 45.42,
+    "profit_factor": 1.1,
+    "total_net_return_pct": 29.09,
+    "monthly_avg_return_pct": 0.5,
+    "max_drawdown_pct": -36.79,
+    "sharpe_ratio": 0.66,
+    "in_sample_return_pct": 20.64,
+    "out_of_sample_return_pct": 8.45,
+    "total_fees_paid": 68242.7
+  }
+]

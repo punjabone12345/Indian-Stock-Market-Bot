@@ -42,7 +42,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
           <div className="space-y-1.5 max-w-sm">
             <h3 className="text-base font-black text-white font-mono">No Running Positions</h3>
             <p className="text-xs text-slate-400 leading-relaxed font-sans">
-              Top 14 VWAP Engine is continuously monitoring 5m pullbacks with Nifty Macro Trend alignment and 0.50% SL floor. Positions trigger automatically with predefined Stop Loss and Target orders.
+              Velocity Compounder Engine is continuously monitoring 29 Liquid Mega-Caps for 10:00 AM RS Leaders with 4.0R target and Breakeven lock. Positions trigger automatically with predefined Stop Loss and Target orders.
             </p>
           </div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">

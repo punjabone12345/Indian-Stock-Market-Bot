@@ -1,0 +1,62 @@
+[
+  {
+    "scenario": "1. Baseline Realistic Conditions",
+    "final_equity": 343910.4,
+    "net_profit": 243910.4,
+    "max_drawdown_pct": 5.76
+  },
+  {
+    "scenario": "2. 50% Higher Statutory Fees / Taxes",
+    "final_equity": 273572.18,
+    "net_profit": 173572.18,
+    "max_drawdown_pct": 6.39
+  },
+  {
+    "scenario": "3. 100% Higher Statutory Fees (Doubled Taxes)",
+    "final_equity": 209026.88,
+    "net_profit": 109026.88,
+    "max_drawdown_pct": 6.99
+  },
+  {
+    "scenario": "4. 50% Extra Intraday Slippage (Rs 50/trade)",
+    "final_equity": 209651.71,
+    "net_profit": 109651.71,
+    "max_drawdown_pct": 6.91
+  },
+  {
+    "scenario": "5. 100% Extra Intraday Slippage (Rs 100/trade)",
+    "final_equity": 115550.7,
+    "net_profit": 15550.7,
+    "max_drawdown_pct": 9.68
+  },
+  {
+    "scenario": "6. 5% Randomly Missed Winning Orders",
+    "final_equity": 282474.74,
+    "net_profit": 182474.74,
+    "max_drawdown_pct": 6.39
+  },
+  {
+    "scenario": "7. 10% Randomly Missed Winning Orders",
+    "final_equity": 239636.44,
+    "net_profit": 139636.44,
+    "max_drawdown_pct": 6.46
+  },
+  {
+    "scenario": "8. Combined Slippage (Rs 50) + Higher Fees (50%)",
+    "final_equity": 143254.79,
+    "net_profit": 43254.79,
+    "max_drawdown_pct": 8.11
+  },
+  {
+    "scenario": "9. Severe Frictions (Rs 75 Slippage + 50% Fees + 5% Drops)",
+    "final_equity": 98892.02,
+    "net_profit": -1107.98,
+    "max_drawdown_pct": 12.61
+  },
+  {
+    "scenario": "10. Catastrophic Frictions (Rs 100 Slippage + 100% Fees + 10% Drops)",
+    "final_equity": 72037.46,
+    "net_profit": -27962.54,
+    "max_drawdown_pct": 31.15
+  }
+]

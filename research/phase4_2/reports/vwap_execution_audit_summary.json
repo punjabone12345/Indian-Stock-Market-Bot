@@ -1,0 +1,50 @@
+{
+  "V1_ORIGINAL_RETRO": {
+    "trades": 1077,
+    "skipped_trades": 0,
+    "win_rate_pct": 50.14,
+    "profit_factor": 1.71,
+    "net_R": 411.62,
+    "net_profit_inr": 411626.55,
+    "max_drawdown_R": -23.42,
+    "in_sample_R": 175.23,
+    "out_of_sample_R": 236.39,
+    "total_statutory_fees": 134625.0,
+    "total_slippage_cost": 0.0,
+    "profitable_months": 48,
+    "total_months": 58,
+    "win_month_pct": 82.76
+  },
+  "V2_NEXT_BAR_MARKET": {
+    "trades": 1077,
+    "skipped_trades": 0,
+    "win_rate_pct": 37.98,
+    "profit_factor": 0.82,
+    "net_R": -139.56,
+    "net_profit_inr": -139547.47,
+    "max_drawdown_R": -164.07,
+    "in_sample_R": -69.0,
+    "out_of_sample_R": -70.57,
+    "total_statutory_fees": 157570.08,
+    "total_slippage_cost": 106583.7,
+    "profitable_months": 20,
+    "total_months": 58,
+    "win_month_pct": 34.48
+  },
+  "V3_NEXT_BAR_LIMIT_RETEST": {
+    "trades": 986,
+    "skipped_trades": 0,
+    "win_rate_pct": 35.09,
+    "profit_factor": 0.73,
+    "net_R": -213.29,
+    "net_profit_inr": -213311.65,
+    "max_drawdown_R": -229.22,
+    "in_sample_R": -91.58,
+    "out_of_sample_R": -121.71,
+    "total_statutory_fees": 154854.33,
+    "total_slippage_cost": 109777.86,
+    "profitable_months": 16,
+    "total_months": 58,
+    "win_month_pct": 27.59
+  }
+}

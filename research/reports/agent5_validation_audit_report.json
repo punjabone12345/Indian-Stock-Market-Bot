@@ -1,0 +1,344 @@
+{
+  "GAP_AND_GO_CATALYST": {
+    "strategy_family": "GAP_AND_GO_CATALYST",
+    "walk_forward_breakdown": {
+      "In_Sample_2022_2023": {
+        "trades": 216,
+        "win_rate_pct": 45.37,
+        "profit_factor": 1.18,
+        "total_R": 20.64,
+        "monthly_avg_R": 0.86,
+        "months": 24
+      },
+      "Validation_2024": {
+        "trades": 118,
+        "win_rate_pct": 45.76,
+        "profit_factor": 1.13,
+        "total_R": 8.72,
+        "monthly_avg_R": 0.73,
+        "months": 12
+      },
+      "Out_Of_Sample_2025": {
+        "trades": 103,
+        "win_rate_pct": 46.6,
+        "profit_factor": 0.91,
+        "total_R": -4.34,
+        "monthly_avg_R": -0.36,
+        "months": 12
+      },
+      "Final_Validation_2026": {
+        "trades": 98,
+        "win_rate_pct": 43.88,
+        "profit_factor": 1.07,
+        "total_R": 4.07,
+        "monthly_avg_R": 0.41,
+        "months": 10
+      }
+    },
+    "monte_carlo_10k": {
+      "n_simulations": 10000,
+      "mean_return_pct": 27.91,
+      "median_return_pct": 27.91,
+      "5th_pct_return_pct": 27.91,
+      "95th_pct_return_pct": 27.91,
+      "mean_max_drawdown_pct": -22.2,
+      "worst_max_drawdown_pct": -47.91,
+      "95th_pct_max_drawdown_pct": -31.6,
+      "prob_dd_over_10pct": 100.0,
+      "prob_dd_over_15pct": 95.54,
+      "prob_dd_over_20pct": 62.56,
+      "mean_max_consecutive_losses": 9.5,
+      "99th_pct_consecutive_losses": 16
+    },
+    "pct_profitable_months": 58.62,
+    "total_months_traded": 58,
+    "best_month_R": 11.92,
+    "worst_month_R": -7.65,
+    "monthly_r_std": 4.15
+  },
+  "MULTI_TIMEFRAME_TREND": {
+    "strategy_family": "MULTI_TIMEFRAME_TREND",
+    "walk_forward_breakdown": {
+      "In_Sample_2022_2023": {
+        "trades": 492,
+        "win_rate_pct": 41.46,
+        "profit_factor": 0.82,
+        "total_R": -57.69,
+        "monthly_avg_R": -2.4,
+        "months": 24
+      },
+      "Validation_2024": {
+        "trades": 246,
+        "win_rate_pct": 38.21,
+        "profit_factor": 0.75,
+        "total_R": -40.45,
+        "monthly_avg_R": -3.37,
+        "months": 12
+      },
+      "Out_Of_Sample_2025": {
+        "trades": 248,
+        "win_rate_pct": 38.71,
+        "profit_factor": 0.68,
+        "total_R": -51.5,
+        "monthly_avg_R": -4.29,
+        "months": 12
+      },
+      "Final_Validation_2026": {
+        "trades": 196,
+        "win_rate_pct": 37.24,
+        "profit_factor": 0.65,
+        "total_R": -47.09,
+        "monthly_avg_R": -4.71,
+        "months": 10
+      }
+    },
+    "monte_carlo_10k": {
+      "n_simulations": 10000,
+      "mean_return_pct": -87.23,
+      "median_return_pct": -87.23,
+      "5th_pct_return_pct": -87.23,
+      "95th_pct_return_pct": -87.23,
+      "mean_max_drawdown_pct": -88.12,
+      "worst_max_drawdown_pct": -91.74,
+      "95th_pct_max_drawdown_pct": -89.42,
+      "prob_dd_over_10pct": 100.0,
+      "prob_dd_over_15pct": 100.0,
+      "prob_dd_over_20pct": 100.0,
+      "mean_max_consecutive_losses": 12.9,
+      "99th_pct_consecutive_losses": 20
+    },
+    "pct_profitable_months": 25.86,
+    "total_months_traded": 58,
+    "best_month_R": 10.41,
+    "worst_month_R": -13.35,
+    "monthly_r_std": 5.2
+  },
+  "ORB_MOMENTUM_RVOL": {
+    "strategy_family": "ORB_MOMENTUM_RVOL",
+    "walk_forward_breakdown": {
+      "In_Sample_2022_2023": {
+        "trades": 389,
+        "win_rate_pct": 38.56,
+        "profit_factor": 0.84,
+        "total_R": -38.31,
+        "monthly_avg_R": -1.6,
+        "months": 24
+      },
+      "Validation_2024": {
+        "trades": 188,
+        "win_rate_pct": 44.68,
+        "profit_factor": 1.05,
+        "total_R": 4.74,
+        "monthly_avg_R": 0.39,
+        "months": 12
+      },
+      "Out_Of_Sample_2025": {
+        "trades": 186,
+        "win_rate_pct": 40.86,
+        "profit_factor": 0.76,
+        "total_R": -23.51,
+        "monthly_avg_R": -1.96,
+        "months": 12
+      },
+      "Final_Validation_2026": {
+        "trades": 149,
+        "win_rate_pct": 44.3,
+        "profit_factor": 1.12,
+        "total_R": 10.18,
+        "monthly_avg_R": 1.02,
+        "months": 10
+      }
+    },
+    "monte_carlo_10k": {
+      "n_simulations": 10000,
+      "mean_return_pct": -41.68,
+      "median_return_pct": -41.68,
+      "5th_pct_return_pct": -41.68,
+      "95th_pct_return_pct": -41.68,
+      "mean_max_drawdown_pct": -51.4,
+      "worst_max_drawdown_pct": -71.27,
+      "95th_pct_max_drawdown_pct": -60.07,
+      "prob_dd_over_10pct": 100.0,
+      "prob_dd_over_15pct": 100.0,
+      "prob_dd_over_20pct": 100.0,
+      "mean_max_consecutive_losses": 11.7,
+      "99th_pct_consecutive_losses": 19
+    },
+    "pct_profitable_months": 34.48,
+    "total_months_traded": 58,
+    "best_month_R": 13.54,
+    "worst_month_R": -9.64,
+    "monthly_r_std": 5.32
+  },
+  "RELATIVE_STRENGTH_BREAKOUT": {
+    "strategy_family": "RELATIVE_STRENGTH_BREAKOUT",
+    "walk_forward_breakdown": {
+      "In_Sample_2022_2023": {
+        "trades": 302,
+        "win_rate_pct": 46.36,
+        "profit_factor": 0.97,
+        "total_R": -4.44,
+        "monthly_avg_R": -0.18,
+        "months": 24
+      },
+      "Validation_2024": {
+        "trades": 146,
+        "win_rate_pct": 44.52,
+        "profit_factor": 0.84,
+        "total_R": -13.43,
+        "monthly_avg_R": -1.12,
+        "months": 12
+      },
+      "Out_Of_Sample_2025": {
+        "trades": 142,
+        "win_rate_pct": 40.85,
+        "profit_factor": 0.7,
+        "total_R": -25.65,
+        "monthly_avg_R": -2.14,
+        "months": 12
+      },
+      "Final_Validation_2026": {
+        "trades": 124,
+        "win_rate_pct": 45.16,
+        "profit_factor": 1.04,
+        "total_R": 2.72,
+        "monthly_avg_R": 0.27,
+        "months": 10
+      }
+    },
+    "monte_carlo_10k": {
+      "n_simulations": 10000,
+      "mean_return_pct": -36.97,
+      "median_return_pct": -36.97,
+      "5th_pct_return_pct": -36.97,
+      "95th_pct_return_pct": -36.97,
+      "mean_max_drawdown_pct": -46.38,
+      "worst_max_drawdown_pct": -65.29,
+      "95th_pct_max_drawdown_pct": -54.82,
+      "prob_dd_over_10pct": 100.0,
+      "prob_dd_over_15pct": 100.0,
+      "prob_dd_over_20pct": 100.0,
+      "mean_max_consecutive_losses": 10.2,
+      "99th_pct_consecutive_losses": 17
+    },
+    "pct_profitable_months": 46.55,
+    "total_months_traded": 58,
+    "best_month_R": 10.32,
+    "worst_month_R": -8.71,
+    "monthly_r_std": 4.73
+  },
+  "VOLATILITY_SQUEEZE_EXPANSION": {
+    "strategy_family": "VOLATILITY_SQUEEZE_EXPANSION",
+    "walk_forward_breakdown": {
+      "In_Sample_2022_2023": {
+        "trades": 477,
+        "win_rate_pct": 41.93,
+        "profit_factor": 0.81,
+        "total_R": -47.21,
+        "monthly_avg_R": -1.97,
+        "months": 24
+      },
+      "Validation_2024": {
+        "trades": 239,
+        "win_rate_pct": 42.26,
+        "profit_factor": 0.88,
+        "total_R": -13.94,
+        "monthly_avg_R": -1.16,
+        "months": 12
+      },
+      "Out_Of_Sample_2025": {
+        "trades": 245,
+        "win_rate_pct": 35.92,
+        "profit_factor": 0.56,
+        "total_R": -57.28,
+        "monthly_avg_R": -4.77,
+        "months": 12
+      },
+      "Final_Validation_2026": {
+        "trades": 184,
+        "win_rate_pct": 42.93,
+        "profit_factor": 0.75,
+        "total_R": -23.43,
+        "monthly_avg_R": -2.34,
+        "months": 10
+      }
+    },
+    "monte_carlo_10k": {
+      "n_simulations": 10000,
+      "mean_return_pct": -77.34,
+      "median_return_pct": -77.34,
+      "5th_pct_return_pct": -77.34,
+      "95th_pct_return_pct": -77.34,
+      "mean_max_drawdown_pct": -78.92,
+      "worst_max_drawdown_pct": -86.54,
+      "95th_pct_max_drawdown_pct": -81.17,
+      "prob_dd_over_10pct": 100.0,
+      "prob_dd_over_15pct": 100.0,
+      "prob_dd_over_20pct": 100.0,
+      "mean_max_consecutive_losses": 12.3,
+      "99th_pct_consecutive_losses": 20
+    },
+    "pct_profitable_months": 34.48,
+    "total_months_traded": 58,
+    "best_month_R": 9.13,
+    "worst_month_R": -10.61,
+    "monthly_r_std": 4.96
+  },
+  "VWAP_PULLBACK_RETEST": {
+    "strategy_family": "VWAP_PULLBACK_RETEST",
+    "walk_forward_breakdown": {
+      "In_Sample_2022_2023": {
+        "trades": 458,
+        "win_rate_pct": 51.09,
+        "profit_factor": 1.59,
+        "total_R": 150.34,
+        "monthly_avg_R": 6.26,
+        "months": 24
+      },
+      "Validation_2024": {
+        "trades": 218,
+        "win_rate_pct": 50.92,
+        "profit_factor": 1.76,
+        "total_R": 92.53,
+        "monthly_avg_R": 7.71,
+        "months": 12
+      },
+      "Out_Of_Sample_2025": {
+        "trades": 221,
+        "win_rate_pct": 48.87,
+        "profit_factor": 1.5,
+        "total_R": 61.99,
+        "monthly_avg_R": 5.17,
+        "months": 12
+      },
+      "Final_Validation_2026": {
+        "trades": 180,
+        "win_rate_pct": 47.22,
+        "profit_factor": 1.45,
+        "total_R": 48.22,
+        "monthly_avg_R": 4.82,
+        "months": 10
+      }
+    },
+    "monte_carlo_10k": {
+      "n_simulations": 10000,
+      "mean_return_pct": 2862.89,
+      "median_return_pct": 2862.89,
+      "5th_pct_return_pct": 2862.89,
+      "95th_pct_return_pct": 2862.89,
+      "mean_max_drawdown_pct": -15.94,
+      "worst_max_drawdown_pct": -39.59,
+      "95th_pct_max_drawdown_pct": -22.22,
+      "prob_dd_over_10pct": 99.75,
+      "prob_dd_over_15pct": 55.17,
+      "prob_dd_over_20pct": 11.33,
+      "mean_max_consecutive_losses": 9.4,
+      "99th_pct_consecutive_losses": 15
+    },
+    "pct_profitable_months": 77.59,
+    "total_months_traded": 58,
+    "best_month_R": 22.58,
+    "worst_month_R": -10.57,
+    "monthly_r_std": 7.51
+  }
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "tier": "Top_10_Liquid_MegaCaps",
+    "symbols_count": 10,
+    "trades": 60,
+    "win_rate_pct": 45.0,
+    "profit_factor": 1.05,
+    "total_net_R": 1.77,
+    "max_drawdown_R": -13.12,
+    "avg_daily_turnover_cr": 1207.0
+  },
+  {
+    "tier": "Top_30_Liquid_Stocks",
+    "symbols_count": 30,
+    "trades": 60,
+    "win_rate_pct": 43.33,
+    "profit_factor": 1.07,
+    "total_net_R": 2.84,
+    "max_drawdown_R": -9.44,
+    "avg_daily_turnover_cr": 740.4
+  },
+  {
+    "tier": "Top_50_Liquid_Stocks",
+    "symbols_count": 50,
+    "trades": 60,
+    "win_rate_pct": 53.33,
+    "profit_factor": 1.81,
+    "total_net_R": 26.41,
+    "max_drawdown_R": -8.01,
+    "avg_daily_turnover_cr": 582.6
+  },
+  {
+    "tier": "Top_100_Liquid_Stocks",
+    "symbols_count": 100,
+    "trades": 60,
+    "win_rate_pct": 50.0,
+    "profit_factor": 1.65,
+    "total_net_R": 22.66,
+    "max_drawdown_R": -8.0,
+    "avg_daily_turnover_cr": 409.8
+  },
+  {
+    "tier": "Broader_Universe_194_Stocks",
+    "symbols_count": 194,
+    "trades": 60,
+    "win_rate_pct": 50.0,
+    "profit_factor": 1.65,
+    "total_net_R": 22.75,
+    "max_drawdown_R": -8.0,
+    "avg_daily_turnover_cr": 263.9
+  }
+]

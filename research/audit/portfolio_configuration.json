@@ -1,0 +1,39 @@
+{
+  "system_name": "NSE_EQUITY_INTRADAY_MASTER_ALPHA",
+  "instrument_universe": "Liquid NSE Equity Mega-Caps (NIFTY 50 / Liquid 30)",
+  "leverage_product": "MIS (Intraday Cash Equity - 100% SEBI Compliant, Zero F&O)",
+  "capital_allocation": {
+    "initial_capital_inr": 100000.0,
+    "strategy_1_vwap_retest_weight": 0.5,
+    "strategy_2_gap_catalyst_weight": 0.5
+  },
+  "risk_governor": {
+    "tier_1_normal": {
+      "dd_threshold": 0.0,
+      "risk_pct": 0.01
+    },
+    "tier_2_defensive": {
+      "dd_threshold": -0.04,
+      "risk_pct": 0.005
+    },
+    "tier_3_caution": {
+      "dd_threshold": -0.07,
+      "risk_pct": 0.0025
+    },
+    "tier_4_capital_preserve": {
+      "dd_threshold": -0.1,
+      "risk_pct": 0.001
+    }
+  },
+  "strategy_rules": {
+    "vwap_pullback_retest": {
+      "entry_window": "09:30 AM to 10:45 AM (Bars 3 to 18)",
+      "qualification": "15-min RVOL >= 1.5x 20-day average",
+      "entry_trigger": "5-min candle pulls back to touch VWAP and closes above VWAP (Bullish) or below VWAP (Bearish)",
+      "structural_stop_loss": "15-minute Opening Range Midpoint (Mid = [High + Low] / 2)",
+      "risk_cap": "Capped between 0.35% and 1.00% of stock price",
+      "target_1": "+2.0R (Book 50% position)",
+      "target_2_runner": "+3.5R or End-of-Day Market Close at 15:15 PM"
+    }
+  }
+}

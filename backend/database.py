@@ -44,15 +44,15 @@ class Database:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS settings (
                 id INTEGER PRIMARY KEY,
-                capital REAL DEFAULT 125000.0,
-                risk_per_trade REAL DEFAULT 200.0,
+                capital REAL DEFAULT 100000.0,
+                risk_per_trade REAL DEFAULT 2500.0,
                 trading_mode TEXT DEFAULT 'PAPER',
                 dhan_client_id TEXT DEFAULT '',
                 dhan_access_token TEXT DEFAULT '',
                 telegram_token TEXT DEFAULT '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc',
                 telegram_chat_id TEXT DEFAULT '5582938659',
-                max_open_positions INTEGER DEFAULT 14,
-                target_rr REAL DEFAULT 2.0,
+                max_open_positions INTEGER DEFAULT 1,
+                target_rr REAL DEFAULT 4.0,
                 bot_active INTEGER DEFAULT 1,
                 updated_at TEXT
             )
@@ -70,7 +70,7 @@ class Database:
                 quantity INTEGER NOT NULL,
                 margin_used REAL NOT NULL,
                 entry_time TEXT NOT NULL,
-                setup TEXT DEFAULT 'Top 14 VWAP Pullback',
+                setup TEXT DEFAULT 'Velocity Compounder (Pure Leader 4.0R)',
                 sl_dist REAL NOT NULL,
                 created_at TEXT NOT NULL
             )
@@ -105,10 +105,10 @@ class Database:
             now_str = now_ist_datetime_str()
             cur.execute("""
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 14, 2.0, 1, ?)
+                VALUES (1, 100000.0, 2500.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 1, 4.0, 1, ?)
             """ if not self.is_postgres else """
                 INSERT INTO settings (id, capital, risk_per_trade, trading_mode, telegram_token, telegram_chat_id, max_open_positions, target_rr, bot_active, updated_at)
-                VALUES (1, 125000.0, 200.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 14, 2.0, 1, %s)
+                VALUES (1, 100000.0, 2500.0, 'PAPER', '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc', '5582938659', 1, 4.0, 1, %s)
             """, (now_str,))
 
         # One-time migration: Convert any UTC timestamps in positions table to IST
@@ -122,9 +122,9 @@ class Database:
         except Exception as e:
             pass
 
-        # Ensure active strategy parameters: target_rr = 2.0, max_open_positions = 14
+        # Ensure active strategy parameters: target_rr = 4.0, max_open_positions = 1
         try:
-            cur.execute("UPDATE settings SET target_rr = 2.0, max_open_positions = 14 WHERE id = 1 AND (target_rr != 2.0 OR max_open_positions != 14)" if not self.is_postgres else "UPDATE settings SET target_rr = 2.0, max_open_positions = 14 WHERE id = 1 AND (target_rr != 2.0 OR max_open_positions != 14)")
+            cur.execute("UPDATE settings SET target_rr = 4.0, max_open_positions = 1, capital = 100000.0, risk_per_trade = 2500.0 WHERE id = 1 AND (target_rr != 4.0 OR max_open_positions != 1)" if not self.is_postgres else "UPDATE settings SET target_rr = 4.0, max_open_positions = 1, capital = 100000.0, risk_per_trade = 2500.0 WHERE id = 1 AND (target_rr != 4.0 OR max_open_positions != 1)")
         except Exception:
             pass
 
@@ -334,8 +334,17 @@ class Database:
         conn.commit()
         conn.close()
 
+    def update_position_sl(self, pos_id: str, new_sl: float):
+        """Updates stop loss price of an active position (e.g. Breakeven lock or Trailing stop)."""
+        conn = self.get_connection()
+        cur = conn.cursor()
+        sql = "UPDATE positions SET stop_loss = ? WHERE id = ?" if not self.is_postgres else "UPDATE positions SET stop_loss = %s WHERE id = %s"
+        cur.execute(sql, (round(float(new_sl), 2), pos_id))
+        conn.commit()
+        conn.close()
+
     def reset_database(self):
-        """Danger Zone: Clears all positions & trade history, resets balance to default ₹1,25,000"""
+        """Danger Zone: Clears all positions & trade history, resets balance to default ₹1,00,000"""
         conn = self.get_connection()
         cur = conn.cursor()
         cur.execute("DELETE FROM positions")
@@ -343,24 +352,24 @@ class Database:
         now_str = now_ist_datetime_str()
         sql = """
             UPDATE settings SET
-                capital = 125000.0,
-                risk_per_trade = 200.0,
-                target_rr = 2.0,
-                max_open_positions = 14,
+                capital = 100000.0,
+                risk_per_trade = 2500.0,
+                target_rr = 4.0,
+                max_open_positions = 1,
                 updated_at = ?
             WHERE id = 1
         """ if not self.is_postgres else """
             UPDATE settings SET
-                capital = 125000.0,
-                risk_per_trade = 200.0,
-                target_rr = 2.0,
-                max_open_positions = 14,
+                capital = 100000.0,
+                risk_per_trade = 2500.0,
+                target_rr = 4.0,
+                max_open_positions = 1,
                 updated_at = %s
             WHERE id = 1
         """
         cur.execute(sql, (now_str,))
         conn.commit()
         conn.close()
-        print("[DB] Danger Zone: Factory Reset executed successfully.")
+        print("[DB] Danger Zone: Factory Reset executed successfully. Account restored to ₹1,00,000.")
 
 db = Database()

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
-<title>Indian Stock Market Bot • Top 14 Champions VWAP Terminal</title>
+<title>Indian Stock Market Bot • 29 Mega-Caps Velocity Compounder 4.0R</title>
 <!-- PWA Manifest & Android App Meta Tags -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080B11">
@@ -244,7 +244,7 @@
       <div class="flex flex-col min-w-0">
         <div class="flex items-center gap-1.5 min-w-0">
           <span class="font-extrabold text-xs sm:text-base tracking-tight text-white font-sans truncate">Indian Stock Market Bot</span>
-          <span class="px-1.5 py-0.5 rounded font-mono font-extrabold text-[7.5px] sm:text-[8px] bg-sky-500/20 text-sky-300 border border-sky-500/40 shrink-0 uppercase">TOP 14 VWAP</span>
+          <span class="px-1.5 py-0.5 rounded font-mono font-extrabold text-[7.5px] sm:text-[8px] bg-sky-500/20 text-sky-300 border border-sky-500/40 shrink-0 uppercase">VELOCITY 4.0R</span>
           <span id="govModeBadge" class="px-1.5 py-0.5 rounded font-mono font-black text-[7.5px] sm:text-[8px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
             GOV: NORMAL (1.0R)
           </span>
@@ -252,7 +252,7 @@
             🌙 NSE CLOSED
           </span>
         </div>
-        <span class="text-[8px] sm:text-[8.5px] font-mono text-slate-400 hidden sm:block truncate">TOP 14 CHAMPIONS • VWAP INSTITUTIONAL PULLBACK • 3:00 PM SQUAREOFF</span>
+        <span class="text-[8px] sm:text-[8.5px] font-mono text-slate-400 hidden sm:block truncate">29 LIQUID MEGA-CAPS • VELOCITY COMPOUNDER • 4.0R TARGET</span>
       </div>
     </div>
 
@@ -359,7 +359,7 @@
 <!-- Watchlist Header -->
 <div class="flex items-center justify-between pt-0.5 px-1">
 <div class="flex items-center gap-1.5">
-<span class="text-xs font-black text-slate-200 font-mono tracking-wide">Top 14 Champion Marketwatch</span>
+<span class="text-xs font-black text-slate-200 font-mono tracking-wide">29 Mega-Cap Velocity Marketwatch</span>
 <span class="text-[8.5px] px-2 py-0.5 rounded-full bg-cyanAccent/10 text-cyanAccent font-mono border border-cyanAccent/20 font-semibold">14 Champions • 5m MIS</span>
 </div>
 <span class="text-[9.5px] font-mono text-slate-400">NSE Intraday</span>
@@ -391,7 +391,7 @@
             </div>
             <h4 class="text-xs font-bold text-white font-mono mb-1">NO ACTIVE POSITIONS</h4>
             <p class="text-[10px] text-slate-400 font-mono max-w-[240px] leading-relaxed">
-              Scanning 5m VWAP pullbacks across Top 14 Champions. Auto 1:2 bracket with 0.50% SL floor.
+              Scanning 10:00 AM RS Leaders across 29 Liquid Mega-Caps. Auto 1:4 bracket with +1.5R Breakeven lock.
             </p>
           </div>
         </div>
@@ -1560,9 +1560,9 @@ Trigger Condition:
     let userState = {
       engineActive: true,
       tradingMode: 'PAPER',
-      capital: 125000,
+      capital: 100000,
       riskPerTrade: 200,
-      availableMargin: 125000.00,
+      availableMargin: 100000.00,
       usedMargin: 0,
       netDayPnl: 0.00,
       netDayR: 0.00,
@@ -2389,8 +2389,8 @@ Trigger Condition:
         fetch(`${BACKEND_URL}/api/reset`, { method: 'POST' }).catch(e => console.log(e));
         userState.positions = [];
         userState.ledger = [];
-        userState.capital = 125000;
-        userState.availableMargin = 125000;
+        userState.capital = 100000;
+        userState.availableMargin = 100000;
         userState.usedMargin = 0;
         userState.netDayPnl = 0;
         userState.netDayR = 0;
@@ -2822,7 +2822,7 @@ Trigger Condition:
           time: '09:15',
           pnl: 0,
           r: 0,
-          capital: 125000.0,
+          capital: 100000.0,
           cum_pnl: 0,
           cum_r: 0,
           drawdown_r: 0,
@@ -2866,7 +2866,7 @@ Trigger Condition:
             time: t.exitTime || t.time || '',
             pnl: Math.round(pnl * 100) / 100,
             r: Math.round(r * 100) / 100,
-            capital: Math.round((125000.0 + cumPnl) * 100) / 100,
+            capital: Math.round((100000.0 + cumPnl) * 100) / 100,
             cum_pnl: Math.round(cumPnl * 100) / 100,
             cum_r: Math.round(cumR * 100) / 100,
             drawdown_r: Math.round(dd * 100) / 100,
@@ -2904,7 +2904,7 @@ Trigger Condition:
       const allCapitals = points.map(p => p.capital);
       const minCapital = Math.min(...allCapitals);
       const peakCapital = Math.max(...allCapitals);
-      const initialCapital = 125000.0;
+      const initialCapital = 100000.0;
       const netGain = latestPoint.capital - initialCapital;
       const returnPct = (netGain / initialCapital) * 100;
       const peakReturnPct = ((peakCapital - initialCapital) / initialCapital) * 100;
@@ -3059,8 +3059,8 @@ Trigger Condition:
       }
 
       const capitals = points.map(p => p.capital);
-      let minCap = Math.min(...capitals, 125000);
-      let maxCap = Math.max(...capitals, 125000);
+      let minCap = Math.min(...capitals, 100000);
+      let maxCap = Math.max(...capitals, 100000);
       const span = maxCap - minCap;
       const buffer = Math.max(300, span * 0.15);
       minCap = Math.floor((minCap - buffer) / 500) * 500;
@@ -3069,7 +3069,7 @@ Trigger Condition:
 
       const getX = (i) => pad.left + (points.length === 1 ? plotW / 2 : (i / (points.length - 1)) * plotW);
       const getY = (val) => pad.top + plotH - ((val - minCap) / (maxCap - minCap)) * plotH;
-      const yBase = getY(125000.0);
+      const yBase = getY(100000.0);
 
       // Grid levels & HTML labels
       const gridCount = 4;
@@ -3187,7 +3187,7 @@ Trigger Condition:
 
         if (tooltip) {
           const isGain = pt.pnl >= 0;
-          const isProfitableTotal = pt.capital >= 125000;
+          const isProfitableTotal = pt.capital >= 100000;
           tooltip.innerHTML = `
             <div class="flex items-center justify-between border-b border-white/10 pb-1 gap-3">
               <span class="text-white font-black">Trade #${pt.trade_num} • ${pt.symbol || 'START'} ${pt.direction ? '(' + pt.direction + ')' : ''}</span>
@@ -3600,7 +3600,7 @@ Trigger Condition:
       try {
         const clientId = document.getElementById('dhanClientId')?.value || '1000289190';
         const token = document.getElementById('dhanAccessToken')?.value || 'eyJhbGciOiJIUzUxMiJ9.dhanhq.secret';
-        const cap = parseFloat((document.getElementById('settingCapital')?.value || '125000').replace(/[^0-9.]/g, '')) || 125000;
+        const cap = parseFloat((document.getElementById('settingCapital')?.value || '100000').replace(/[^0-9.]/g, '')) || 100000;
         const risk = parseFloat((document.getElementById('settingRisk')?.value || '250').replace(/[^0-9.]/g, '')) || 250;
 
         await fetch(`${BACKEND_URL}/api/settings/test-dhan`, {

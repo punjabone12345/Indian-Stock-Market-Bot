@@ -1,0 +1,140 @@
+[
+  {
+    "config_name": "Config 1: Gap>=1.5%, RVOL>=2.5x, SL=0.8%, 1 Trade/Day",
+    "total_trades": 938,
+    "trades_per_month": 16.2,
+    "win_rate_pct": 31.56,
+    "profit_factor": 0.87,
+    "total_net_R": -104.19,
+    "total_net_profit_inr": -104180.66,
+    "avg_monthly_R": -1.8,
+    "avg_monthly_pnl_inr": -1796.22,
+    "static_monthly_return_pct": -1.8,
+    "max_drawdown_R": -162.57,
+    "max_drawdown_pct": 162.57,
+    "total_fees_paid_inr": 85355.86,
+    "profitable_months": "25 / 58 (43.1%)",
+    "yearly_R": {
+      "2022": -108.41199999999999,
+      "2023": 9.488000000000007,
+      "2024": -37.339,
+      "2025": -21.875999999999994,
+      "2026": 53.95
+    }
+  },
+  {
+    "config_name": "Config 2: Gap>=1.5%, RVOL>=2.5x, SL=0.8%, 2 Trades/Day",
+    "total_trades": 1568,
+    "trades_per_month": 27.0,
+    "win_rate_pct": 30.99,
+    "profit_factor": 0.89,
+    "total_net_R": -152.22,
+    "total_net_profit_inr": -152217.51,
+    "avg_monthly_R": -2.62,
+    "avg_monthly_pnl_inr": -2624.44,
+    "static_monthly_return_pct": -2.62,
+    "max_drawdown_R": -249.66,
+    "max_drawdown_pct": 249.66,
+    "total_fees_paid_inr": 142637.57,
+    "profitable_months": "26 / 58 (44.8%)",
+    "yearly_R": {
+      "2022": -137.873,
+      "2023": -13.60599999999999,
+      "2024": -72.351,
+      "2025": -16.41999999999999,
+      "2026": 88.02900000000001
+    }
+  },
+  {
+    "config_name": "Config 3: Gap>=2.0%, RVOL>=2.5x, SL=0.8%, 1 Trade/Day",
+    "total_trades": 822,
+    "trades_per_month": 14.2,
+    "win_rate_pct": 29.68,
+    "profit_factor": 0.8,
+    "total_net_R": -153.52,
+    "total_net_profit_inr": -153514.73,
+    "avg_monthly_R": -2.65,
+    "avg_monthly_pnl_inr": -2646.81,
+    "static_monthly_return_pct": -2.65,
+    "max_drawdown_R": -199.15,
+    "max_drawdown_pct": 199.15,
+    "total_fees_paid_inr": 74776.94,
+    "profitable_months": "16 / 58 (27.6%)",
+    "yearly_R": {
+      "2022": -121.94099999999999,
+      "2023": -12.816999999999995,
+      "2024": -32.748,
+      "2025": -28.879999999999995,
+      "2026": 42.865
+    }
+  },
+  {
+    "config_name": "Config 4: Gap>=1.5%, RVOL>=3.0x, SL=0.8%, 2 Trades/Day",
+    "total_trades": 1392,
+    "trades_per_month": 24.0,
+    "win_rate_pct": 31.61,
+    "profit_factor": 0.92,
+    "total_net_R": -95.17,
+    "total_net_profit_inr": -95165.95,
+    "avg_monthly_R": -1.64,
+    "avg_monthly_pnl_inr": -1640.79,
+    "static_monthly_return_pct": -1.64,
+    "max_drawdown_R": -190.14,
+    "max_drawdown_pct": 190.14,
+    "total_fees_paid_inr": 126643.67,
+    "profitable_months": "27 / 58 (46.6%)",
+    "yearly_R": {
+      "2022": -131.19799999999998,
+      "2023": 0.8100000000000092,
+      "2024": -46.70099999999999,
+      "2025": -2.957999999999993,
+      "2026": 84.872
+    }
+  },
+  {
+    "config_name": "Config 5: Gap>=1.5%, RVOL>=2.5x, SL=0.6%, 2 Trades/Day (Tighter Stop)",
+    "total_trades": 1569,
+    "trades_per_month": 27.1,
+    "win_rate_pct": 26.64,
+    "profit_factor": 0.66,
+    "total_net_R": -552.56,
+    "total_net_profit_inr": -552591.66,
+    "avg_monthly_R": -9.53,
+    "avg_monthly_pnl_inr": -9527.44,
+    "static_monthly_return_pct": -9.53,
+    "max_drawdown_R": -596.07,
+    "max_drawdown_pct": 596.07,
+    "total_fees_paid_inr": 165688.99,
+    "profitable_months": "15 / 58 (25.9%)",
+    "yearly_R": {
+      "2022": -202.17600000000002,
+      "2023": -65.47800000000001,
+      "2024": -128.272,
+      "2025": -189.401,
+      "2026": 32.765
+    }
+  },
+  {
+    "config_name": "Config 6: Gap>=1.5%, RVOL>=2.5x, SL=1.0%, 2 Trades/Day (Wider Stop)",
+    "total_trades": 1568,
+    "trades_per_month": 27.0,
+    "win_rate_pct": 35.91,
+    "profit_factor": 1.07,
+    "total_net_R": 79.47,
+    "total_net_profit_inr": 79467.33,
+    "avg_monthly_R": 1.37,
+    "avg_monthly_pnl_inr": 1370.13,
+    "static_monthly_return_pct": 1.37,
+    "max_drawdown_R": -92.75,
+    "max_drawdown_pct": 92.75,
+    "total_fees_paid_inr": 128832.56,
+    "profitable_months": "32 / 58 (55.2%)",
+    "yearly_R": {
+      "2022": -78.711,
+      "2023": 32.828,
+      "2024": -18.165999999999993,
+      "2025": 13.593000000000005,
+      "2026": 129.92600000000002
+    }
+  }
+]

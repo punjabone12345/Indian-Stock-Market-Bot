@@ -45,3 +45,6 @@ ui_ux_skill_ref/
 Thumbs.db
 
 scratch/
+
+.agents/
+.claude/

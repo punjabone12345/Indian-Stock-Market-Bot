@@ -8,9 +8,11 @@ except ImportError:
 try:
     from database import db
     from telegram_alerts import telegram_service
+    from market_data import market_service
 except ImportError:
     from backend.database import db
     from backend.telegram_alerts import telegram_service
+    from backend.market_data import market_service
 
 class PortfolioManager:
     def __init__(self):
@@ -19,15 +21,17 @@ class PortfolioManager:
         self.peak_realized_r = 0.0
         self.cumulative_realized_r = 0.0
         self.current_drawdown_r = 0.0
+        self.dynamic_risk_pct = 0.025  # 2.5% dynamic risk per trade (Velocity Compounder)
         self.refresh_from_db()
 
     def refresh_from_db(self):
         settings = db.get_settings()
-        self.capital = float(settings.get('capital', 125000.0))
-        self.risk_per_trade = float(settings.get('risk_per_trade', 200.0))
+        self.capital = float(settings.get('capital', 100000.0))
+        # Recalculate dynamic risk amount (2.5% of current equity)
+        self.risk_per_trade = round(self.capital * self.dynamic_risk_pct, 2)
         self.trading_mode = settings.get('trading_mode', 'PAPER')
-        self.max_open_positions = int(settings.get('max_open_positions', 14))
-        self.target_rr = float(settings.get('target_rr', 2.0))
+        self.max_open_positions = int(settings.get('max_open_positions', 1))  # Pure Leader: 1 trade max
+        self.target_rr = float(settings.get('target_rr', 4.0))  # 4:1 Asymmetric Target
         self.bot_active = bool(settings.get('bot_active', True))
         
         # Load positions from DB
@@ -44,11 +48,12 @@ class PortfolioManager:
                 'quantity': int(p['quantity']),
                 'margin_used': float(p['margin_used']),
                 'entry_time': to_ist_time_str(p['entry_time']),
-                'setup': p.get('setup', 'Top 14 VWAP Pullback'),
+                'setup': p.get('setup', 'Velocity Compounder (Pure Leader 4.0R)'),
                 'sl_dist': float(p['sl_dist']),
                 'current_price': float(p['entry_price']),
                 'unrealized_pnl': 0.0,
                 'unrealized_r': 0.0,
+                'be_locked': False,
                 'created_at': p.get('created_at', now_ist_datetime_str()),
                 'governor_mode': p.get('governor_mode', self.governor_mode)
             }
@@ -57,14 +62,7 @@ class PortfolioManager:
         self._recalculate_governor_state()
 
     def _recalculate_governor_state(self):
-        """
-        Recomputes peak realized R and current drawdown in R.
-        Governor Rule:
-          - If current_drawdown_r <= -15.0 R: DEFENSIVE MODE (multiplier = 0.5)
-          - If current_drawdown_r >= -5.0 R: NORMAL MODE (multiplier = 1.0)
-        """
         history = db.get_trade_history()
-        # Sort chronologically (oldest to newest) to accurately compute the cumulative equity curve and drawdown
         history_chronological = sorted(history, key=lambda x: (x.get('trade_date', ''), x.get('entry_time', ''), x.get('created_at', '')))
         cum_r = 0.0
         peak_r = 0.0
@@ -91,22 +89,22 @@ class PortfolioManager:
         self.governor_mode = curr_mode
         self.governor_multiplier = curr_mult
 
-        # If state transitioned during execution, notify via Telegram
         if prev_mode != curr_mode and len(history) > 0:
             eff = self.get_effective_risk()
             telegram_service.notify_governor_switch(curr_mode, self.current_drawdown_r, curr_mult, eff)
 
     def get_effective_risk(self) -> float:
-        """Returns the current trade risk in ₹ scaled by the Dynamic Risk Governor."""
-        return round(self.risk_per_trade * self.governor_multiplier, 2)
+        """Returns 2.5% of current equity, scaled by governor if in defensive mode."""
+        base_risk = self.capital * self.dynamic_risk_pct
+        return round(base_risk * self.governor_multiplier, 2)
 
     def calculate_statutory_charges(self, entry_price: float, exit_price: float, qty: int, direction: str = 'BUY') -> float:
         """
         100% Exact Zerodha & Dhan Equity Intraday (MIS) Charges Schedule on NSE:
-        1. Brokerage: min(₹20, 0.03% of turnover) per leg (separate on entry and exit leg)
-        2. STT (Securities Transaction Tax): 0.025% on SELL turnover only
+        1. Brokerage: min(₹20, 0.03% of turnover) per leg
+        2. STT: 0.025% on SELL turnover only
         3. Exchange Turnover Fee: 0.00297% (NSE) of total round-trip turnover
-        4. SEBI Turnover Fee: ₹10 per crore (0.0001% of total round-trip turnover)
+        4. SEBI Turnover Fee: ₹10 per crore (0.0001% of total turnover)
         5. Stamp Duty: 0.003% (₹300 per crore) on BUY turnover only
         6. GST: 18% on (Brokerage + Exchange Turnover Fee + SEBI Fee)
         """
@@ -123,24 +121,14 @@ class PortfolioManager:
 
         turnover = round(buy_val + sell_val, 2)
 
-        # 1. Brokerage (charged on both Buy and Sell legs, max ₹20 per leg)
         buy_brok = min(20.0, round(buy_val * 0.0003, 2))
         sell_brok = min(20.0, round(sell_val * 0.0003, 2))
         brokerage = round(buy_brok + sell_brok, 2)
 
-        # 2. STT (0.025% on sell side only)
         stt = round(sell_val * 0.00025, 2)
-
-        # 3. NSE Exchange transaction fee (0.00297% of total turnover)
         exch_fees = round(turnover * 0.0000297, 2)
-
-        # 4. SEBI turnover charge (₹10/cr = 0.0001% of total turnover)
         sebi_fees = round(turnover * 0.000001, 2)
-
-        # 5. Stamp duty (0.003% on buy side only)
         stamp_duty = round(buy_val * 0.00003, 2)
-
-        # 6. GST (18% on Brokerage + Exchange Fees + SEBI Fees)
         gst = round((brokerage + exch_fees + sebi_fees) * 0.18, 2)
 
         total = round(brokerage + stt + exch_fees + sebi_fees + stamp_duty + gst, 2)
@@ -158,10 +146,9 @@ class PortfolioManager:
             return {'status': 'error', 'message': 'Bot is currently paused.'}
 
         if len(self.positions) >= self.max_open_positions:
-            return {'status': 'error', 'message': f'Max concurrent positions ({self.max_open_positions}) reached.'}
+            return {'status': 'error', 'message': f'Max concurrent positions ({self.max_open_positions}) reached. Pure Leader allows 1 active trade.'}
 
         symbol = signal['symbol']
-        # Check if symbol already open
         for pos in self.positions.values():
             if pos['symbol'] == symbol:
                 return {'status': 'error', 'message': f'Active position already exists for {symbol}.'}
@@ -172,33 +159,42 @@ class PortfolioManager:
         direction = signal['direction']
         sl_dist = abs(entry_price - stop_loss)
 
-        # Enforce strict 0.50% SL floor to prevent micro-SL turnover charge blowout
+        # Enforce strict 0.50% SL floor and 1.50% SL cap as per audited strategy
         min_sl_dist = round(entry_price * 0.0050, 2)
+        max_sl_dist = round(entry_price * 0.0150, 2)
         if sl_dist < min_sl_dist:
             sl_dist = min_sl_dist
             stop_loss = round(entry_price - sl_dist, 2) if direction == 'BUY' else round(entry_price + sl_dist, 2)
-            take_profit = round(entry_price + (sl_dist * self.target_rr), 2) if direction == 'BUY' else round(entry_price - (sl_dist * self.target_rr), 2)
+        elif sl_dist > max_sl_dist:
+            sl_dist = max_sl_dist
+            stop_loss = round(entry_price - sl_dist, 2) if direction == 'BUY' else round(entry_price + sl_dist, 2)
+
+        take_profit = round(entry_price + (sl_dist * self.target_rr), 2) if direction == 'BUY' else round(entry_price - (sl_dist * self.target_rr), 2)
 
         if sl_dist <= 0:
             return {'status': 'error', 'message': 'Invalid Stop Loss price.'}
 
-        # Dynamic Risk Governor Position Sizing:
-        # Normal Mode: 1.0R (₹200) | Defensive Mode: 0.5R (₹100)
         eff_risk = self.get_effective_risk()
         quantity = int(eff_risk / sl_dist)
         if quantity <= 0:
             quantity = 1
 
-        # 5x MIS Margin required
+        # 5x MIS Margin required (SEBI Intraday regulation)
         pos_val = quantity * entry_price
         margin_used = round(pos_val * 0.20, 2)
 
         avail_margin = self.get_available_margin()
         if margin_used > avail_margin:
-            return {
-                'status': 'error',
-                'message': f'Insufficient margin! Needed: ₹{margin_used:,.2f}, Available: ₹{avail_margin:,.2f}'
-            }
+            # Scale down quantity to fit available margin
+            max_qty_margin = int((avail_margin * 5.0) / entry_price)
+            if max_qty_margin <= 0:
+                return {
+                    'status': 'error',
+                    'message': f'Insufficient margin! Needed: ₹{margin_used:,.2f}, Available: ₹{avail_margin:,.2f}'
+                }
+            quantity = max_qty_margin
+            pos_val = quantity * entry_price
+            margin_used = round(pos_val * 0.20, 2)
 
         pos_id = str(uuid.uuid4())[:8]
         entry_time_str = now_ist_str("%H:%M:%S")
@@ -213,22 +209,21 @@ class PortfolioManager:
             'quantity': quantity,
             'margin_used': margin_used,
             'entry_time': entry_time_str,
-            'setup': signal.get('setup', 'Top 14 VWAP Pullback'),
+            'setup': signal.get('setup', 'Velocity Compounder (Pure Leader 4.0R)'),
             'sl_dist': round(sl_dist, 2),
             'current_price': round(entry_price, 2),
             'unrealized_pnl': 0.0,
             'unrealized_r': 0.0,
+            'be_locked': False,
             'created_at': now_ist_datetime_str(),
             'governor_mode': self.governor_mode,
             'risk_amount': eff_risk,
             'target_rr': self.target_rr
         }
 
-        # Save to DB & memory
         self.positions[pos_id] = pos_dict
         db.save_position(pos_dict)
 
-        # Telegram Alert
         telegram_service.notify_order_entry({
             **pos_dict,
             'mode': self.trading_mode,
@@ -238,7 +233,6 @@ class PortfolioManager:
         return {'status': 'success', 'position': pos_dict}
 
     def delete_position(self, pos_id: str):
-        """Deletes position from DB, releases margin, NO P&L counted."""
         if pos_id not in self.positions:
             return {'status': 'error', 'message': 'Position not found'}
 
@@ -248,7 +242,6 @@ class PortfolioManager:
         return {'status': 'success', 'message': f'Position {pos["symbol"]} deleted without P&L impact.'}
 
     def close_position_manually(self, pos_id: str, current_price: float = None):
-        """Exits position at market price, releases margin, records P&L and charges."""
         if pos_id not in self.positions:
             return {'status': 'error', 'message': 'Position not found'}
 
@@ -263,10 +256,8 @@ class PortfolioManager:
         gross_pnl = (exit_p - entry_p) * qty if direction == 'BUY' else (entry_p - exit_p) * qty
         charges = self.calculate_statutory_charges(entry_p, exit_p, qty, direction)
         net_pnl = round(gross_pnl - charges, 2)
-        # R accounting relative to base risk (₹200)
         realized_r = round(net_pnl / self.risk_per_trade, 2)
 
-        # Update capital
         self.capital = round(self.capital + net_pnl, 2)
         db.update_settings({'capital': self.capital})
 
@@ -294,7 +285,7 @@ class PortfolioManager:
         return {'status': 'success', 'trade': trade_record}
 
     def update_live_prices_and_check_triggers(self, quotes: dict):
-        """Updates open positions with live quotes, checks Target / Stop Loss triggers, or 3:10 PM EOD squareoff."""
+        """Updates open positions with live quotes, checks BE Lock (+1.5R), Trailing (+2.5R), Target, SL or 3:00 PM Square-off."""
         closed_trades = []
 
         for pos_id, pos in list(self.positions.items()):
@@ -307,53 +298,74 @@ class PortfolioManager:
             qty = pos['quantity']
             direction = pos['direction']
             sl = pos['stop_loss']
-            # Dynamically ensure take_profit aligns with active target_rr (1:2 RRR)
             sl_dist = abs(entry_p - sl)
-            expected_tp = round(entry_p + (sl_dist * self.target_rr), 2) if direction == 'BUY' else round(entry_p - (sl_dist * self.target_rr), 2)
-            if pos.get('take_profit') != expected_tp:
-                pos['take_profit'] = expected_tp
             tp = pos['take_profit']
 
             # Gross & Net Unrealized P&L
             gross_pnl = (ltp - entry_p) * qty if direction == 'BUY' else (entry_p - ltp) * qty
             pos['unrealized_pnl'] = round(gross_pnl, 2)
-            pos['unrealized_r'] = round(gross_pnl / self.risk_per_trade, 2)
+            pos['unrealized_r'] = round(gross_pnl / max(self.risk_per_trade, 1.0), 2)
 
-            # Check Stop Loss / Target Triggers or 3:00 PM IST EOD Square-off
+            # 1. Check Breakeven Stop Lock (+1.5R)
+            if not pos.get('be_locked', False):
+                be_threshold = (entry_p + (sl_dist * 1.5)) if direction == 'BUY' else (entry_p - (sl_dist * 1.5))
+                if (direction == 'BUY' and ltp >= be_threshold) or (direction == 'SELL' and ltp <= be_threshold):
+                    new_sl = round((entry_p + (sl_dist * 0.10)) if direction == 'BUY' else (entry_p - (sl_dist * 0.10)), 2)
+                    pos['stop_loss'] = new_sl
+                    pos['be_locked'] = True
+                    db.update_position_sl(pos_id, new_sl)
+                    telegram_service.notify_breakeven_locked(pos)
+
+            # 2. Check Dynamic Trailing Stop (+2.5R)
+            trail_threshold = (entry_p + (sl_dist * 2.5)) if direction == 'BUY' else (entry_p - (sl_dist * 2.5))
+            if (direction == 'BUY' and ltp >= trail_threshold) or (direction == 'SELL' and ltp <= trail_threshold):
+                candles = market_service.get_candle_history(sym)
+                if len(candles) >= 3:
+                    recent_low = min(c['low'] for c in candles[-3:])
+                    recent_high = max(c['high'] for c in candles[-3:])
+                    if direction == 'BUY' and recent_low > pos['stop_loss']:
+                        pos['stop_loss'] = round(recent_low, 2)
+                        db.update_position_sl(pos_id, recent_low)
+                        telegram_service.notify_trailing_stop_updated(pos)
+                    elif direction == 'SELL' and recent_high < pos['stop_loss']:
+                        pos['stop_loss'] = round(recent_high, 2)
+                        db.update_position_sl(pos_id, recent_high)
+                        telegram_service.notify_trailing_stop_updated(pos)
+
+            # 3. Check Exits (Pessimistic: Stop Loss checked before Target)
             exit_reason = None
             exit_price = None
 
             now_ist_obj = now_ist()
             time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
-            is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST auto square-off
+            is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST strict square-off
 
             if is_eod_cutoff:
                 exit_reason = 'EOD_AUTO_SQUAREOFF_3PM'
                 exit_price = ltp
             elif direction == 'BUY':
-                if ltp <= sl:
-                    exit_reason = 'STOP_LOSS_HIT'
-                    exit_price = sl
+                if ltp <= pos['stop_loss']:
+                    exit_reason = 'BREAKEVEN_STOP_HIT' if pos.get('be_locked') else 'STOP_LOSS_HIT'
+                    exit_price = pos['stop_loss']
                 elif ltp >= tp:
-                    exit_reason = 'TARGET_REACHED'
+                    exit_reason = 'TARGET_4R_HIT'
                     exit_price = tp
             else: # SELL
-                if ltp >= sl:
-                    exit_reason = 'STOP_LOSS_HIT'
-                    exit_price = sl
+                if ltp >= pos['stop_loss']:
+                    exit_reason = 'BREAKEVEN_STOP_HIT' if pos.get('be_locked') else 'STOP_LOSS_HIT'
+                    exit_price = pos['stop_loss']
                 elif ltp <= tp:
-                    exit_reason = 'TARGET_REACHED'
+                    exit_reason = 'TARGET_4R_HIT'
                     exit_price = tp
 
             if exit_reason:
-                # Trigger Auto Exit
                 self.positions.pop(pos_id)
                 db.delete_position(pos_id)
 
                 charges = self.calculate_statutory_charges(entry_p, exit_price, qty, direction)
                 final_pnl = (exit_price - entry_p) * qty if direction == 'BUY' else (entry_p - exit_price) * qty
                 net_pnl = round(final_pnl - charges, 2)
-                realized_r = round(net_pnl / self.risk_per_trade, 2)
+                realized_r = round(net_pnl / max(self.risk_per_trade, 1.0), 2)
 
                 self.capital = round(self.capital + net_pnl, 2)
                 db.update_settings({'capital': self.capital})
@@ -388,7 +400,6 @@ class PortfolioManager:
         unrealized_pnl = sum(p['unrealized_pnl'] for p in self.positions.values())
         unrealized_r = sum(p['unrealized_r'] for p in self.positions.values())
         
-        # Load trade history stats
         history = db.get_trade_history()
         realized_pnl = sum(t['realized_pnl'] for t in history)
         realized_r = sum(t['realized_r'] for t in history)
@@ -403,7 +414,7 @@ class PortfolioManager:
             'capital': round(self.capital, 2),
             'available_margin': round(avail_margin, 2),
             'used_margin': round(used_margin, 2),
-            'risk_per_trade': round(self.risk_per_trade, 2),
+            'risk_per_trade': round(self.get_effective_risk(), 2),
             'trading_mode': self.trading_mode,
             'bot_active': self.bot_active,
             'max_open_positions': self.max_open_positions,
@@ -418,13 +429,13 @@ class PortfolioManager:
             'total_r': total_r,
             'total_trades': total_trades,
             'win_rate': win_rate,
-            'strategy_name': 'Nifty-Aligned VWAP Pullback + Risk Governor',
+            'strategy_name': 'Velocity Compounder (Pure Leader 4.0R)',
             'governor_mode': self.governor_mode,
             'governor_multiplier': self.governor_multiplier,
             'current_drawdown_r': self.current_drawdown_r,
             'peak_realized_r': self.peak_realized_r,
             'effective_risk': self.get_effective_risk(),
-            'instruments_count': 14,
+            'instruments_count': 29,
             'eod_squareoff_time': '15:00 IST'
         }
 

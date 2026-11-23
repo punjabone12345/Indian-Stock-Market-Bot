@@ -1,0 +1,76 @@
+{
+  "Stress_1_Slippage_Plus_50pct": {
+    "total_return_pct": 221.14,
+    "max_drawdown_pct": -9.79,
+    "cagr_pct": 27.3
+  },
+  "Stress_2_Transaction_Costs_Plus_25pct": {
+    "total_return_pct": 214.76,
+    "max_drawdown_pct": -9.93,
+    "cagr_pct": 26.78
+  },
+  "Stress_3_Transaction_Costs_Plus_50pct": {
+    "total_return_pct": 87.86,
+    "max_drawdown_pct": -10.72,
+    "cagr_pct": 13.94
+  },
+  "Stress_4_Delayed_Entry_1_Bar": {
+    "total_return_pct": 101.43,
+    "max_drawdown_pct": -10.56,
+    "cagr_pct": 15.59
+  },
+  "Stress_5_Delayed_Exit_1_Bar": {
+    "total_return_pct": 134.53,
+    "max_drawdown_pct": -10.43,
+    "cagr_pct": 19.29
+  },
+  "Stress_6_Missed_Trades_10pct": {
+    "total_return_pct": 275.89,
+    "max_drawdown_pct": -9.07,
+    "cagr_pct": 31.52
+  },
+  "Stress_7A_Fixed_0.5pct_No_Breaker": {
+    "total_return_pct": 156.76,
+    "max_drawdown_pct": -8.83,
+    "cagr_pct": 21.55
+  },
+  "Stress_7B_Fixed_1.0pct_No_Breaker": {
+    "total_return_pct": 543.17,
+    "max_drawdown_pct": -16.99,
+    "cagr_pct": 46.98
+  },
+  "Stress_8_Top10_MegaCaps": {
+    "trades": 322,
+    "win_rate_pct": 50.62,
+    "profit_factor": 1.56,
+    "total_R": 100.92
+  },
+  "Stress_8_Next20_Stocks": {
+    "trades": 755,
+    "win_rate_pct": 49.67,
+    "profit_factor": 1.59,
+    "total_R": 252.16
+  },
+  "Stress_9_Yearly_Regimes": {
+    "2022": {
+      "annual_return_pct": 65.79,
+      "max_drawdown_pct": -4.92
+    },
+    "2023": {
+      "annual_return_pct": 30.22,
+      "max_drawdown_pct": -9.1
+    },
+    "2024": {
+      "annual_return_pct": 60.05,
+      "max_drawdown_pct": -6.64
+    },
+    "2025": {
+      "annual_return_pct": 22.82,
+      "max_drawdown_pct": -7.8
+    },
+    "2026": {
+      "annual_return_pct": 24.05,
+      "max_drawdown_pct": -7.0
+    }
+  }
+}

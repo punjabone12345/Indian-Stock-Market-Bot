@@ -35,7 +35,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
       time: '09:15',
       pnl: 0,
       r: 0,
-      capital: 125000.0,
+      capital: 100000.0,
       cum_pnl: 0,
       cum_r: 0,
       drawdown_r: 0,
@@ -59,7 +59,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
 
     allTrades.forEach((t, idx) => {
       const p = Number(t.realized_pnl || 0);
-      const r = Number(t.realized_r !== undefined ? t.realized_r : (p / 200));
+      const r = Number(t.realized_r !== undefined ? t.realized_r : (p / 2500));
       cumP += p;
       cumR += r;
       if (cumR > peakR) peakR = cumR;
@@ -77,7 +77,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
         time: t.exit_time || t.entry_time || '',
         pnl: Math.round(p * 100) / 100,
         r: Math.round(r * 100) / 100,
-        capital: Math.round((125000.0 + cumP) * 100) / 100,
+        capital: Math.round((100000.0 + cumP) * 100) / 100,
         cum_pnl: Math.round(cumP * 100) / 100,
         cum_r: Math.round(cumR * 100) / 100,
         drawdown_r: Math.round(dd * 100) / 100,
@@ -151,7 +151,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
   // Equity calculations
   const allCapitals = points.map(p => p.capital);
   const latestPt = points[points.length - 1];
-  const initialCap = 125000.0;
+  const initialCap = 100000.0;
   const netGain = latestPt.capital - initialCap;
   const returnPct = (netGain / initialCap) * 100;
   const peakCapital = Math.max(...allCapitals);
@@ -162,8 +162,8 @@ export default function StatsTab({ analyticsData, onRefresh }) {
 
   // Filtered Equity Math
   const eqCapitals = filteredEqPoints.map(p => p.capital);
-  let minEqCap = Math.min(...eqCapitals, 125000);
-  let maxEqCap = Math.max(...eqCapitals, 125000);
+  let minEqCap = Math.min(...eqCapitals, 100000);
+  let maxEqCap = Math.max(...eqCapitals, 100000);
   const eqSpan = maxEqCap - minEqCap;
   const eqBuffer = Math.max(300, eqSpan * 0.15);
   minEqCap = Math.floor((minEqCap - eqBuffer) / 500) * 500;
@@ -172,7 +172,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
 
   const getEqX = (i) => pad.left + (filteredEqPoints.length === 1 ? plotW / 2 : (i / (filteredEqPoints.length - 1)) * plotW);
   const getEqY = (val) => pad.top + plotH_EQ - ((val - minEqCap) / (maxEqCap - minEqCap)) * plotH_EQ;
-  const yEqBase = getEqY(125000.0);
+  const yEqBase = getEqY(100000.0);
 
   let eqPathD = `M ${getEqX(0)},${getEqY(filteredEqPoints[0].capital)}`;
   for (let i = 1; i < filteredEqPoints.length; i++) {
@@ -339,7 +339,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
                 <span className="text-xs sm:text-sm font-black text-white truncate block">
                   ₹{latestPt.capital.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
-                <span className="text-[8.5px] text-slate-400 truncate block">vs ₹1,25,000 initial</span>
+                <span className="text-[8.5px] text-slate-400 truncate block">vs ₹1,00,000 initial</span>
               </div>
             </div>
 
@@ -476,7 +476,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
                   </div>
                   <div className="flex items-center justify-between text-slate-300 gap-3">
                     <span className="text-slate-400">Capital:</span>
-                    <span className={`font-black ${hoverEquity.point.capital >= 125000 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    <span className={`font-black ${hoverEquity.point.capital >= 100000 ? 'text-emerald-400' : 'text-amber-400'}`}>
                       ₹{hoverEquity.point.capital.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </span>
                   </div>

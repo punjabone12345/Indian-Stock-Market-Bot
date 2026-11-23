@@ -28,10 +28,10 @@ export default function SettingsTab({
   onTestDhan 
 }) {
   const [formData, setFormData] = useState({
-    capital: settings?.capital || 125000,
-    risk_per_trade: settings?.risk_per_trade || 200,
-    target_rr: settings?.target_rr || 2.0,
-    max_open_positions: settings?.max_open_positions || 6,
+    capital: settings?.capital || 100000,
+    risk_per_trade: settings?.risk_per_trade || 2500,
+    target_rr: settings?.target_rr || 4.0,
+    max_open_positions: settings?.max_open_positions || 1,
     trading_mode: settings?.trading_mode || 'PAPER',
     dhan_client_id: settings?.dhan_client_id || '',
     dhan_access_token: settings?.dhan_access_token || '',
@@ -116,7 +116,7 @@ export default function SettingsTab({
           </h2>
         </div>
         <span className="text-[10px] font-mono text-slate-400 bg-[#0D121F] px-2.5 py-1 rounded-lg border border-white/10">
-          Top 14 VWAP Engine Config
+          Velocity Leader 4.0R Config
         </span>
       </div>
 
@@ -229,7 +229,7 @@ export default function SettingsTab({
                 required
               />
               <span className="text-[9px] text-sky-400 mt-1 block">
-                1:{formData.target_rr} RRR (Champion model: 1:2.0)
+                1:{formData.target_rr} RRR (Velocity Compounder: 1:4.0)
               </span>
             </div>
           </div>
@@ -449,7 +449,7 @@ export default function SettingsTab({
             </button>
           </div>
           <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
-            Purges all closed trade records and active positions from database, restoring starting capital to ₹1,25,000.
+            Purges all closed trade records and active positions from database, restoring starting capital to ₹1,00,000.
           </p>
         </div>
 

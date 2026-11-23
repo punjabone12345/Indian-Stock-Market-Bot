@@ -1,0 +1,13 @@
+{
+  "simulations": 10000,
+  "initial_capital": 100000.0,
+  "median_final_equity": 342051.81,
+  "mean_final_equity": 342182.81,
+  "equity_5th_percentile_worst_case": 272970.99,
+  "equity_95th_percentile_best_case": 410164.62,
+  "median_max_drawdown_pct": 4.92,
+  "max_dd_95th_percentile_pct": 6.5,
+  "max_dd_99th_percentile_pct": 7.04,
+  "worst_single_sim_drawdown_pct": 8.25,
+  "risk_of_ruin_pct": 0.0
+}
