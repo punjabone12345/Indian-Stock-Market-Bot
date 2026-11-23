@@ -2,12 +2,12 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timezone, timedelta
 try:
-    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+    from ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str, get_nse_holiday, is_trading_day
     from database import db
     from market_data import market_service, MEGACAP_29_INSTRUMENTS
     from portfolio import portfolio
 except ImportError:
-    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str
+    from backend.ist_time import now_ist, now_ist_str, now_ist_datetime_str, now_ist_date_str, to_ist_time_str, get_nse_holiday, is_trading_day
     from backend.database import db
     from backend.market_data import market_service, MEGACAP_29_INSTRUMENTS
     from backend.portfolio import portfolio
@@ -216,10 +216,11 @@ class TradeEngine:
             nifty_trend = 0
 
         now_ist_obj = now_ist()
+        holiday = get_nse_holiday(now_ist_obj)
         is_weekday = (0 <= now_ist_obj.weekday() <= 4)
         time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
-        is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30)
-        is_entry_window = is_weekday and (10 * 60 <= time_mins <= 14 * 60 + 45)  # 10:00 AM to 02:45 PM IST
+        is_market_open = is_weekday and (9 * 60 + 15 <= time_mins <= 15 * 60 + 30) and (holiday is None)
+        is_entry_window = is_weekday and (10 * 60 <= time_mins <= 14 * 60 + 45) and (holiday is None)
         is_past_cutoff = is_weekday and (time_mins >= 15 * 60)  # 3:00 PM IST strict square-off
 
         today_date = now_ist_date_str()
@@ -243,7 +244,10 @@ class TradeEngine:
             q = quotes[sym]
             sc = self.calculate_stock_score_and_next_step(sym, q, nifty_trend)
 
-            if not is_market_open:
+            if holiday:
+                sc['signal_ready'] = False
+                sc['next_step'] = f"NSE Closed (Holiday: {holiday}). Live market resumes Wednesday 09:15 AM IST."
+            elif not is_market_open:
                 sc['signal_ready'] = False
                 sc['next_step'] = f"NSE Closed (Recorded LTP: ₹{q['price']:,.2f}). Session starts 09:15 AM."
             elif is_past_cutoff:
