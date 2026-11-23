@@ -228,7 +228,8 @@ class PortfolioManager:
             'governor_mode': self.governor_mode,
             'risk_amount': actual_risk,
             'risk_pct': actual_risk_pct,
-            'target_rr': self.target_rr
+            'target_rr': self.target_rr,
+            'is_simulation': signal.get('is_simulation', False)
         }
 
         self.positions[pos_id] = pos_dict
@@ -349,7 +350,8 @@ class PortfolioManager:
 
             now_ist_obj = now_ist()
             time_mins = now_ist_obj.hour * 60 + now_ist_obj.minute
-            is_eod_cutoff = (time_mins >= 15 * 60)  # 3:00 PM IST strict square-off
+            # Strict 3:00 PM IST square-off during market session (15:00 - 15:30 IST) for live trades
+            is_eod_cutoff = (15 * 60 <= time_mins <= 15 * 60 + 30) and not pos.get('is_simulation', False)
 
             if is_eod_cutoff:
                 exit_reason = 'EOD_AUTO_SQUAREOFF_3PM'

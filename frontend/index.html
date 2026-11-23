@@ -1867,7 +1867,7 @@ Trigger Condition:
 
       const isWeekday = day >= 1 && day <= 5;
       const isMarketHours = timeInMinutes >= (9 * 60 + 15) && timeInMinutes <= (15 * 60 + 30);
-      const isPast3PM = isWeekday && (timeInMinutes >= (15 * 60)); // Strict 3:00 PM IST EOD Square-off
+      const isPast3PM = isWeekday && (timeInMinutes >= (15 * 60) && timeInMinutes <= (15 * 60 + 30)); // Strict 3:00 PM IST EOD Square-off window
 
       return {
         isOpen: isWeekday && isMarketHours && !isPast3PM,
@@ -2176,7 +2176,7 @@ Trigger Condition:
           }
           const riskInput = document.getElementById('settingRisk');
           if (riskInput && document.activeElement !== riskInput) {
-            riskInput.value = `₹${Math.round(userState.riskPerTrade)} (${((userState.riskPerTrade / userState.capital) * 100).toFixed(1)}%)`;
+            riskInput.value = `90% (₹${Math.round(userState.capital * 0.90).toLocaleString('en-IN')} / 4.5x)`;
           }
           if (Array.isArray(data.summary.positions)) {
             if (data.summary.positions.length > 0) {
@@ -2207,44 +2207,47 @@ Trigger Condition:
         // 4. Auto Square-off any open intraday positions before 3:00 PM IST
         const marketStatus = getMarketStatus();
         if (marketStatus.isPast3PM && userState.positions && userState.positions.length > 0) {
-          userState.positions.forEach(pos => {
-            const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty, pos.side || pos.direction);
-            const grossPnl = pos.currentPnl;
-            const charges = chg.totalCharges;
-            const netPnl = parseFloat((grossPnl - charges).toFixed(2));
-            const rMultiple = (netPnl / (userState.riskPerTrade || 2500)).toFixed(2);
+          const liveTrades = userState.positions.filter(p => !p.isSimulation);
+          if (liveTrades.length > 0) {
+            liveTrades.forEach(pos => {
+              const chg = calculateIndianTradingCharges(pos.entry, pos.currentLtp, pos.qty, pos.side || pos.direction);
+              const grossPnl = pos.currentPnl;
+              const charges = chg.totalCharges;
+              const netPnl = parseFloat((grossPnl - charges).toFixed(2));
+              const rMultiple = (netPnl / (userState.riskPerTrade || 2500)).toFixed(2);
 
-            const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
-            if (!userState.ledger[0] || (userState.ledger[0].date !== "TODAY" && userState.ledger[0].fullDate !== todayIso)) {
-              userState.ledger.unshift({ date: "TODAY", fullDate: todayIso, dayPnl: "+₹0.00", trades: [] });
-            }
+              const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+              if (!userState.ledger[0] || (userState.ledger[0].date !== "TODAY" && userState.ledger[0].fullDate !== todayIso)) {
+                userState.ledger.unshift({ date: "TODAY", fullDate: todayIso, dayPnl: "+₹0.00", trades: [] });
+              }
 
-            userState.ledger[0].trades.unshift({
-              id: "tr_eod_" + Date.now(),
-              symbol: pos.symbol,
-              side: pos.side,
-              qty: pos.qty,
-              entry: pos.entry,
-              exit: pos.currentLtp,
-              sl: pos.sl,
-              tp: pos.tp,
-              pnl: `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`,
-              grossPnl: grossPnl,
-              charges: charges,
-              netPnl: netPnl,
-              rMultiple: `${netPnl >= 0 ? '+' : ''}${rMultiple}R`,
-              exitReason: "3:00 PM EOD Auto-Squareoff",
-              time: "03:00 PM",
-              marginUsed: pos.marginLocked,
-              turnover: pos.entry * pos.qty
+              userState.ledger[0].trades.unshift({
+                id: "tr_eod_" + Date.now(),
+                symbol: pos.symbol,
+                side: pos.side,
+                qty: pos.qty,
+                entry: pos.entry,
+                exit: pos.currentLtp,
+                sl: pos.sl,
+                tp: pos.tp,
+                pnl: `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`,
+                grossPnl: grossPnl,
+                charges: charges,
+                netPnl: netPnl,
+                rMultiple: `${netPnl >= 0 ? '+' : ''}${rMultiple}R`,
+                exitReason: "3:00 PM EOD Auto-Squareoff",
+                time: "03:00 PM",
+                marginUsed: pos.marginLocked,
+                turnover: pos.entry * pos.qty
+              });
             });
-          });
-          userState.positions = [];
-          renderPositions();
-          renderLedger();
-          renderAnalyticsCurves();
-          recalculateMarginsAndPnl();
-          showToast("⏰ 03:00 PM IST Reached: All intraday positions auto-squared off.");
+            userState.positions = userState.positions.filter(p => p.isSimulation);
+            renderPositions();
+            renderLedger();
+            renderAnalyticsCurves();
+            recalculateMarginsAndPnl();
+            showToast("⏰ 03:00 PM IST Reached: All intraday positions auto-squared off.");
+          }
         }
 
         recalculateMarginsAndPnl();
@@ -2726,6 +2729,7 @@ Trigger Condition:
         marginLocked: marginLocked,
         currentPnl: 0.00,
         rMultiple: 0.00,
+        isSimulation: true,
         time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }) + ' IST'
       };
 
@@ -2783,9 +2787,9 @@ Trigger Condition:
         userState.usedMargin = 0;
         userState.netDayPnl = 0;
         userState.netDayR = 0;
-        userState.riskPerTrade = 2500;
+        userState.riskPerTrade = 6210;
         if (document.getElementById('settingCapital')) document.getElementById('settingCapital').value = '1,00,000';
-        if (document.getElementById('settingRisk')) document.getElementById('settingRisk').value = '₹2500 (2.5%)';
+        if (document.getElementById('settingRisk')) document.getElementById('settingRisk').value = '90% (₹90,000 / 4.5x)';
         
         dispatchTelegramAlert("⚠️ *FACTORY RESET COMPLETED*\n\nAccount balance reset to ₹1,00,000. All positions and trade history wiped.");
         closeActionModal();

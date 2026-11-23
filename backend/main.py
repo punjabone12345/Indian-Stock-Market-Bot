@@ -572,7 +572,8 @@ def simulate_paper_position(payload: dict = Body(None)):
         'entry_price': cur_p,
         'stop_loss': sl_price,
         'take_profit': tp_price,
-        'setup': 'Velocity Compounder (Pure Leader 4.0R)'
+        'setup': 'Velocity Compounder (Pure 90% Margin)',
+        'is_simulation': True
     }
 
     res = portfolio.open_position(signal)
