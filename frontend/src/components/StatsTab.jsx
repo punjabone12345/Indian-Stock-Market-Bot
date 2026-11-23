@@ -503,7 +503,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-4 border-t-2 border-dashed border-cyan-400/70 inline-block"></span>
-                <span className="text-slate-300">Initial Capital (₹1,25,000.00)</span>
+                <span className="text-slate-300">Initial Capital (₹1,00,000.00)</span>
               </div>
             </div>
           </div>
@@ -522,7 +522,7 @@ export default function StatsTab({ analyticsData, onRefresh }) {
               <div className="space-y-1 mt-2 text-[9.5px]">
                 <div className="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
                   <span className="text-slate-400">Initial Capital</span>
-                  <span className="font-bold text-white">₹1,25,000.00</span>
+                  <span className="font-bold text-white">₹1,00,000.00</span>
                 </div>
                 <div className="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
                   <span className="text-slate-400">Current Equity</span>

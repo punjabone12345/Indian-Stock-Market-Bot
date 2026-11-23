@@ -340,7 +340,7 @@ export default function App() {
               <span>Dhan Fast-Order Ready</span>
             </span>
             <span>•</span>
-            <span className="text-sky-400 font-bold">1:2 RRR • Dynamic Risk Governor</span>
+            <span className="text-sky-400 font-bold">1:4.0 RRR • Breakeven Lock @ +1.5R</span>
           </div>
 
         </div>

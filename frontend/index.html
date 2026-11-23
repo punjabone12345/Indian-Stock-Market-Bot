@@ -310,7 +310,7 @@
         <span class="text-[8px] sm:text-[9.5px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
       </div>
-      <div class="text-[12.5px] sm:text-base md:text-lg font-black text-white tracking-tight mt-1 truncate tabular-nums" id="availMarginDisplay">₹1,25,000</div>
+      <div class="text-[12.5px] sm:text-base md:text-lg font-black text-white tracking-tight mt-1 truncate tabular-nums" id="availMarginDisplay">₹1,00,000</div>
       <span class="text-[7.5px] sm:text-[8px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
     </div>
 
@@ -357,12 +357,27 @@
 <!-- TAB 1: WATCHLIST / MARKETWATCH -->
 <section class="p-3 space-y-2.5" id="tab-watchlist">
 <!-- Watchlist Header -->
-<div class="flex items-center justify-between pt-0.5 px-1">
-<div class="flex items-center gap-1.5">
-<span class="text-xs font-black text-slate-200 font-mono tracking-wide">29 Mega-Cap Velocity Marketwatch</span>
-<span class="text-[8.5px] px-2 py-0.5 rounded-full bg-cyanAccent/10 text-cyanAccent font-mono border border-cyanAccent/20 font-semibold">14 Champions • 5m MIS</span>
+<div class="flex items-center justify-between pt-0.5 px-1 flex-wrap gap-2">
+<div class="flex items-center gap-2">
+  <span class="text-xs font-black text-slate-200 font-mono tracking-wide">29 Mega-Cap Velocity Marketwatch</span>
+  <span class="text-[8.5px] px-2 py-0.5 rounded-full bg-cyanAccent/15 text-cyanAccent font-mono border border-cyanAccent/30 font-bold">29 Liquid Mega-Caps • 10:00 AM RS Leader</span>
 </div>
-<span class="text-[9.5px] font-mono text-slate-400">NSE Intraday</span>
+<div class="flex items-center gap-2">
+  <div class="bg-surfaceLow p-0.5 rounded-lg border border-white/10 flex items-center">
+    <button id="viewCardsBtn" onclick="setWatchlistView('cards')" class="px-2 py-1 rounded-md text-[9.5px] font-mono font-bold bg-cyanAccent/20 text-cyanAccent border border-cyanAccent/30 flex items-center gap-1 transition-all cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+      <span>Cards</span>
+    </button>
+    <button id="viewTableBtn" onclick="setWatchlistView('table')" class="px-2 py-1 rounded-md text-[9.5px] font-mono font-bold text-slate-400 hover:text-white flex items-center gap-1 transition-all cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+      <span>Table</span>
+    </button>
+  </div>
+  <span class="text-[9.5px] font-mono text-slate-400 flex items-center gap-1">
+    <span class="w-1.5 h-1.5 rounded-full bg-emeraldBull animate-ping"></span>
+    <span>NSE Cash Real-Time</span>
+  </span>
+</div>
 </div>
 <!-- 6 High-Density Instrument Cards Container -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="watchlistContainer">
@@ -372,7 +387,7 @@
 <!-- TAB 2: POSITIONS TAB -->
 <section class="p-3.5 space-y-3 hidden" id="tab-positions">
 <div class="flex items-center justify-between pt-1 px-1">
-<span class="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-mono">Running Trades (5x MIS)</span>
+<span class="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-mono">Running Trades (5x MIS • Max 1 Active)</span>
 <div class="flex items-center gap-1.5">
 <button class="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/25 hover:bg-cyanAccent/20 transition-all flex items-center gap-1 font-semibold" onclick="demoSimulateTrade()">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" aria-hidden="true" class="lucide lucide-plus w-3 h-3"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Simulate Trigger
@@ -417,7 +432,7 @@
 </div>
 <div class="glass-panel p-3.5 rounded-2xl relative overflow-hidden">
 <div class="absolute -right-4 -top-4 w-16 h-16 bg-cyanAccent/10 rounded-full blur-xl"></div>
-<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">WIN RATE (1:2 RRR)</span>
+<span class="text-[9px] text-slate-400 block font-sans font-bold uppercase tracking-wider mb-1">WIN RATE (1:4.0 RRR)</span>
 <div class="text-base font-black text-cyanAccent" id="analyticsWinRateDisplay">0.0%</div>
 <span class="text-[10px] text-slate-400 mt-0.5 block font-medium" id="analyticsWinLossSub">0 Wins / 0 Losses</span>
 </div>
@@ -481,7 +496,7 @@
           </div>
           <div class="min-w-0">
             <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">Total Return</span>
-            <span class="text-xs sm:text-sm font-black text-emeraldBull truncate block" id="kpiTotalReturnVal">₹1,25,000</span>
+            <span class="text-xs sm:text-sm font-black text-emeraldBull truncate block" id="kpiTotalReturnVal">+₹0.00</span>
             <span class="text-[8.5px] font-bold text-emeraldBull flex items-center gap-0.5" id="kpiTotalReturnPct">▲ +5.12%</span>
           </div>
         </div>
@@ -494,7 +509,7 @@
           <div class="min-w-0">
             <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">Current Equity</span>
             <span class="text-xs sm:text-sm font-black text-white truncate block" id="kpiCurrentEquityVal">₹1,22,793.16</span>
-            <span class="text-[8.5px] text-slate-400 truncate block">vs ₹1,25,000 initial</span>
+            <span class="text-[8.5px] text-slate-400 truncate block">vs ₹1,00,000 initial</span>
           </div>
         </div>
 
@@ -505,7 +520,7 @@
           </div>
           <div class="min-w-0">
             <span class="text-[9px] text-slate-400 block uppercase tracking-wider font-bold">All-Time Peak</span>
-            <span class="text-xs sm:text-sm font-black text-emeraldBull truncate block" id="kpiAllTimePeakVal">₹1,25,000</span>
+            <span class="text-xs sm:text-sm font-black text-emeraldBull truncate block" id="kpiAllTimePeakVal">₹1,00,000</span>
             <span class="text-[8.5px] font-bold text-emeraldBull flex items-center gap-0.5" id="kpiAllTimePeakPct">▲ +0.00%</span>
           </div>
         </div>
@@ -558,7 +573,7 @@
           </div>
           <div class="flex items-center gap-1.5">
             <span class="w-4 border-t-2 border-dashed border-cyanAccent/70 inline-block"></span>
-            <span class="text-slate-300">Initial Capital (<span id="eqLegendInitialCap">₹1,25,000.00</span>)</span>
+            <span class="text-slate-300">Initial Capital (<span id="eqLegendInitialCap">₹1,00,000.00</span>)</span>
           </div>
         </div>
       </div>
@@ -577,7 +592,7 @@
           <div class="space-y-1 mt-2 text-[9.5px]">
             <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
               <span class="text-slate-400">Initial Capital</span>
-              <span class="font-bold text-white" id="statInitialCap">₹1,25,000.00</span>
+              <span class="font-bold text-white" id="statInitialCap">₹1,00,000.00</span>
             </div>
             <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
               <span class="text-slate-400">Current Equity</span>
@@ -589,7 +604,7 @@
             </div>
             <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
               <span class="text-slate-400">Absolute Profit</span>
-              <span class="font-bold text-emeraldBull" id="statAbsoluteProfit">₹1,25,000</span>
+              <span class="font-bold text-emeraldBull" id="statAbsoluteProfit">+₹0.00</span>
             </div>
             <div class="flex items-center justify-between py-0.5 border-b border-white/[0.04]">
               <span class="text-slate-400">Max Drawdown</span>
@@ -869,7 +884,7 @@ Fast 1-tap Android install with offline caching and zero lag.
 <div class="grid grid-cols-2 gap-2.5 pt-1 font-mono">
 <div>
 <label class="text-[9px] text-slate-400 uppercase tracking-wider block mb-1 font-sans">CAPITAL (₹)</label>
-<input class="w-full rounded-xl px-3 py-2 text-xs text-white outline-none font-bold tabular-nums" id="settingCapital" type="text" value="1,25,000" onchange="updateCapitalAndRiskSettings()" style="background-color: #0A0F1D !important; color: #FFFFFF !important; border: 1px solid rgba(255, 255, 255, 0.15) !important;">
+<input class="w-full rounded-xl px-3 py-2 text-xs text-white outline-none font-bold tabular-nums" id="settingCapital" type="text" value="1,00,000" onchange="updateCapitalAndRiskSettings()" style="background-color: #0A0F1D !important; color: #FFFFFF !important; border: 1px solid rgba(255, 255, 255, 0.15) !important;">
 </div>
 <div>
 <label class="text-[9px] text-slate-400 uppercase tracking-wider block mb-1 font-sans">RISK / TRADE (1R)</label>
@@ -940,7 +955,7 @@ Fast 1-tap Android install with offline caching and zero lag.
 <span class="text-xs font-bold">DANGER ZONE</span>
 </div>
 <p class="text-[10px] text-slate-400 font-mono leading-relaxed">
-Clears local cache, orders, and resets capital to ₹1,25,000.
+Clears local cache, orders, and resets capital to ₹1,00,000.
 </p>
 <button class="w-full py-2.5 rounded-xl bg-roseBear/20 text-roseBear border border-roseBear/30 font-mono text-xs font-bold hover:bg-roseBear/30 active:scale-98 transition-all" onclick="openFactoryResetModal()">
 FACTORY RESET ENGINE
@@ -1256,21 +1271,36 @@ Trigger Condition:
     // TRADINGVIEW-STYLE INSTRUMENT LOGOS
     // ==============================================
         const STOCK_LOGOS = {
-      RELIANCE: `<div class="w-8 h-8 rounded-full bg-[#002D62] border border-blue-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[10px]">RIL</div>`,
-      INDUSINDBK: `<div class="w-8 h-8 rounded-full bg-[#800000] border border-red-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">IIB</div>`,
-      LT: `<div class="w-8 h-8 rounded-full bg-[#F59E0B] border border-amber-300/40 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-black text-[11px]">L&T</div>`,
-      ADANIENT: `<div class="w-8 h-8 rounded-full bg-[#1E293B] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[9px]">ADANI</div>`,
-      TATAMOTORS: `<div class="w-8 h-8 rounded-full bg-[#003B73] border border-blue-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TATA</div>`,
-      SUNPHARMA: `<div class="w-8 h-8 rounded-full bg-[#C2410C] border border-amber-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-amber-200 text-[9px]">SUN</div>`,
-      WIPRO: `<div class="w-8 h-8 rounded-full bg-[#047857] border border-emerald-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-emerald-300 text-[9px]">WIPRO</div>`,
-      JSWSTEEL: `<div class="w-8 h-8 rounded-full bg-[#B91C1C] border border-red-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">JSW</div>`,
-      TATASTEEL: `<div class="w-8 h-8 rounded-full bg-[#003B73] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TISCO</div>`,
-      BAJFINANCE: `<div class="w-8 h-8 rounded-full bg-[#0369A1] border border-cyan-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">BAJAJ</div>`,
-      SBIN: `<div class="w-8 h-8 rounded-full bg-[#0284C7] border border-sky-300/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[10px]">SBI</div>`,
-      ONGC: `<div class="w-8 h-8 rounded-full bg-[#991B1B] border border-amber-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-amber-300 text-[9px]">ONGC</div>`,
-      TCS: `<div class="w-8 h-8 rounded-full bg-[#0F172A] border border-sky-400/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[10px]">TCS</div>`,
-      MARUTI: `<div class="w-8 h-8 rounded-full bg-[#002B7F] border border-red-500/30 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">MSIL</div>`
-    };
+  RELIANCE: `<div class="w-8 h-8 rounded-full bg-[#002D62] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[9px]">RIL</div>`,
+  TCS: `<div class="w-8 h-8 rounded-full bg-[#0F172A] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[9px]">TCS</div>`,
+  HDFCBANK: `<div class="w-8 h-8 rounded-full bg-[#004C8F] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">HDFC</div>`,
+  ICICIBANK: `<div class="w-8 h-8 rounded-full bg-[#800000] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">ICICI</div>`,
+  SBIN: `<div class="w-8 h-8 rounded-full bg-[#0284C7] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">SBI</div>`,
+  INFY: `<div class="w-8 h-8 rounded-full bg-[#007CC3] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">INFY</div>`,
+  LT: `<div class="w-8 h-8 rounded-full bg-[#F59E0B] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-black text-[9px]">L&T</div>`,
+  TATASTEEL: `<div class="w-8 h-8 rounded-full bg-[#003B73] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TATA</div>`,
+  BAJFINANCE: `<div class="w-8 h-8 rounded-full bg-[#0369A1] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">BAJAJ</div>`,
+  MARUTI: `<div class="w-8 h-8 rounded-full bg-[#002B7F] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">MSIL</div>`,
+  BHARTIARTL: `<div class="w-8 h-8 rounded-full bg-[#E11D48] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">AIRTEL</div>`,
+  WIPRO: `<div class="w-8 h-8 rounded-full bg-[#047857] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-emerald-300 text-[9px]">WIPRO</div>`,
+  GRASIM: `<div class="w-8 h-8 rounded-full bg-[#475569] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">GRASIM</div>`,
+  SUNPHARMA: `<div class="w-8 h-8 rounded-full bg-[#C2410C] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-amber-200 text-[9px]">SUN</div>`,
+  INDUSINDBK: `<div class="w-8 h-8 rounded-full bg-[#991B1B] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">IIB</div>`,
+  TECHM: `<div class="w-8 h-8 rounded-full bg-[#6366F1] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TECHM</div>`,
+  HCLTECH: `<div class="w-8 h-8 rounded-full bg-[#0D9488] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">HCL</div>`,
+  KOTAKBANK: `<div class="w-8 h-8 rounded-full bg-[#DC2626] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">KOTAK</div>`,
+  AXISBANK: `<div class="w-8 h-8 rounded-full bg-[#9D174D] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">AXIS</div>`,
+  ONGC: `<div class="w-8 h-8 rounded-full bg-[#991B1B] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-amber-300 text-[9px]">ONGC</div>`,
+  NTPC: `<div class="w-8 h-8 rounded-full bg-[#1E40AF] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">NTPC</div>`,
+  POWERGRID: `<div class="w-8 h-8 rounded-full bg-[#047857] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">PGRID</div>`,
+  COALINDIA: `<div class="w-8 h-8 rounded-full bg-[#713F12] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">CIL</div>`,
+  JSWSTEEL: `<div class="w-8 h-8 rounded-full bg-[#B91C1C] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">JSW</div>`,
+  ITC: `<div class="w-8 h-8 rounded-full bg-[#D97706] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">ITC</div>`,
+  HINDUNILVR: `<div class="w-8 h-8 rounded-full bg-[#1D4ED8] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">HUL</div>`,
+  TITAN: `<div class="w-8 h-8 rounded-full bg-[#B45309] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">TITAN</div>`,
+  ADANIENT: `<div class="w-8 h-8 rounded-full bg-[#1E293B] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-sky-400 text-[9px]">ADANI</div>`,
+  ULTRACEMCO: `<div class="w-8 h-8 rounded-full bg-[#475569] border border-white/20 flex items-center justify-center shrink-0 shadow-sm overflow-hidden font-black text-white text-[9px]">ULTRA</div>`,
+};
 
     // ==============================================
     // EXACT INDIAN STATUTORY CHARGES ENGINE (100% ZERODHA & DHAN EQUITY INTRADAY MIS)
@@ -1331,237 +1361,477 @@ Trigger Condition:
     }
 
         const CROWN_6_DATA = [
-      {
-        symbol: "RELIANCE",
-        name: "Reliance Industries Ltd",
-        sector: "Energy • Heavyweight",
-        ltp: 1344.80,
-        change: 5.10,
-        pChange: 0.38,
-        probScore: 84,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Bounced off VWAP support. Monitoring for bullish pullback continuation above EMA9.",
-        ema9: 1341.20,
-        vwap: 1339.80,
-        atr14: 14.80,
-        margin5x: "₹268.96 / sh"
-      },
-      {
-        symbol: "INDUSINDBK",
-        name: "IndusInd Bank Ltd",
-        sector: "Banking & Finance",
-        ltp: 914.55,
-        change: 0.15,
-        pChange: 0.02,
-        probScore: 78,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Consolidating above EMA9 (₹912.40). Awaiting expansion volume bar.",
-        ema9: 912.40,
-        vwap: 911.80,
-        atr14: 11.20,
-        margin5x: "₹182.91 / sh"
-      },
-      {
-        symbol: "LT",
-        name: "Larsen & Toubro Ltd",
-        sector: "Infrastructure • Heavyweight",
-        ltp: 4140.00,
-        change: -3.80,
-        pChange: -0.09,
-        probScore: 82,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Testing EMA9 support zone (₹4,136.50). Watching for green candle confirmation.",
-        ema9: 4136.50,
-        vwap: 4132.00,
-        atr14: 38.50,
-        margin5x: "₹828.00 / sh"
-      },
-      {
-        symbol: "ADANIENT",
-        name: "Adani Enterprises Ltd",
-        sector: "Diversified Conglomerate",
-        ltp: 2659.00,
-        change: -29.00,
-        pChange: -1.08,
-        probScore: 75,
-        probCategory: "Bearish Momentum",
-        probColor: "rose",
-        triggerNote: "Below VWAP (₹2,674.00). Waiting for pullback rally toward EMA9.",
-        ema9: 2668.00,
-        vwap: 2674.00,
-        atr14: 34.00,
-        margin5x: "₹531.80 / sh"
-      },
-      {
-        symbol: "TATAMOTORS",
-        name: "Tata Motors Limited",
-        sector: "Automobiles",
-        ltp: 428.25,
-        change: -5.30,
-        pChange: -1.22,
-        probScore: 76,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Testing EMA9 support (₹427.10). Inversion FVG retest confirmed.",
-        ema9: 427.10,
-        vwap: 429.40,
-        atr14: 6.80,
-        margin5x: "₹85.65 / sh"
-      },
-      {
-        symbol: "SUNPHARMA",
-        name: "Sun Pharma Ind",
-        sector: "Pharma • Healthcare",
-        ltp: 1867.50,
-        change: -12.50,
-        pChange: -0.66,
-        probScore: 79,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Pullback into EMA9 support zone. Monitoring for bounce trigger.",
-        ema9: 1871.20,
-        vwap: 1874.50,
-        atr14: 21.40,
-        margin5x: "₹373.50 / sh"
-      },
-      {
-        symbol: "WIPRO",
-        name: "Wipro Limited",
-        sector: "IT & Software",
-        ltp: 193.54,
-        change: -1.06,
-        pChange: -0.54,
-        probScore: 72,
-        probCategory: "Consolidating",
-        probColor: "slate",
-        triggerNote: "Consolidating between EMA9 and VWAP. Awaiting directional breakout.",
-        ema9: 194.10,
-        vwap: 194.50,
-        atr14: 2.40,
-        margin5x: "₹38.71 / sh"
-      },
-      {
-        symbol: "JSWSTEEL",
-        name: "JSW Steel Ltd",
-        sector: "Metals & Mining",
-        ltp: 1334.60,
-        change: -13.40,
-        pChange: -0.99,
-        probScore: 77,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Retesting VWAP anchor line (₹1,338.00). Watching for rejection wick.",
-        ema9: 1339.50,
-        vwap: 1338.00,
-        atr14: 16.20,
-        margin5x: "₹266.92 / sh"
-      },
-      {
-        symbol: "TATASTEEL",
-        name: "Tata Steel Ltd",
-        sector: "Metals & Mining",
-        ltp: 182.26,
-        change: -4.42,
-        pChange: -2.37,
-        probScore: 74,
-        probCategory: "Bearish Momentum",
-        probColor: "rose",
-        triggerNote: "Bearish momentum below VWAP (₹184.50). Waiting for pullback rally toward EMA9.",
-        ema9: 183.40,
-        vwap: 184.50,
-        atr14: 2.80,
-        margin5x: "₹36.45 / sh"
-      },
-      {
-        symbol: "BAJFINANCE",
-        name: "Bajaj Finance Ltd",
-        sector: "NBFC & Lending",
-        ltp: 1110.00,
-        change: -7.00,
-        pChange: -0.63,
-        probScore: 81,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Dip into EMA9 support zone. Waiting for bullish green candle confirmation.",
-        ema9: 1112.50,
-        vwap: 1114.00,
-        atr14: 15.00,
-        margin5x: "₹222.00 / sh"
-      },
-      {
-        symbol: "SBIN",
-        name: "State Bank of India",
-        sector: "PSU Banking",
-        ltp: 1090.50,
-        change: 10.50,
-        pChange: 0.97,
-        probScore: 86,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Strong bullish trend above VWAP (₹1,085.00). Retesting EMA9 support.",
-        ema9: 1088.00,
-        vwap: 1085.00,
-        atr14: 12.80,
-        margin5x: "₹218.10 / sh"
-      },
-      {
-        symbol: "ONGC",
-        name: "Oil & Natural Gas Corp",
-        sector: "Energy & Utilities",
-        ltp: 226.99,
-        change: 1.99,
-        pChange: 0.88,
-        probScore: 83,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Bounced off VWAP support. Monitoring for expansion break.",
-        ema9: 225.80,
-        vwap: 225.20,
-        atr14: 3.10,
-        margin5x: "₹45.40 / sh"
-      },
-      {
-        symbol: "TCS",
-        name: "Tata Consultancy Services",
-        sector: "IT Services",
-        ltp: 2405.00,
-        change: -2.50,
-        pChange: -0.10,
-        probScore: 80,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Bounced off EMA9 support (₹2,402.15). Waiting for expansion candle.",
-        ema9: 2402.15,
-        vwap: 2404.50,
-        atr14: 28.50,
-        margin5x: "₹481.00 / sh"
-      },
-      {
-        symbol: "MARUTI",
-        name: "Maruti Suzuki India",
-        sector: "Automobiles",
-        ltp: 12571.00,
-        change: -283.00,
-        pChange: -2.20,
-        probScore: 82,
-        probCategory: "Institutional Pullback",
-        probColor: "emerald",
-        triggerNote: "Testing EMA9 resistance zone (₹12,620.00). Monitoring for bearish rejection.",
-        ema9: 12620.00,
-        vwap: 12680.00,
-        atr14: 165.00,
-        margin5x: "₹2,514.20 / sh"
-      }
-    ];
+  {
+    symbol: "RELIANCE",
+    name: "Reliance Industries",
+    sector: "Energy • Heavyweight",
+    ltp: 1344.8,
+    change: 6.05,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1339.42,
+    vwap: 1338.08,
+    atr14: 16.14,
+    margin5x: "₹268.96 / sh"
+  },
+  {
+    symbol: "TCS",
+    name: "Tata Consultancy Services",
+    sector: "IT Services • Heavyweight",
+    ltp: 2465.0,
+    change: 11.09,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 2455.14,
+    vwap: 2452.68,
+    atr14: 29.58,
+    margin5x: "₹493.00 / sh"
+  },
+  {
+    symbol: "HDFCBANK",
+    name: "HDFC Bank Ltd",
+    sector: "Banking • Heavyweight",
+    ltp: 1740.0,
+    change: 7.83,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1733.04,
+    vwap: 1731.3,
+    atr14: 20.88,
+    margin5x: "₹348.00 / sh"
+  },
+  {
+    symbol: "ICICIBANK",
+    name: "ICICI Bank Ltd",
+    sector: "Banking & Finance",
+    ltp: 1397.0,
+    change: 6.29,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1391.41,
+    vwap: 1390.02,
+    atr14: 16.76,
+    margin5x: "₹279.40 / sh"
+  },
+  {
+    symbol: "SBIN",
+    name: "State Bank of India",
+    sector: "PSU Banking",
+    ltp: 962.6,
+    change: 4.33,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 958.75,
+    vwap: 957.79,
+    atr14: 11.55,
+    margin5x: "₹192.52 / sh"
+  },
+  {
+    symbol: "INFY",
+    name: "Infosys Limited",
+    sector: "IT Services",
+    ltp: 1850.0,
+    change: 8.32,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1842.6,
+    vwap: 1840.75,
+    atr14: 22.2,
+    margin5x: "₹370.00 / sh"
+  },
+  {
+    symbol: "LT",
+    name: "Larsen & Toubro Ltd",
+    sector: "Infrastructure • Heavyweight",
+    ltp: 3627.1,
+    change: 16.32,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 3612.59,
+    vwap: 3608.96,
+    atr14: 43.53,
+    margin5x: "₹725.42 / sh"
+  },
+  {
+    symbol: "TATASTEEL",
+    name: "Tata Steel Ltd",
+    sector: "Metals & Mining",
+    ltp: 175.5,
+    change: 0.79,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 174.8,
+    vwap: 174.62,
+    atr14: 2.11,
+    margin5x: "₹35.10 / sh"
+  },
+  {
+    symbol: "BAJFINANCE",
+    name: "Bajaj Finance Ltd",
+    sector: "NBFC & Lending",
+    ltp: 6850.0,
+    change: 30.82,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 6822.6,
+    vwap: 6815.75,
+    atr14: 82.2,
+    margin5x: "₹1,370.00 / sh"
+  },
+  {
+    symbol: "MARUTI",
+    name: "Maruti Suzuki India",
+    sector: "Automobiles",
+    ltp: 11489.0,
+    change: 51.7,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 11443.04,
+    vwap: 11431.56,
+    atr14: 137.87,
+    margin5x: "₹2,297.80 / sh"
+  },
+  {
+    symbol: "BHARTIARTL",
+    name: "Bharti Airtel Ltd",
+    sector: "Telecommunications",
+    ltp: 1905.0,
+    change: 8.57,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1897.38,
+    vwap: 1895.47,
+    atr14: 22.86,
+    margin5x: "₹381.00 / sh"
+  },
+  {
+    symbol: "WIPRO",
+    name: "Wipro Limited",
+    sector: "IT Services",
+    ltp: 550.0,
+    change: 2.47,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 547.8,
+    vwap: 547.25,
+    atr14: 6.6,
+    margin5x: "₹110.00 / sh"
+  },
+  {
+    symbol: "GRASIM",
+    name: "Grasim Industries",
+    sector: "Materials & Cement",
+    ltp: 2920.0,
+    change: 13.14,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 2908.32,
+    vwap: 2905.4,
+    atr14: 35.04,
+    margin5x: "₹584.00 / sh"
+  },
+  {
+    symbol: "SUNPHARMA",
+    name: "Sun Pharma Ind",
+    sector: "Healthcare & Pharma",
+    ltp: 1758.8,
+    change: 7.91,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1751.76,
+    vwap: 1750.01,
+    atr14: 21.11,
+    margin5x: "₹351.76 / sh"
+  },
+  {
+    symbol: "INDUSINDBK",
+    name: "IndusInd Bank Ltd",
+    sector: "Banking & Finance",
+    ltp: 877.0,
+    change: 3.95,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 873.49,
+    vwap: 872.62,
+    atr14: 10.52,
+    margin5x: "₹175.40 / sh"
+  },
+  {
+    symbol: "TECHM",
+    name: "Tech Mahindra Ltd",
+    sector: "IT Services",
+    ltp: 1790.0,
+    change: 8.05,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1782.84,
+    vwap: 1781.05,
+    atr14: 21.48,
+    margin5x: "₹358.00 / sh"
+  },
+  {
+    symbol: "HCLTECH",
+    name: "HCL Technologies",
+    sector: "IT Services",
+    ltp: 1820.0,
+    change: 8.19,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1812.72,
+    vwap: 1810.9,
+    atr14: 21.84,
+    margin5x: "₹364.00 / sh"
+  },
+  {
+    symbol: "KOTAKBANK",
+    name: "Kotak Mahindra Bank",
+    sector: "Banking & Finance",
+    ltp: 1750.0,
+    change: 7.87,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1743.0,
+    vwap: 1741.25,
+    atr14: 21.0,
+    margin5x: "₹350.00 / sh"
+  },
+  {
+    symbol: "AXISBANK",
+    name: "Axis Bank Ltd",
+    sector: "Banking & Finance",
+    ltp: 1290.0,
+    change: 5.8,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1284.84,
+    vwap: 1283.55,
+    atr14: 15.48,
+    margin5x: "₹258.00 / sh"
+  },
+  {
+    symbol: "ONGC",
+    name: "Oil & Natural Gas Corp",
+    sector: "Energy & Oil",
+    ltp: 222.0,
+    change: 1.0,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 221.11,
+    vwap: 220.89,
+    atr14: 2.66,
+    margin5x: "₹44.40 / sh"
+  },
+  {
+    symbol: "NTPC",
+    name: "NTPC Limited",
+    sector: "Utilities & Power",
+    ltp: 315.15,
+    change: 1.42,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 313.89,
+    vwap: 313.57,
+    atr14: 3.78,
+    margin5x: "₹63.03 / sh"
+  },
+  {
+    symbol: "POWERGRID",
+    name: "Power Grid Corp",
+    sector: "Utilities & Power",
+    ltp: 250.45,
+    change: 1.13,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 249.45,
+    vwap: 249.2,
+    atr14: 3.01,
+    margin5x: "₹50.09 / sh"
+  },
+  {
+    symbol: "COALINDIA",
+    name: "Coal India Ltd",
+    sector: "Mining & Energy",
+    ltp: 417.2,
+    change: 1.88,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 415.53,
+    vwap: 415.11,
+    atr14: 5.01,
+    margin5x: "₹83.44 / sh"
+  },
+  {
+    symbol: "JSWSTEEL",
+    name: "JSW Steel Ltd",
+    sector: "Metals & Mining",
+    ltp: 1216.3,
+    change: 5.47,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 1211.43,
+    vwap: 1210.22,
+    atr14: 14.6,
+    margin5x: "₹243.26 / sh"
+  },
+  {
+    symbol: "ITC",
+    name: "ITC Limited",
+    sector: "FMCG • Diversified",
+    ltp: 470.0,
+    change: 2.11,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 468.12,
+    vwap: 467.65,
+    atr14: 5.64,
+    margin5x: "₹94.00 / sh"
+  },
+  {
+    symbol: "HINDUNILVR",
+    name: "Hindustan Unilever",
+    sector: "FMCG & Consumer",
+    ltp: 2420.0,
+    change: 10.89,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 2410.32,
+    vwap: 2407.9,
+    atr14: 29.04,
+    margin5x: "₹484.00 / sh"
+  },
+  {
+    symbol: "TITAN",
+    name: "Titan Company Ltd",
+    sector: "Consumer Discretionary",
+    ltp: 3444.8,
+    change: 15.5,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 3431.02,
+    vwap: 3427.58,
+    atr14: 41.34,
+    margin5x: "₹688.96 / sh"
+  },
+  {
+    symbol: "ADANIENT",
+    name: "Adani Enterprises Ltd",
+    sector: "Diversified Conglomerate",
+    ltp: 2692.0,
+    change: 12.11,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 2681.23,
+    vwap: 2678.54,
+    atr14: 32.3,
+    margin5x: "₹538.40 / sh"
+  },
+  {
+    symbol: "ULTRACEMCO",
+    name: "UltraTech Cement",
+    sector: "Materials & Cement",
+    ltp: 10907.0,
+    change: 49.08,
+    pChange: 0.45,
+    probScore: 84,
+    probCategory: "RS Leader Candidate",
+    probColor: "emerald",
+    triggerNote: "Scanning 08:50 AM Gap >=1.2%, 45m RVOL >=2.5x, 10:00 AM VWAP confirmation, and RS Leadership.",
+    ema9: 10863.37,
+    vwap: 10852.47,
+    atr14: 130.88,
+    margin5x: "₹2,181.40 / sh"
+  },
+];
 
     let userState = {
       engineActive: true,
       tradingMode: 'PAPER',
       capital: 100000,
-      riskPerTrade: 200,
+      riskPerTrade: 2500,
       availableMargin: 100000.00,
       usedMargin: 0,
       netDayPnl: 0.00,
@@ -1707,7 +1977,7 @@ Trigger Condition:
 
       // 4. Update Today's Net Day P&L and R-Multiple (Today's Realized Net + Running Unrealized P&L)
       userState.netDayPnl = parseFloat((todayRealizedNet + totalUnrealized).toFixed(2));
-      userState.netDayR = parseFloat((userState.netDayPnl / (userState.riskPerTrade || 200)).toFixed(2));
+      userState.netDayR = parseFloat((userState.netDayPnl / (userState.riskPerTrade || 2500)).toFixed(2));
 
       // 5. Update Available Margin like a real Demat account:
       // Note: userState.capital returned from the backend is current account equity (already net of closed trade P&L).
@@ -1874,7 +2144,7 @@ Trigger Condition:
                   pos.currentLtp = stock.ltp;
                   const diff = pos.side === 'BUY' ? (stock.ltp - pos.entry) : (pos.entry - stock.ltp);
                   pos.currentPnl = parseFloat((diff * pos.qty).toFixed(2));
-                  pos.rMultiple = parseFloat((pos.currentPnl / (userState.riskPerTrade || 200)).toFixed(2));
+                  pos.rMultiple = parseFloat((pos.currentPnl / (userState.riskPerTrade || 2500)).toFixed(2));
                 }
               });
             }
@@ -1934,7 +2204,7 @@ Trigger Condition:
             const grossPnl = pos.currentPnl;
             const charges = chg.totalCharges;
             const netPnl = parseFloat((grossPnl - charges).toFixed(2));
-            const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
+            const rMultiple = (netPnl / (userState.riskPerTrade || 2500)).toFixed(2);
 
             const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
             if (!userState.ledger[0] || (userState.ledger[0].date !== "TODAY" && userState.ledger[0].fullDate !== todayIso)) {
@@ -1996,7 +2266,7 @@ Trigger Condition:
               const grossPnl = parseFloat(((t.direction === 'BUY' ? (t.exit_price - t.entry_price) : (t.entry_price - t.exit_price)) * t.quantity).toFixed(2));
               const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
               const netPnl = t.realized_pnl !== undefined ? t.realized_pnl : parseFloat((grossPnl - charges).toFixed(2));
-              const rMultiple = `${t.realized_r !== undefined ? (t.realized_r >= 0 ? '+' : '') + t.realized_r.toFixed(2) : (netPnl >= 0 ? '+' : '') + (netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+              const rMultiple = `${t.realized_r !== undefined ? (t.realized_r >= 0 ? '+' : '') + t.realized_r.toFixed(2) : (netPnl >= 0 ? '+' : '') + (netPnl / (userState.riskPerTrade || 2500)).toFixed(2)}R`;
               
               let friendlyExit = t.exit_reason || "1:2 Pullback Target Executed";
               if (t.exit_reason === 'STOP_LOSS_HIT') friendlyExit = 'Stop Loss Hit (Bracket Protection)';
@@ -2085,23 +2355,99 @@ Trigger Condition:
     // ==============================================
     // TAB 1: WATCHLIST RENDERING
     // ==============================================
+    let currentWatchlistView = 'cards';
+
+    function setWatchlistView(mode) {
+      currentWatchlistView = mode;
+      const cBtn = document.getElementById('viewCardsBtn');
+      const tBtn = document.getElementById('viewTableBtn');
+      if (mode === 'cards') {
+        if (cBtn) cBtn.className = "px-2 py-1 rounded-md text-[9.5px] font-mono font-bold bg-cyanAccent/20 text-cyanAccent border border-cyanAccent/30 flex items-center gap-1 transition-all cursor-pointer";
+        if (tBtn) tBtn.className = "px-2 py-1 rounded-md text-[9.5px] font-mono font-bold text-slate-400 hover:text-white flex items-center gap-1 transition-all cursor-pointer";
+      } else {
+        if (cBtn) cBtn.className = "px-2 py-1 rounded-md text-[9.5px] font-mono font-bold text-slate-400 hover:text-white flex items-center gap-1 transition-all cursor-pointer";
+        if (tBtn) tBtn.className = "px-2 py-1 rounded-md text-[9.5px] font-mono font-bold bg-cyanAccent/20 text-cyanAccent border border-cyanAccent/30 flex items-center gap-1 transition-all cursor-pointer";
+      }
+      renderWatchlist();
+    }
+
     function renderWatchlist() {
       const container = document.getElementById('watchlistContainer');
+      if (!container) return;
       container.innerHTML = '';
 
+      if (currentWatchlistView === 'table') {
+        container.className = "col-span-full w-full overflow-hidden rounded-2xl border border-white/10 bg-[#080C16] shadow-xl";
+        let tableHtml = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs font-mono">
+              <thead class="bg-[#0B0F19] border-b border-white/[0.08] text-[9.5px] uppercase text-slate-400 tracking-wider">
+                <tr>
+                  <th class="px-4 py-3 font-bold">Instrument</th>
+                  <th class="px-3 py-3 font-bold text-right">LTP (₹)</th>
+                  <th class="px-3 py-3 font-bold text-right">Change (%)</th>
+                  <th class="px-3 py-3 font-bold text-center">Status</th>
+                  <th class="px-3 py-3 font-bold text-right">EMA 9</th>
+                  <th class="px-3 py-3 font-bold text-right">VWAP</th>
+                  <th class="px-3 py-3 font-bold text-right">5x Margin</th>
+                  <th class="px-4 py-3 font-bold text-center">Chart</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/[0.05]">
+        `;
+        CROWN_6_DATA.forEach((item) => {
+          const isUp = item.change >= 0;
+          tableHtml += `
+            <tr class="hover:bg-white/[0.02] transition-colors cursor-pointer" onclick="openChartModal('${item.symbol}')">
+              <td class="px-4 py-2.5">
+                <div class="flex items-center gap-2">
+                  ${STOCK_LOGOS[item.symbol] || ''}
+                  <div>
+                    <div class="font-black text-white text-xs">${item.symbol}</div>
+                    <div class="text-[9px] text-slate-400 font-sans truncate max-w-[140px]">${item.name}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-3 py-2.5 text-right font-black text-white tabular-nums">
+                ₹${item.ltp.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+              <td class="px-3 py-2.5 text-right font-extrabold tabular-nums ${isUp ? 'text-emeraldBull' : 'text-roseBear'}">
+                ${isUp ? '+' : ''}${item.pChange.toFixed(2)}%
+              </td>
+              <td class="px-3 py-2.5 text-center">
+                <span class="inline-block px-2 py-0.5 rounded-full text-[8.5px] font-extrabold bg-emeraldBull/15 text-emeraldBull border border-emeraldBull/30">
+                  RS Leader (84%)
+                </span>
+              </td>
+              <td class="px-3 py-2.5 text-right text-slate-300 tabular-nums">₹${item.ema9?.toFixed(2) || '—'}</td>
+              <td class="px-3 py-2.5 text-right text-cyanAccent tabular-nums">₹${item.vwap?.toFixed(2) || '—'}</td>
+              <td class="px-3 py-2.5 text-right text-slate-400 tabular-nums">${item.margin5x}</td>
+              <td class="px-4 py-2.5 text-center">
+                <button onclick="event.stopPropagation(); openChartModal('${item.symbol}')" class="px-2 py-1 rounded bg-cyanAccent/15 hover:bg-cyanAccent/25 text-cyanAccent text-[9px] font-bold border border-cyanAccent/30 transition-all">
+                  5m
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+        tableHtml += `</tbody></table></div>`;
+        container.innerHTML = tableHtml;
+        return;
+      }
+
+      container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5";
       CROWN_6_DATA.forEach((item) => {
         const isUp = item.change >= 0;
         const card = document.createElement('div');
-        card.id = `stock-row-${item.symbol}`;
-        card.className = "glass-panel rounded-2xl overflow-hidden transition-all duration-300 hover:border-cyanAccent/40 hover:shadow-[0_0_28px_rgba(0,240,255,0.14)] active:scale-[0.99] shadow-lg group";
-        
+        card.className = "glass-card rounded-2xl border border-white/10 bg-surfaceCard hover:border-cyanAccent/40 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-lg group";
+        card.onclick = () => toggleStockExpansion(item.symbol);
+
         card.innerHTML = `
-          <div class="p-3.5 cursor-pointer" onclick="toggleStockExpansion('${item.symbol}')">
-            <!-- Row 1: Brand Avatar with Glow + Symbol + Sector + Bold LTP + % Pill -->
-            <div class="flex items-center justify-between gap-2">
+          <div class="p-3.5 pb-2">
+            <!-- Row 1: Stock Logo, Name, LTP, Change -->
+            <div class="flex items-start justify-between gap-2">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="relative shrink-0">
-                  <div class="absolute -inset-0.5 rounded-full bg-gradient-to-r from-cyan-500/25 to-blue-500/25 blur-sm"></div>
+                <div class="w-9 h-9 rounded-full bg-surfaceHigh border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
                   <div class="relative">${STOCK_LOGOS[item.symbol] || ''}</div>
                 </div>
                 <div class="flex flex-col min-w-0">
@@ -2127,27 +2473,27 @@ Trigger Condition:
             <div class="flex items-center justify-between gap-2 mt-3 pt-2.5 border-t border-white/5">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-14 h-1.5 bg-black/40 rounded-full overflow-hidden border border-white/5 shrink-0">
-                  <div class="h-full bg-gradient-to-r ${item.probScore > 75 ? 'from-emerald-400 via-teal-400 to-cyan-400' : 'from-slate-500 to-slate-400'} rounded-full transition-all duration-500" style="width: ${item.probScore}%;"></div>
+                  <div class="h-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 rounded-full transition-all duration-500" style="width: 84%;"></div>
                 </div>
                 <div class="flex items-center gap-1 min-w-0">
-                  <span class="w-1.5 h-1.5 rounded-full shrink-0 ${item.probScore > 70 ? 'bg-emeraldBull animate-ping' : 'bg-slate-500'}"></span>
-                  <span class="text-[9.5px] font-mono font-bold truncate ${item.probScore > 70 ? 'text-emeraldBull' : 'text-slate-400'}">
-                    ${item.probScore}% • ${item.probCategory}
+                  <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emeraldBull animate-ping"></span>
+                  <span class="text-[9.5px] font-mono font-bold truncate text-emeraldBull">
+                    84% • RS Leader Candidate
                   </span>
                 </div>
               </div>
 
               <button onclick="event.stopPropagation(); openChartModal('${item.symbol}')" class="px-2.5 py-1 rounded-xl bg-surfaceHigh/90 text-cyanAccent border border-cyanAccent/30 text-[9.5px] font-mono font-bold hover:bg-cyanAccent/15 active:scale-95 transition-all flex items-center gap-1 shadow-sm shrink-0">
-                <i data-lucide="candlestick-chart" class="w-3 h-3"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
                 <span>5m Chart</span>
               </button>
             </div>
           </div>
 
           <!-- Integrated Bottom Drawer Strip for Signal Trigger Radar Box -->
-          <div class="px-3.5 py-2.5 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
+          <div class="px-3.5 py-2 bg-surfaceLow/90 border-t border-white/5 flex items-start gap-2 text-[9.5px] font-mono text-slate-300 leading-relaxed">
             <div class="w-4 h-4 rounded-full bg-amberTactical/15 flex items-center justify-center shrink-0 mt-0.5 border border-amberTactical/30">
-              <i data-lucide="zap" class="w-2.5 h-2.5 text-amberTactical"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amberTactical"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </div>
             <div class="flex-1 min-w-0">
               <span class="text-amberTactical font-bold">ALGO TRIGGER:</span> ${item.triggerNote}
@@ -2176,7 +2522,7 @@ Trigger Condition:
         `;
         container.appendChild(card);
       });
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
     function toggleStockExpansion(symbol) {
@@ -2206,7 +2552,7 @@ Trigger Condition:
             </div>
             <h4 class="text-sm font-bold text-white font-mono mb-1">NO ACTIVE POSITIONS</h4>
             <p class="text-xs text-slate-400 font-mono max-w-[260px] leading-relaxed mb-4">
-              Scanning 5m intraday setups. 1:2 bracket execution automatically activates on trigger.
+              Scanning 5m intraday setups. Automatic 1:4.0 bracket execution with +1.5R Breakeven lock activates on trigger.
             </p>
             <button onclick="demoSimulateTrade()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-mono font-bold text-xs active:scale-95 transition-all shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
               <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
@@ -2270,7 +2616,7 @@ Trigger Condition:
             <div class="space-y-1">
               <div class="flex justify-between text-[9px] font-mono text-slate-400">
                 <span class="text-roseBear font-semibold">SL: ₹${pos.sl.toFixed(2)}</span>
-                <span class="text-slate-400">1:2 RRR Bracket</span>
+                <span class="text-slate-400">1:4.0 RRR Bracket</span>
                 <span class="text-emeraldBull font-semibold">TP: ₹${pos.tp.toFixed(2)}</span>
               </div>
               <div class="w-full h-1.5 bg-surfaceLow rounded-full overflow-hidden border border-white/5 relative">
@@ -2317,20 +2663,42 @@ Trigger Condition:
     }
 
     async function demoSimulateTrade() {
-      // Pick a random stock that is not already open
-      const openSymbols = userState.positions.map(p => p.symbol);
-      const candidates = CROWN_6_DATA.filter(s => !openSymbols.includes(s.symbol));
-      const stock = candidates.length > 0 ? candidates[Math.floor(Math.random() * candidates.length)] : CROWN_6_DATA[0];
+      // 1. Try triggering server-side simulation on Render backend
+      showToast("⚡ Triggering Velocity Leader 4.0R trade simulation...");
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/positions/simulate`, { method: 'POST' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'success' && data.position) {
+            showToast(`⚡ Order Executed: ${data.position.symbol} ${data.position.direction} (${data.position.quantity} Qty). Target 4.0R`);
+            fetchBackendData();
+            return;
+          }
+        }
+      } catch (err) {
+        console.log("Backend simulate error, falling back to local simulation:", err);
+      }
 
-      const side = Math.random() > 0.4 ? 'BUY' : 'SELL';
+      // 2. Client-side fallback simulation strictly following Profile 5 specs
+      if (userState.positions.length >= 1) {
+        showToast("⚠️ Pure Leader strategy enforces maximum 1 active trade!");
+        return;
+      }
+
+      const stock = CROWN_6_DATA[0]; // #1 RS Leader RELIANCE
+      const side = 'BUY';
       const entry = stock.ltp;
-      const riskPerShare = Math.max(1, stock.ltp * 0.005);
-      const sl = side === 'BUY' ? parseFloat((entry - riskPerShare).toFixed(2)) : parseFloat((entry + riskPerShare).toFixed(2));
-      const tp = side === 'BUY' ? parseFloat((entry + (riskPerShare * 3)).toFixed(2)) : parseFloat((entry - (riskPerShare * 3)).toFixed(2));
-      const qty = Math.max(1, Math.round(userState.riskPerTrade / riskPerShare));
+      const slDist = Math.max(1, parseFloat((entry * 0.0100).toFixed(2))); // 1.00% SL
+      const sl = parseFloat((entry - slDist).toFixed(2));
+      const tp = parseFloat((entry + (slDist * 4.0)).toFixed(2)); // 4.0R target
+      
+      const desiredRisk = userState.riskPerTrade || 2500;
+      let targetQty = Math.max(1, Math.floor(desiredRisk / slDist));
+      const maxQtyMargin = Math.floor((userState.availableMargin * 5.0) / entry);
+      const qty = Math.min(targetQty, maxQtyMargin);
       const marginLocked = Math.round((entry * qty) / 5);
 
-      if (marginLocked > userState.availableMargin) {
+      if (qty <= 0 || marginLocked > userState.availableMargin) {
         showToast("⚠️ Insufficient Margin to open trade!");
         return;
       }
@@ -2344,6 +2712,8 @@ Trigger Condition:
         currentLtp: entry,
         sl: sl,
         tp: tp,
+        targetRR: 4.0,
+        beLocked: false,
         marginLocked: marginLocked,
         currentPnl: 0.00,
         rMultiple: 0.00,
@@ -2354,12 +2724,22 @@ Trigger Condition:
       renderPositions();
       recalculateMarginsAndPnl();
 
-      // Trigger Telegram Alert
-      const priceLabel = side === 'BUY' ? 'Buy Price' : 'Sell Price';
-      const teleMsg = `⚡ *NEW TRADE EXECUTED (PAPER)*\n\n• *Symbol:* \`${stock.symbol}\`\n• *Action:* *${side === 'BUY' ? '🟢 BUY' : '🔴 SELL'}*\n• *${priceLabel}:* \`₹${entry.toFixed(2)}\`\n• *Stop Loss:* \`₹${sl.toFixed(2)}\`\n• *Target (1:2 RRR):* \`₹${tp.toFixed(2)}\`\n• *Quantity:* \`${qty} shares\`\n• *Margin Deducted:* \`₹${marginLocked.toLocaleString('en-IN')}\` (5x MIS)\n• *Available Margin Left:* \`₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}\`\n• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``;
+      // Telegram alert
+      const teleMsg = `⚡ *NEW TRADE EXECUTED (PAPER)*
+
+• *Symbol:* \`${stock.symbol}\`
+• *Strategy:* \`Velocity Compounder (Pure Leader 4.0R)\`
+• *Action:* *🟢 BUY*
+• *Entry Price:* \`₹${entry.toFixed(2)}\`
+• *Stop Loss:* \`₹${sl.toFixed(2)}\`
+• *Target (1:4.0 RRR):* \`₹${tp.toFixed(2)}\`
+• *Quantity:* \`${qty} shares\`
+• *Margin Deducted:* \`₹${marginLocked.toLocaleString('en-IN')}\` (5x MIS)
+• *Available Margin Left:* \`₹${Math.round(userState.availableMargin).toLocaleString('en-IN')}\`
+• *Time:* \`${new Date().toLocaleTimeString('en-IN')}\``;
       dispatchTelegramAlert(teleMsg);
 
-      showToast(`⚡ Order Executed: ${stock.symbol} ${side} (${qty} Qty). Margin ₹${marginLocked.toLocaleString('en-IN')} locked.`);
+      showToast(`⚡ Order Executed: ${stock.symbol} BUY (${qty} Qty). Margin ₹${marginLocked.toLocaleString('en-IN')} locked.`);
     }
 
     function promptDeletePosition(index) {
@@ -2394,16 +2774,16 @@ Trigger Condition:
         userState.usedMargin = 0;
         userState.netDayPnl = 0;
         userState.netDayR = 0;
-        userState.riskPerTrade = 200;
-        if (document.getElementById('settingCapital')) document.getElementById('settingCapital').value = '1,25,000';
-        if (document.getElementById('settingRisk')) document.getElementById('settingRisk').value = '₹200 (0.16%)';
+        userState.riskPerTrade = 2500;
+        if (document.getElementById('settingCapital')) document.getElementById('settingCapital').value = '1,00,000';
+        if (document.getElementById('settingRisk')) document.getElementById('settingRisk').value = '₹2500 (2.5%)';
         
-        dispatchTelegramAlert("⚠️ *FACTORY RESET COMPLETED*\n\nAccount balance reset to ₹1,25,000. All positions and trade history wiped.");
+        dispatchTelegramAlert("⚠️ *FACTORY RESET COMPLETED*\n\nAccount balance reset to ₹1,00,000. All positions and trade history wiped.");
         closeActionModal();
         renderPositions();
         renderLedger();
         recalculateMarginsAndPnl();
-        showToast("⚠️ ENGINE FACTORY RESET COMPLETED • Capital Restored to ₹1,25,000");
+        showToast("⚠️ ENGINE FACTORY RESET COMPLETED • Capital Restored to ₹1,00,000");
         return;
       }
 
@@ -2432,7 +2812,7 @@ Trigger Condition:
         const grossPnl = pos.currentPnl;
         const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
-        const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
+        const rMultiple = (netPnl / (userState.riskPerTrade || 2500)).toFixed(2);
 
         const closedTrade = {
           id: "tr_" + Date.now(),
@@ -2510,7 +2890,7 @@ Trigger Condition:
         const grossPnl = pos.currentPnl;
         const charges = chg.totalCharges;
         const netPnl = parseFloat((grossPnl - charges).toFixed(2));
-        const rMultiple = (netPnl / (userState.riskPerTrade || 200)).toFixed(2);
+        const rMultiple = (netPnl / (userState.riskPerTrade || 2500)).toFixed(2);
         userState.capital = parseFloat((userState.capital + netPnl).toFixed(2));
 
         userState.ledger[0].trades.unshift({
@@ -2592,7 +2972,7 @@ Trigger Condition:
             </div>
             <h4 class="text-xs font-bold text-white font-mono mb-1">ALL TRADES CLEARED</h4>
             <p class="text-[10px] text-slate-400 font-sans max-w-[280px] leading-relaxed">
-              Quant ledger reset to ₹0. Available margin is ₹1,25,000. Ready for direct live trading on Monday (09:15 AM IST).
+              Quant ledger reset to ₹0. Available margin is ₹1,00,000. Ready for direct live trading on Monday (09:15 AM IST).
             </p>
           </div>
         `;
@@ -2612,7 +2992,7 @@ Trigger Condition:
             const grossPnl = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
             const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
             const netPnl = (t.netPnl !== undefined) ? t.netPnl : parseFloat((grossPnl - charges).toFixed(2));
-            const rMultiple = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+            const rMultiple = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 2500)).toFixed(2)}R`;
 
             t.grossPnl = grossPnl;
             t.charges = charges;
@@ -2676,7 +3056,7 @@ Trigger Condition:
           });
 
           const isDayProfit = dayNetPnl >= 0;
-          const dayR = (dayNetPnl / (userState.riskPerTrade || 200)).toFixed(2);
+          const dayR = (dayNetPnl / (userState.riskPerTrade || 2500)).toFixed(2);
           day.dayPnl = `${isDayProfit ? '+' : ''}₹${dayNetPnl.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${isDayProfit ? '+' : ''}${dayR}R)`;
 
           group.innerHTML = `
@@ -2701,7 +3081,7 @@ Trigger Condition:
 
       const totalTrades = totalWins + totalLosses;
       const isGrandProfit = grandTotalNet >= 0;
-      const totalR = (grandTotalNet / (userState.riskPerTrade || 200)).toFixed(2);
+      const totalR = (grandTotalNet / (userState.riskPerTrade || 2500)).toFixed(2);
 
       if (anNetPnl) {
         anNetPnl.className = `text-base font-black ${totalTrades === 0 ? 'text-white' : (isGrandProfit ? 'text-emeraldBull' : 'text-roseBear')}`;
@@ -2848,7 +3228,7 @@ Trigger Condition:
 
         allTrades.forEach((t, idx) => {
           const pnl = Number(t.netPnl !== undefined ? t.netPnl : 0);
-          const r = Number(t.rMultiple ? parseFloat(t.rMultiple) : (pnl / (userState.riskPerTrade || 200)));
+          const r = Number(t.rMultiple ? parseFloat(t.rMultiple) : (pnl / (userState.riskPerTrade || 2500)));
           cumPnl += pnl;
           cumR += r;
           if (cumR > peakR) peakR = cumR;
@@ -2912,9 +3292,9 @@ Trigger Condition:
       const maxDrawdownPct = peakCapital > 0 ? (maxDrawdownAmount / peakCapital) * 100 : 0;
 
       // Extract Win Rate & Analytics metrics
-      const winRate = userState.winRate !== undefined ? userState.winRate : (stats && stats.win_rate !== undefined ? stats.win_rate : 40.2);
-      const pf = userState.profitFactor || "0.67";
-      const sharpe = userState.sharpeRatio || "1.82";
+      const winRate = userState.winRate !== undefined ? userState.winRate : (stats && stats.win_rate !== undefined ? stats.win_rate : 51.7);
+      const pf = userState.profitFactor || "1.70";
+      const sharpe = userState.sharpeRatio || "1.92";
 
       // 1. Update 4 Top KPI Cards (Terminal 1 - Image 1)
       const kpiTotRet = document.getElementById('kpiTotalReturnVal');
@@ -2975,12 +3355,12 @@ Trigger Condition:
         govCurDd.className = `text-xs sm:text-sm font-black truncate block ${stats.current_drawdown_r >= -5.0 ? 'text-emeraldBull' : (stats.current_drawdown_r <= -15.0 ? 'text-roseBear' : 'text-amberTactical')}`;
       }
       const govCurSub = document.getElementById('govKpiCurrentDdSub');
-      if (govCurSub) govCurSub.innerText = `(-${Math.abs((stats.current_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
+      if (govCurSub) govCurSub.innerText = `(-${Math.abs((stats.current_drawdown_r * 2500 / initialCapital) * 100).toFixed(2)}%)`;
 
       const govPkDd = document.getElementById('govKpiPeakDd');
       if (govPkDd) govPkDd.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
       const govPkSub = document.getElementById('govKpiPeakDdSub');
-      if (govPkSub) govPkSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
+      if (govPkSub) govPkSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 2500 / initialCapital) * 100).toFixed(2)}%)`;
 
       const govNormVal = document.getElementById('govKpiNormalTargetVal');
       if (govNormVal) {
@@ -2990,7 +3370,7 @@ Trigger Condition:
       const govNormSub = document.getElementById('govKpiNormalTargetSub');
       if (govNormSub) {
         const normVal = stats.recovery_threshold_r !== undefined ? stats.recovery_threshold_r : -5.0;
-        govNormSub.innerText = `(-${Math.abs((normVal * 200 / initialCapital) * 100).toFixed(2)}%)`;
+        govNormSub.innerText = `(-${Math.abs((normVal * 2500 / initialCapital) * 100).toFixed(2)}%)`;
       }
 
       // 5. Update Governor Recovery Progress Card
@@ -3024,7 +3404,7 @@ Trigger Condition:
       const sMaxDdVal = document.getElementById('stripMaxDdVal');
       if (sMaxDdVal) sMaxDdVal.innerText = `${stats.max_drawdown_r.toFixed(2)} R`;
       const sMaxDdSub = document.getElementById('stripMaxDdSub');
-      if (sMaxDdSub) sMaxDdSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 200 / initialCapital) * 100).toFixed(2)}%)`;
+      if (sMaxDdSub) sMaxDdSub.innerText = `(-${Math.abs((stats.max_drawdown_r * 2500 / initialCapital) * 100).toFixed(2)}%)`;
 
       const sRecPct = document.getElementById('stripRecoveryPct');
       if (sRecPct) sRecPct.innerText = `${recPct}%`;
@@ -3491,7 +3871,7 @@ Trigger Condition:
 
       const grossPnl = (t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty;
       const netPnl = parseFloat((grossPnl - chargesVal).toFixed(2));
-      const rVal = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+      const rVal = `${netPnl >= 0 ? '+' : ''}${(netPnl / (userState.riskPerTrade || 2500)).toFixed(2)}R`;
 
       safeSet('tdModalGrossPnl', `${grossPnl >= 0 ? '+' : ''}₹${grossPnl.toFixed(2)}`);
       safeSet('tdModalNetPnl', `${netPnl >= 0 ? '+' : ''}₹${netPnl.toFixed(2)}`);
@@ -3527,7 +3907,7 @@ Trigger Condition:
           const gross = parseFloat(((t.side === 'BUY' ? (t.exit - t.entry) : (t.entry - t.exit)) * t.qty).toFixed(2));
           const charges = (t.charges !== undefined && t.charges > 0) ? t.charges : chg.totalCharges;
           const net = parseFloat((gross - charges).toFixed(2));
-          const r = `${net >= 0 ? '+' : ''}${(net / (userState.riskPerTrade || 200)).toFixed(2)}R`;
+          const r = `${net >= 0 ? '+' : ''}${(net / (userState.riskPerTrade || 2500)).toFixed(2)}R`;
           const buyP = t.side === 'BUY' ? t.entry : t.exit;
           const sellP = t.side === 'BUY' ? t.exit : t.entry;
           csvContent += `"${t.id || ''}","${day.date}","${t.symbol}","${t.side}",${t.qty},${buyP},${sellP},${chg.margin},${charges},${gross},${net},"${r}","${t.exitReason}"\n`;
@@ -3601,7 +3981,7 @@ Trigger Condition:
         const clientId = document.getElementById('dhanClientId')?.value || '1000289190';
         const token = document.getElementById('dhanAccessToken')?.value || 'eyJhbGciOiJIUzUxMiJ9.dhanhq.secret';
         const cap = parseFloat((document.getElementById('settingCapital')?.value || '100000').replace(/[^0-9.]/g, '')) || 100000;
-        const risk = parseFloat((document.getElementById('settingRisk')?.value || '250').replace(/[^0-9.]/g, '')) || 250;
+        const risk = parseFloat((document.getElementById('settingRisk')?.value || '2500').replace(/[^0-9.]/g, '')) || 250;
 
         await fetch(`${BACKEND_URL}/api/settings/test-dhan`, {
           method: 'POST',
@@ -3730,7 +4110,7 @@ Trigger Condition:
       pendingAction = { type: 'FACTORY_RESET' };
       document.getElementById('actionModalIcon').innerHTML = '<i data-lucide="alert-triangle" class="w-6 h-6 text-roseBear"></i>';
       document.getElementById('actionModalTitle').innerText = "FACTORY RESET APPLICATION?";
-      document.getElementById('actionModalDesc').innerText = "Reset capital to ₹1,25,000, clear active positions, and wipe trade logs to start fresh with 0 trades?";
+      document.getElementById('actionModalDesc').innerText = "Reset capital to ₹1,00,000, clear active positions, and wipe trade logs to start fresh with 0 trades?";
       document.getElementById('actionModalConfirmBtn').className = "py-2.5 rounded-xl bg-roseBear text-white font-bold active:scale-95 transition-all";
       document.getElementById('actionModalConfirmBtn').innerText = "FACTORY RESET";
       openActionModal();

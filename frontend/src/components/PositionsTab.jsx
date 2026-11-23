@@ -24,12 +24,12 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
           <h2 className="text-xs sm:text-sm font-black tracking-tight text-white font-mono uppercase flex items-center gap-2">
             <span>Active Live Positions</span>
             <span className="px-2 py-0.5 text-[10px] font-mono font-extrabold bg-sky-500/20 text-sky-300 rounded-full border border-sky-500/30">
-              {positions.length} / 14 Max Open
+              {positions.length} / 1 Max Open
             </span>
           </h2>
         </div>
         <span className="text-[10px] font-mono text-slate-400 bg-[#0D121F] px-2.5 py-1 rounded-lg border border-white/10">
-          Strict 1:2 RRR & Dynamic Risk Governor
+          1:4.0 RRR • Breakeven Lock @ +1.5R
         </span>
       </div>
 
@@ -141,7 +141,7 @@ export default function PositionsTab({ positions = [], onDeletePosition, onClose
                     <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 pt-0.5">
                       <span>{pos.direction === 'BUY' ? 'Buy Price' : 'Sell Price'}: ₹{pos.entry_price?.toFixed(2)}</span>
                       <span>Margin: ₹{pos.margin_used?.toFixed(0)}</span>
-                      <span>Target: 1:2 RRR</span>
+                      <span>Target: 1:4.0 RRR</span>
                     </div>
                   </div>
                 </div>

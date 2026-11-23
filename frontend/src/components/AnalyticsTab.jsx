@@ -100,7 +100,7 @@ export default function AnalyticsTab({ analyticsData, onExportCSV }) {
             </span>
           </div>
           <div className="mt-1 flex items-center justify-between text-[10px] font-mono font-bold text-slate-400">
-            <span className="text-amber-400">1:2 RRR Edge</span>
+            <span className="text-amber-400">1:4.0 RRR Edge</span>
             <span className="text-slate-500">Edge</span>
           </div>
         </div>
