@@ -1269,7 +1269,9 @@ Trigger Condition:
     // Single Classy Theme Locked
     // BACKEND INTEGRATION & STATE ENGINE
     // ==============================================
-    const BACKEND_URL = 'https://indian-stock-market-bot-1.onrender.com';
+    const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? 'http://localhost:8000'
+      : 'https://indian-stock-market-bot-1.onrender.com';
     const TELEGRAM_BOT_TOKEN = '9230981995:AAHm8Pa65hwSHvH1N89qLwWzdEZDXKEVdWc';
     const TELEGRAM_CHAT_ID = '5582938659';
 
