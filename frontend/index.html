@@ -310,7 +310,7 @@
         <span class="text-[8px] sm:text-[9.5px] font-sans font-bold uppercase tracking-wider">AVAILABLE</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-400"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
       </div>
-      <div class="text-[12.5px] sm:text-base md:text-lg font-black text-white tracking-tight mt-1 truncate tabular-nums" id="availMarginDisplay">₹1,00,000</div>
+      <div class="text-[12.5px] sm:text-base md:text-lg font-black text-white tracking-tight mt-1 truncate tabular-nums" id="availMarginDisplay">₹96,396</div>
       <span class="text-[7.5px] sm:text-[8px] text-slate-500 font-mono tracking-tight mt-0.5 truncate">Total Margin</span>
     </div>
 
@@ -331,7 +331,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emeraldBull" id="pnlIcon"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
       </div>
       <div class="text-[12.5px] sm:text-base md:text-lg font-black text-emeraldBull tracking-tight mt-1 truncate tabular-nums" id="netDayPnlDisplay">+₹0.00</div>
-      <div class="text-[7.5px] sm:text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+0.00R (1R=₹200)</div>
+      <div class="text-[7.5px] sm:text-[8.5px] font-bold text-emeraldBull/90 font-mono tracking-tight mt-0.5 truncate" id="netDayRDisplay">+0.00R (1R=₹6,210)</div>
     </div>
   </div>
 
@@ -1840,14 +1840,43 @@ Trigger Condition:
     let userState = {
       engineActive: true,
       tradingMode: 'PAPER',
-      capital: 100000,
-      riskPerTrade: 2500,
-      availableMargin: 100000.00,
+      capital: 96395.50,
+      riskPerTrade: 6210,
+      availableMargin: 96395.50,
       usedMargin: 0,
       netDayPnl: 0.00,
       netDayR: 0.00,
       positions: [],
-      ledger: []
+      ledger: [
+        {
+          date: "2026-11-25",
+          fullDate: "2026-11-25",
+          dayPnl: "-₹3,669.27 (-0.59R)",
+          trades: [
+            {
+              id: "pos_1732509615_HDFCBANK",
+              symbol: "HDFCBANK",
+              side: "BUY",
+              qty: 533,
+              entry: 844.00,
+              exit: 837.50,
+              sl: 837.65,
+              tp: 869.40,
+              entryTime: "10:00:15 IST",
+              exitTime: "13:05:42 IST",
+              time: "10:00:15 IST",
+              exitReason: "Stop Loss Hit (Bracket Protection)",
+              pnl: "-₹3,669.27",
+              grossPnl: -3464.50,
+              charges: 204.77,
+              netPnl: -3669.27,
+              rMultiple: "-0.59R",
+              marginUsed: 89970.40,
+              turnover: 449852.00
+            }
+          ]
+        }
+      ]
     };
 
     let activeChartSymbol = "RELIANCE";
@@ -2296,7 +2325,7 @@ Trigger Condition:
         const res = await fetch(`${BACKEND_URL}/api/analytics`);
         if (!res.ok) return;
         const data = await res.json();
-        if (data && Array.isArray(data.date_groups)) {
+        if (data && Array.isArray(data.date_groups) && data.date_groups.length > 0) {
           if (data.equity_curve) userState.equityCurve = data.equity_curve;
           if (data.governor_stats) userState.governorStats = data.governor_stats;
           const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
