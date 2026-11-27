@@ -1,0 +1,19 @@
+[
+  {
+    "id": "pos_1732509615_HDFCBANK",
+    "symbol": "HDFCBANK",
+    "direction": "BUY",
+    "entry_price": 844.00,
+    "exit_price": 837.50,
+    "quantity": 533,
+    "margin_used": 89970.40,
+    "entry_time": "10:00:15",
+    "exit_time": "13:05:42",
+    "exit_reason": "STOP_LOSS",
+    "realized_pnl": -3669.27,
+    "realized_r": -0.59,
+    "charges": 204.77,
+    "trade_date": "2026-11-25",
+    "created_at": "2026-11-25 10:00:15"
+  }
+]

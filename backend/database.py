@@ -124,9 +124,44 @@ class Database:
 
         # Ensure active strategy parameters: target_rr = 4.0, max_open_positions = 1
         try:
-            cur.execute("UPDATE settings SET target_rr = 4.0, max_open_positions = 1, capital = 100000.0, risk_per_trade = 2500.0 WHERE id = 1 AND (target_rr != 4.0 OR max_open_positions != 1)" if not self.is_postgres else "UPDATE settings SET target_rr = 4.0, max_open_positions = 1, capital = 100000.0, risk_per_trade = 2500.0 WHERE id = 1 AND (target_rr != 4.0 OR max_open_positions != 1)")
+            cur.execute("UPDATE settings SET target_rr = 4.0, max_open_positions = 1 WHERE id = 1 AND (target_rr != 4.0 OR max_open_positions != 1)" if not self.is_postgres else "UPDATE settings SET target_rr = 4.0, max_open_positions = 1 WHERE id = 1 AND (target_rr != 4.0 OR max_open_positions != 1)")
         except Exception:
             pass
+
+        # Restore persistent trade history from backup JSON if database is empty
+        try:
+            cur.execute("SELECT COUNT(*) FROM trade_history")
+            r_th = cur.fetchone()
+            th_count = r_th[0] if not isinstance(r_th, dict) else list(r_th.values())[0]
+            backup_file = os.path.join(os.path.dirname(__file__), "trades_history.json")
+            if th_count == 0 and os.path.exists(backup_file):
+                with open(backup_file, "r", encoding="utf-8") as f:
+                    backed_trades = json.load(f)
+                cum_pnl = 0.0
+                for tr in backed_trades:
+                    sql_ins = """
+                        INSERT OR IGNORE INTO trade_history (id, symbol, direction, entry_price, exit_price, quantity, margin_used, entry_time, exit_time, exit_reason, realized_pnl, realized_r, charges, trade_date, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """ if not self.is_postgres else """
+                        INSERT INTO trade_history (id, symbol, direction, entry_price, exit_price, quantity, margin_used, entry_time, exit_time, exit_reason, realized_pnl, realized_r, charges, trade_date, created_at)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (id) DO NOTHING
+                    """
+                    cur.execute(sql_ins, (
+                        tr['id'], tr['symbol'], tr['direction'], tr['entry_price'], tr['exit_price'],
+                        tr['quantity'], tr['margin_used'], tr['entry_time'], tr['exit_time'],
+                        tr['exit_reason'], tr['realized_pnl'], tr['realized_r'], tr.get('charges', 0.0),
+                        tr.get('trade_date', now_ist_date_str()), tr.get('created_at', now_ist_datetime_str())
+                    ))
+                    cum_pnl += tr['realized_pnl']
+                
+                # Update settings capital reflecting restored trades
+                if cum_pnl != 0.0:
+                    new_cap = round(100000.0 + cum_pnl, 2)
+                    cur.execute("UPDATE settings SET capital = ? WHERE id = 1" if not self.is_postgres else "UPDATE settings SET capital = %s WHERE id = 1", (new_cap,))
+                print(f"[DB] Restored {len(backed_trades)} past trades from persistent backup JSON.")
+        except Exception as ex:
+            print(f"[DB] Error restoring trades backup: {ex}")
 
         conn.commit()
         conn.close()
@@ -171,7 +206,19 @@ class Database:
 
             gross_pnl = round((ex - en) * q if direction == 'BUY' else (en - ex) * q, 2)
             net_pnl = round(gross_pnl - total_charges, 2)
-            realized_r = round(net_pnl / 200.0, 2)
+
+            # Calculate 1R risk baseline (Profile 5 Velocity Compounder: dynamic 6.21% risk / max loss)
+            risk_unit = 6210.0
+            try:
+                cur.execute("SELECT risk_per_trade FROM settings WHERE id = 1")
+                s_r = cur.fetchone()
+                if s_r:
+                    r_val = s_r[0] if not isinstance(s_r, dict) else list(s_r.values())[0]
+                    if r_val and float(r_val) > 1000.0:
+                        risk_unit = float(r_val)
+            except Exception:
+                pass
+            realized_r = round(net_pnl / risk_unit, 2)
 
             sql = "UPDATE trade_history SET charges = ?, realized_pnl = ?, realized_r = ? WHERE id = ?" if not self.is_postgres else "UPDATE trade_history SET charges = %s, realized_pnl = %s, realized_r = %s WHERE id = %s"
             cur.execute(sql, (total_charges, net_pnl, realized_r, d['id']))
@@ -335,6 +382,20 @@ class Database:
         conn.commit()
         conn.close()
 
+        # Also sync to persistent backup file so it survives container restarts/rebuilds
+        try:
+            backup_file = os.path.join(os.path.dirname(__file__), "trades_history.json")
+            trades_list = []
+            if os.path.exists(backup_file):
+                with open(backup_file, "r", encoding="utf-8") as f:
+                    trades_list = json.load(f)
+            if not any(t.get('id') == trade['id'] for t in trades_list):
+                trades_list.append(trade)
+                with open(backup_file, "w", encoding="utf-8") as f:
+                    json.dump(trades_list, f, indent=2)
+        except Exception as ex:
+            print(f"[DB] Error syncing trade to backup JSON: {ex}")
+
     def update_position_sl(self, pos_id: str, new_sl: float):
         """Updates stop loss price of an active position (e.g. Breakeven lock or Trailing stop)."""
         conn = self.get_connection()
@@ -371,6 +432,15 @@ class Database:
         cur.execute(sql, (now_str,))
         conn.commit()
         conn.close()
+
+        try:
+            backup_file = os.path.join(os.path.dirname(__file__), "trades_history.json")
+            if os.path.exists(backup_file):
+                with open(backup_file, "w", encoding="utf-8") as f:
+                    json.dump([], f, indent=2)
+        except Exception:
+            pass
+
         print("[DB] Danger Zone: Factory Reset executed successfully. Account restored to ₹1,00,000.")
 
 db = Database()
